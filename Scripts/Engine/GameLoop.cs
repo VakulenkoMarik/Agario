@@ -7,7 +7,8 @@ namespace Agario.Scripts.Engine;
 
 public class GameLoop
 {
-    private static List<IDrawable> drawableObjects = new List<IDrawable>();
+    public static List<IDrawable> drawableObjects = new();
+    public static List<IUpdatable> updatableObjects = new();
     
     private RenderWindow scene;
     private Game game;
@@ -34,6 +35,11 @@ public class GameLoop
     {
         Time.Update();
         game.Update();
+        
+        foreach (IUpdatable objectToDraw in drawableObjects)
+        {
+            objectToDraw.Update();
+        }
     }
     
     private void Render()
