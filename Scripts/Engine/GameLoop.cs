@@ -1,4 +1,5 @@
 using Agario.Scripts.Engine.Interfaces;
+using Agario.Scripts.GameProcess;
 using SFML.Graphics;
 using SFML.Window; 
 
@@ -9,11 +10,11 @@ public class GameLoop
     private static List<IDrawable> drawableObjects = new List<IDrawable>();
     
     private RenderWindow scene;
-    private Game.GameProcess game;
+    private Game game;
     
-    private GameLoop()
+    public GameLoop(Game newGame)
     {
-        game = new Game.GameProcess();
+        game = newGame;
         
         scene = new RenderWindow(new VideoMode(1920, 1080), "Game window");
         scene.Closed += (sender, e) => scene.Close();
