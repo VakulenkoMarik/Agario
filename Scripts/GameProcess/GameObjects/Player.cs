@@ -10,37 +10,56 @@ namespace Agario.Scripts.GameProcess.GameObjects;
 
 public class Player : GameObject, IUpdatable, IDrawable
 {
-    public float Radius { get; private set; } = 50;
-    
     private float speed = 150;
     private Vector2f direction;
     
     private CircleShape shape;
 
-    public Player(Color fillColor) : base()
+    public Player(Color fillColor) : base(new CircleShape(50f))
     {
+        shape = (CircleShape)ObjectShape;
+        
         ShapeInit(fillColor);
         
         direction = new Vector2f(0, 0);
 
-        float posX = Configurations.WindowWidth / 2;
-        float posY = Configurations.WindowHeight / 2;
+        float posX = Configurations.WindowWidth / 2f;
+        float posY = Configurations.WindowHeight / 2f;
 
         Position = new Vector2f(posX, posY);
     }
 
     private void ShapeInit(Color fillColor)
     {
-        shape = new CircleShape(Radius);
         shape.FillColor = fillColor;
         
         shape.Origin = new Vector2f(shape.Radius, shape.Radius);
     }
+    
+    public void Update()
+    {
+        DirectionProcessing();
+        TryMove();
+    }
 
+    private void DirectionProcessing()
+    {
+        float directionX;
+        float directionY;
+        
+        directionY = (Keyboard.IsKeyPressed(Keyboard.Key.S) ? 1 : 0) - 
+                     (Keyboard.IsKeyPressed(Keyboard.Key.W) ? 1 : 0);
+
+        directionX = (Keyboard.IsKeyPressed(Keyboard.Key.D) ? 1 : 0) - 
+                     (Keyboard.IsKeyPressed(Keyboard.Key.A) ? 1 : 0);
+
+        direction = new Vector2f(directionX, directionY);
+    }
+    
     private bool CanMove(float newX, float newY)
     {
-        float xborder = newX + Radius * direction.X;
-        float yborder = newY + Radius * direction.Y;
+        float xborder = newX + shape.Radius * direction.X;
+        float yborder = newY + shape.Radius * direction.Y;
         
         if (xborder is < 0 or > Configurations.WindowWidth)
         {
@@ -69,24 +88,10 @@ public class Player : GameObject, IUpdatable, IDrawable
         shape.Position = Position;
     }
 
-    private void DirectionProcessing()
+    public void Grow(float kilo)
     {
-        float directionX = 0;
-        float directionY = 0;
-        
-        directionY = (Keyboard.IsKeyPressed(Keyboard.Key.S) ? 1 : 0) - 
-                     (Keyboard.IsKeyPressed(Keyboard.Key.W) ? 1 : 0);
-
-        directionX = (Keyboard.IsKeyPressed(Keyboard.Key.D) ? 1 : 0) - 
-                     (Keyboard.IsKeyPressed(Keyboard.Key.A) ? 1 : 0);
-
-        direction = new Vector2f(directionX, directionY);
-    }
-
-    public void Update()
-    {
-        DirectionProcessing();
-        TryMove();
+        shape.Radius += kilo / 2;
+        shape.Origin = new Vector2f(shape.Radius, shape.Radius);
     }
 
     public Shape GetShape()

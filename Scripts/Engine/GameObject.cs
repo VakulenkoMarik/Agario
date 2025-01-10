@@ -8,11 +8,15 @@ public class GameObject
 {
     public Vector2f Position;
     public Vector2f Velocity { get; private set; }
+    
+    public Shape ObjectShape { get; private set; }
 
-    public GameObject()
+    public GameObject(Shape objectShape)
     {
+        ObjectShape = objectShape;
+        
         Velocity = new (0, 0);
-        Position = new Vector2f(0, 0);
+        Position = new (0, 0);
 
         if (this is IUpdatable updatable)
         {
@@ -24,7 +28,7 @@ public class GameObject
             GameLoop.drawableObjects.Add(drawable);
         }
     }
-
+    
     public void Destroy()
     {
         if (this is IUpdatable updatable)

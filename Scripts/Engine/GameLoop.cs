@@ -38,7 +38,7 @@ public class GameLoop
         Time.Update();
         game.Update();
         
-        foreach (IUpdatable objectToUpdate in drawableObjects)
+        foreach (IUpdatable objectToUpdate in updatableObjects)
         {
             objectToUpdate.Update();
         }

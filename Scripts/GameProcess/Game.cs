@@ -10,7 +10,7 @@ namespace Agario.Scripts.GameProcess;
 public class Game
 {
     public RenderWindow Scene { get; private set; }
-    public List<Food> foodList = new();
+    public static List<Food> foodList = new();
 
     private GameLoop gameLoop;
     private Player player;
@@ -34,6 +34,7 @@ public class Game
     public void Update()
     {
         TryGenerateFood();
+        CollisionsHandling();
     }
 
     private void TryGenerateFood()
@@ -47,6 +48,18 @@ public class Game
             foodList.Add(food);
 
             food.PutOnMap();
+        }
+    }
+
+    private void CollisionsHandling()
+    {
+        for (int i = 0; i < foodList.Count; i++)
+        {
+            if (player.CollidesWith(foodList[i]))
+            {
+                player.Grow(foodList[i].Kilo);
+                foodList[i].Destroy();
+            }
         }
     }
 }

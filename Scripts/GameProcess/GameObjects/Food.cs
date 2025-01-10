@@ -6,27 +6,29 @@ using SFML.System;
 
 namespace Agario.Scripts.GameProcess.GameObjects;
 
-public class Food : GameObject, IUpdatable, IDrawable
+public class Food : GameObject, IDrawable
 {
     private Random random = new();
     private CircleShape shape;
-
-    public float Radius { get; private set; } = 3f;
     
-    public Food(Color fillColor) : base()
+    public float Kilo { get; private set; } = 0.5f;
+    
+    public Food(Color fillColor) : base(new CircleShape(3f))
     {
-        shape = new CircleShape(Radius);
+        shape = (CircleShape)ObjectShape;
         shape.FillColor = fillColor;
-    }
-
-    public void Update()
-    {
-        
     }
 
     public Shape GetShape()
     {
         return shape;
+    }
+    
+    public new void Destroy()
+    {
+        base.Destroy();
+
+        Game.foodList.Remove(this);
     }
 
     public void PutOnMap()
@@ -41,8 +43,8 @@ public class Food : GameObject, IUpdatable, IDrawable
     
     private void UpdateMesh()
     {
-        shape.Scale = new Vector2f(Radius, Radius);
-        shape.Origin = new Vector2f(Radius, Radius);
+        shape.Scale = new Vector2f(shape.Radius, shape.Radius);
+        shape.Origin = new Vector2f(shape.Radius, shape.Radius);
         shape.Position = Position;
     }
 }
