@@ -1,4 +1,5 @@
 using Agario.Scripts.Engine.Interfaces;
+using Agario.Scripts.Engine.Settings;
 using Agario.Scripts.GameProcess;
 using SFML.Graphics;
 using SFML.Window; 
@@ -12,13 +13,14 @@ public class GameLoop
     
     private RenderWindow scene;
     private Game game;
+    private Color backgroundColor;
     
     public GameLoop(Game newGame)
     {
-        game = newGame;
+        backgroundColor = Color.White;
         
-        scene = new RenderWindow(new VideoMode(1920, 1080), "Game window");
-        scene.Closed += (sender, e) => scene.Close();
+        game = newGame;
+        scene = newGame.Scene;
     }
     
     public void Run()
@@ -36,19 +38,20 @@ public class GameLoop
         Time.Update();
         game.Update();
         
-        foreach (IUpdatable objectToDraw in drawableObjects)
+        foreach (IUpdatable objectToUpdate in drawableObjects)
         {
-            objectToDraw.Update();
+            objectToUpdate.Update();
         }
     }
     
     private void Render()
     {
-        scene.Clear(Color.White);
+        scene.Clear(backgroundColor);
 
         foreach (IDrawable objectToDraw in drawableObjects)
         {
-            objectToDraw.Draw();
+            Shape shapeToDraw = objectToDraw.GetShape();
+            scene.Draw(shapeToDraw);
         }
 
         scene.Display();

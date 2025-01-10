@@ -1,6 +1,8 @@
+using SFML.Graphics;
+
 namespace Agario.Scripts.Engine.Interfaces;
 
 public interface IDrawable
 {
-    public void Draw();
+    public Shape GetShape();
 }
