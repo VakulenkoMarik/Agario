@@ -13,6 +13,7 @@ public class Game
     public List<Food> foodList = new();
 
     private GameLoop gameLoop;
+    private Player player;
 
     private int foodVolume = 20;
 
@@ -22,6 +23,7 @@ public class Game
         Scene.Closed += (sender, e) => Scene.Close();
 
         gameLoop = new GameLoop(this);
+        player = new Player(Color.Blue);
     }
 
     public void Start()

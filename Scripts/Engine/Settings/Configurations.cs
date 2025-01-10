@@ -2,6 +2,6 @@ namespace Agario.Scripts.Engine.Settings;
 
 public static class Configurations
 {
-    public const int WindowHeight = 1080;
-    public const int WindowWidth = 1920;
+    public const int WindowHeight = 768;
+    public const int WindowWidth = 1280;
 }
