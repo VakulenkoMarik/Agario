@@ -23,13 +23,6 @@ public class Food : GameObject, IDrawable
     {
         return shape;
     }
-    
-    public new void Destroy()
-    {
-        base.Destroy();
-
-        Game.foodList.Remove(this);
-    }
 
     public void PutOnMap()
     {

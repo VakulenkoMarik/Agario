@@ -1,5 +1,7 @@
 using Agario.Scripts.Engine.Interfaces;
+using Agario.Scripts.Engine.Settings;
 using SFML.Graphics;
+using SFML.Window;
 
 namespace Agario.Scripts.Engine;
 
@@ -8,24 +10,39 @@ public class GameLoop
     public static List<IDrawable> drawableObjects = new();
     public static List<IUpdatable> updatableObjects = new();
     
-    private RenderWindow scene;
     private Color backgroundColor;
+    private RenderWindow scene;
+
+    private bool isEndGameLoop;
     
-    public GameLoop(RenderWindow scene)
+    public GameLoop()
     {
-        backgroundColor = Color.White;
+        scene = new RenderWindow(new VideoMode(Configurations.WindowWidth, Configurations.WindowHeight), "Game window");
+        scene.Closed += (sender, e) => scene.Close();
         
-        this.scene = scene;
+        backgroundColor = Color.White;
     }
     
     public void Run()
     {
-        while (scene.IsOpen)
+        isEndGameLoop = false;
+        
+        while (!IsEndGameLoop())
         {
             CheckInput();
             Update();
             Render();
         }
+    }
+
+    public void Stop()
+    {
+        isEndGameLoop = true;
+    }
+    
+    private void CheckInput()
+    {
+        scene.DispatchEvents();
     }
     
     private void Update()
@@ -50,9 +67,9 @@ public class GameLoop
 
         scene.Display();
     }
-    
-    private void CheckInput()
+
+    private bool IsEndGameLoop()
     {
-        scene.DispatchEvents();
+        return !scene.IsOpen || isEndGameLoop;
     }
 }
