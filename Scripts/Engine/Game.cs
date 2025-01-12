@@ -25,6 +25,8 @@ public class Game : IUpdatable
 
         gameLoop = new GameLoop(render);
         player = new Player(Color.Blue);
+        
+        GameLoop.updatableObjects.Add(this);
     }
 
     public void Start()
