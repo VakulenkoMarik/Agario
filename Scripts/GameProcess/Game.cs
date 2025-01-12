@@ -1,5 +1,6 @@
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.ExtensionMethods;
+using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Settings;
 using Agario.Scripts.GameProcess.GameObjects;
 using SFML.Graphics;
@@ -7,9 +8,9 @@ using SFML.Window;
 
 namespace Agario.Scripts.GameProcess;
 
-public class Game
+public class Game : IUpdatable
 {
-    public RenderWindow Scene { get; private set; }
+    public RenderWindow render;
     public static List<Food> foodList = new();
 
     private GameLoop gameLoop;
@@ -19,10 +20,10 @@ public class Game
 
     public Game()
     {
-        Scene = new RenderWindow(new VideoMode(Configurations.WindowWidth, Configurations.WindowHeight), "Game window");
-        Scene.Closed += (sender, e) => Scene.Close();
+        render = new RenderWindow(new VideoMode(Configurations.WindowWidth, Configurations.WindowHeight), "Game window");
+        render.Closed += (sender, e) => render.Close();
 
-        gameLoop = new GameLoop(this);
+        gameLoop = new GameLoop(render);
         player = new Player(Color.Blue);
     }
 

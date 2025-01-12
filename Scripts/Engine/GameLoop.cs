@@ -1,8 +1,5 @@
 using Agario.Scripts.Engine.Interfaces;
-using Agario.Scripts.Engine.Settings;
-using Agario.Scripts.GameProcess;
 using SFML.Graphics;
-using SFML.Window; 
 
 namespace Agario.Scripts.Engine;
 
@@ -12,15 +9,13 @@ public class GameLoop
     public static List<IUpdatable> updatableObjects = new();
     
     private RenderWindow scene;
-    private Game game;
     private Color backgroundColor;
     
-    public GameLoop(Game newGame)
+    public GameLoop(RenderWindow scene)
     {
         backgroundColor = Color.White;
         
-        game = newGame;
-        scene = newGame.Scene;
+        this.scene = scene;
     }
     
     public void Run()
@@ -36,7 +31,6 @@ public class GameLoop
     private void Update()
     {
         Time.Update();
-        game.Update();
         
         foreach (IUpdatable objectToUpdate in updatableObjects)
         {

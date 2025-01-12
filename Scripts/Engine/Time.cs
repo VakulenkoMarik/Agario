@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using SFML.System;
 
 namespace Agario.Scripts.Engine;
