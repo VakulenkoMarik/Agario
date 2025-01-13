@@ -13,7 +13,7 @@ public class Food : GameObject, IDrawable
     
     public float Kilo { get; private set; } = 0.5f;
     
-    public Food(Color fillColor) : base(new CircleShape(3f))
+    public Food(Color fillColor) : base(new CircleShape(2f))
     {
         shape = (CircleShape)ObjectShape;
         shape.FillColor = fillColor;

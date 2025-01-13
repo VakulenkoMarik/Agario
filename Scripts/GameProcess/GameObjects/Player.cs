@@ -10,23 +10,27 @@ namespace Agario.Scripts.GameProcess.GameObjects;
 
 public class Player : GameObject, IUpdatable, IDrawable
 {
+    private bool isHuman;
     private float speed = 150;
+    
     private Vector2f direction;
     
     private CircleShape shape;
 
-    public Player(Color fillColor) : base(new CircleShape(50f))
+    public Player(Color fillColor, bool isHuman) : base(new CircleShape(35f))
     {
+        this.isHuman = isHuman;
+        
         shape = (CircleShape)ObjectShape;
+        direction = new Vector2f(0, 0);
         
         ShapeInit(fillColor);
-        
-        direction = new Vector2f(0, 0);
+        PositionInit();
+    }
 
-        float posX = Configurations.WindowWidth / 2f;
-        float posY = Configurations.WindowHeight / 2f;
-
-        Position = new Vector2f(posX, posY);
+    public void Drop(float x, float y)
+    {
+        Position = new Vector2f(x, y);
     }
 
     private void ShapeInit(Color fillColor)
@@ -34,6 +38,14 @@ public class Player : GameObject, IUpdatable, IDrawable
         shape.FillColor = fillColor;
         
         shape.Origin = new Vector2f(shape.Radius, shape.Radius);
+    }
+    
+    private void PositionInit()
+    {
+        float posX = Configurations.WindowWidth / 2f;
+        float posY = Configurations.WindowHeight / 2f;
+
+        Position = new Vector2f(posX, posY);
     }
     
     public void Update()
@@ -44,16 +56,26 @@ public class Player : GameObject, IUpdatable, IDrawable
 
     private void DirectionProcessing()
     {
-        float directionX;
-        float directionY;
+        float dX = 0f;
+        float dY = 0f;
+            
+        if (isHuman)
+        {
+            (dX, dY) = HumanDirectionProc();
+        }
+
+        direction = new Vector2f(dX, dY);
+    }
+
+    private (float, float) HumanDirectionProc()
+    {
+        float directionX = (Keyboard.IsKeyPressed(Keyboard.Key.D) ? 1 : 0) - 
+                          (Keyboard.IsKeyPressed(Keyboard.Key.A) ? 1 : 0);
         
-        directionY = (Keyboard.IsKeyPressed(Keyboard.Key.S) ? 1 : 0) - 
-                     (Keyboard.IsKeyPressed(Keyboard.Key.W) ? 1 : 0);
-
-        directionX = (Keyboard.IsKeyPressed(Keyboard.Key.D) ? 1 : 0) - 
-                     (Keyboard.IsKeyPressed(Keyboard.Key.A) ? 1 : 0);
-
-        direction = new Vector2f(directionX, directionY);
+        float directionY = (Keyboard.IsKeyPressed(Keyboard.Key.S) ? 1 : 0) - 
+                          (Keyboard.IsKeyPressed(Keyboard.Key.W) ? 1 : 0);
+        
+        return (directionX, directionY);
     }
     
     private bool CanMove(float newX, float newY)

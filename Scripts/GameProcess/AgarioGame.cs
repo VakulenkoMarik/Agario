@@ -1,5 +1,6 @@
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.ExtensionMethods;
+using Agario.Scripts.Engine.Settings;
 using Agario.Scripts.GameProcess.GameObjects;
 using SFML.Graphics;
 
@@ -7,15 +8,42 @@ namespace Agario.Scripts.GameProcess;
 
 public class AgarioGame : Game
 {
+    private Random random = new();
+    
+    private List<Food> foodList = new();
+    private List<Player> playersList = new();
+
+    private Player activePlayer;
+    
+    private int foodVolume = 50;
+    private int playersVolume = 5;
+
     public AgarioGame()
     {
-        player = new Player(Color.Blue);
+        activePlayer = new Player(Color.Blue, true);
+        playersList.Add(activePlayer);
+
+        AIPlayersInit();
     }
-    
-    public List<Food> foodList = new();
-    private Player player;
-    
-    private int foodVolume = 20;
+
+    private void AIPlayersInit()
+    {
+        int maxXPos = Configurations.WindowWidth;
+        int maxYPos = Configurations.WindowHeight;
+        
+        for (int i = 0; i < playersVolume; i++)
+        {
+            Color fillColor = new Color().GenerateColor(10, 255);
+            
+            Player player = new Player(fillColor, false);
+            playersList.Add(player);
+
+            int x = random.Next(0, maxXPos);
+            int y = random.Next(0, maxYPos);
+            
+            player.Drop(x, y);
+        }
+    }
 
     public override void Update()
     {
@@ -27,8 +55,7 @@ public class AgarioGame : Game
     {
         if (foodList.Count < foodVolume)
         {
-            Color foodFillColor = new Color();
-            foodFillColor = foodFillColor.GenerateColor(10, 255);
+            Color foodFillColor = new Color().GenerateColor(10, 255);
 
             Food food = new Food(foodFillColor);
             foodList.Add(food);
@@ -41,9 +68,9 @@ public class AgarioGame : Game
     {
         for (int i = 0; i < foodList.Count; i++)
         {
-            if (player.CollidesWith(foodList[i]))
+            if (activePlayer.CollidesWith(foodList[i]))
             {
-                player.Grow(foodList[i].Kilo);
+                activePlayer.Grow(foodList[i].Kilo);
 
                 DestroyAndRemoveFood(foodList[i]);
             }
