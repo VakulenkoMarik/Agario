@@ -10,17 +10,17 @@ namespace Agario.Scripts.GameProcess.GameObjects;
 
 public class Player : GameObject, IUpdatable, IDrawable
 {
-    private bool isHuman;
     private float speed = 150;
+
+    public float Radius { get; private set; }
     
-    private Vector2f direction;
+    protected Vector2f direction;
     
     private CircleShape shape;
 
-    public Player(Color fillColor, bool isHuman) : base(new CircleShape(35f))
+    public Player(Color fillColor, float radius) : base(new CircleShape(radius))
     {
-        this.isHuman = isHuman;
-        
+        Radius = radius;
         shape = (CircleShape)ObjectShape;
         direction = new Vector2f(0, 0);
         
@@ -38,6 +38,8 @@ public class Player : GameObject, IUpdatable, IDrawable
         shape.FillColor = fillColor;
         
         shape.Origin = new Vector2f(shape.Radius, shape.Radius);
+
+        Radius = shape.Radius;
     }
     
     private void PositionInit()
@@ -52,17 +54,12 @@ public class Player : GameObject, IUpdatable, IDrawable
     {
         DirectionProcessing();
         TryMove();
+        UpdateMesh();
     }
 
-    private void DirectionProcessing()
+    public virtual void DirectionProcessing()
     {
-        float dX = 0f;
-        float dY = 0f;
-            
-        if (isHuman)
-        {
-            (dX, dY) = HumanDirectionProc();
-        }
+        (float dX, float dY) = HumanDirectionProc();
 
         direction = new Vector2f(dX, dY);
     }
@@ -78,7 +75,7 @@ public class Player : GameObject, IUpdatable, IDrawable
         return (directionX, directionY);
     }
     
-    private bool CanMove(float newX, float newY)
+    protected bool CanMove(float newX, float newY)
     {
         float xborder = newX + shape.Radius * direction.X;
         float yborder = newY + shape.Radius * direction.Y;
@@ -107,13 +104,25 @@ public class Player : GameObject, IUpdatable, IDrawable
         }
 
         Position = new Vector2f(x, y);
-        shape.Position = Position;
     }
 
-    public void Grow(float kilo)
+    private void UpdateMesh()
     {
-        shape.Radius += kilo / 2;
-        shape.Origin = new Vector2f(shape.Radius, shape.Radius);
+        shape.Position = Position;
+        shape.Radius = Radius;
+        shape.Origin = new Vector2f(Radius, Radius);
+    }
+
+    public void Grow(Food food)
+    {
+        Radius += food.Kilo / 2;
+        food.Destroy();
+    }
+    
+    public void Grow(Player playerFood)
+    {
+        Radius += playerFood.Radius / 2;
+        playerFood.Destroy();
     }
 
     public Drawable GetMesh()

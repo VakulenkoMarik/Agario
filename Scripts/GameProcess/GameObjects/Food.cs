@@ -8,7 +8,7 @@ namespace Agario.Scripts.GameProcess.GameObjects;
 
 public class Food : GameObject, IDrawable
 {
-    private Random random = new();
+    private Random random = Configurations.Random;
     private CircleShape shape;
     
     public float Kilo { get; private set; } = 0.5f;

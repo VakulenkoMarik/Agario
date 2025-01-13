@@ -8,10 +8,11 @@ namespace Agario.Scripts.GameProcess;
 
 public class AgarioGame : Game
 {
-    private Random random = new();
+    private Random random = Configurations.Random;
     
     private List<Food> foodList = new();
     private List<Player> playersList = new();
+    private List<Player> deathList = new();
 
     private Player activePlayer;
     
@@ -20,7 +21,7 @@ public class AgarioGame : Game
 
     public AgarioGame()
     {
-        activePlayer = new Player(Color.Blue, true);
+        activePlayer = new Player(Color.Blue, 35f);
         playersList.Add(activePlayer);
 
         AIPlayersInit();
@@ -35,7 +36,7 @@ public class AgarioGame : Game
         {
             Color fillColor = new Color().GenerateColor(10, 255);
             
-            Player player = new Player(fillColor, false);
+            Player player = new Bot(fillColor);
             playersList.Add(player);
 
             int x = random.Next(0, maxXPos);
@@ -48,9 +49,25 @@ public class AgarioGame : Game
     public override void Update()
     {
         TryGenerateFood();
+        
+        BotsMovement();
+        
         CollisionsHandling();
+
+        ClearDeathList();
     }
-    
+
+    private void BotsMovement()
+    {
+        foreach (Player player in playersList)
+        {
+            if (player is Bot bot)
+            {
+                bot.MakeDecision(foodList, playersList);
+            }
+        }
+    }
+
     private void TryGenerateFood()
     {
         if (foodList.Count < foodVolume)
@@ -66,21 +83,108 @@ public class AgarioGame : Game
     
     private void CollisionsHandling()
     {
-        for (int i = 0; i < foodList.Count; i++)
-        {
-            if (activePlayer.CollidesWith(foodList[i]))
-            {
-                activePlayer.Grow(foodList[i].Kilo);
+        FoodCollisionHandling();
+        PlayersCollisionHandling();
+    }
 
-                DestroyAndRemoveFood(foodList[i]);
+    private void FoodCollisionHandling()
+    {
+        if (playersList.Count <= 0)
+        {
+            return;
+        }
+        
+        foreach (Player player in playersList)
+        {
+            HandlePlayerFoodCollisions(player);
+        }
+    }
+    
+    private void HandlePlayerFoodCollisions(Player player)
+    {
+        for (int foodID = 0; foodID < foodList.Count; foodID++)
+        {
+            Food food = foodList[foodID];
+
+            if (player.CollidesWith(food))
+            {
+                player.Grow(food);
+                DismissObject(food);
+            }
+        }
+    }
+
+    private void PlayersCollisionHandling()
+    {
+        if (playersList.Count <= 0)
+        {
+            return;
+        }
+        
+        List<Player> targetList = new List<Player>(playersList);
+
+        foreach (Player player1 in playersList)
+        {
+            HandlePlayerCollisions(player1, targetList);
+
+            targetList.Remove(player1);
+        }
+    }
+    
+    private void HandlePlayerCollisions(Player player1, List<Player> targetList)
+    {
+        foreach (Player player2 in targetList)
+        {
+            if (player1.CollidesWith(player2))
+            {
+                HandleCollisionResult(player1, player2);
             }
         }
     }
     
-    public void DestroyAndRemoveFood(Food food)
+    private void HandleCollisionResult(Player player1, Player player2)
     {
-        food.Destroy();
+        (Player? smaller, Player? bigger) = WhoBigger(player1, player2);
 
-        foodList.Remove(food);
+        if (smaller is not null && bigger is not null)
+        {
+            bigger.Grow(smaller);
+            deathList.Add(smaller);
+        }
+    }
+
+    private void ClearDeathList()
+    {
+        foreach (Player ghost in deathList)
+        {
+            DismissObject(ghost);
+        }
+    }
+
+    private (Player? smaller, Player? bigger) WhoBigger(Player p1, Player p2)
+    {
+        if (p1.Radius > p2.Radius)
+        {
+            return (p2, p1);
+        }
+        
+        if (p1.Radius < p2.Radius)
+        {
+            return (p1, p2);
+        }
+
+        return (null, null);
+    }
+    
+    public void DismissObject(GameObject gameObject)
+    {
+        if (gameObject is Player)
+        {
+            playersList.Remove((Player)gameObject);
+        }
+        else if (gameObject is Food)
+        {
+            foodList.Remove((Food)gameObject);
+        }
     }
 }

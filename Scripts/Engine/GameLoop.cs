@@ -58,7 +58,7 @@ public class GameLoop
     {
         Time.Update();
         
-        foreach (IUpdatable objectToUpdate in updatableObjects)
+        foreach (IUpdatable objectToUpdate in updatableObjects.ToList())
         {
             objectToUpdate.Update();
         }

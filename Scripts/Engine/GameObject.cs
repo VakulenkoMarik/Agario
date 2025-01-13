@@ -7,7 +7,6 @@ namespace Agario.Scripts.Engine;
 public class GameObject
 {
     public Vector2f Position;
-    public Vector2f Velocity { get; private set; }
     
     public Shape ObjectShape { get; private set; }
 
@@ -15,7 +14,6 @@ public class GameObject
     {
         ObjectShape = objectShape;
         
-        Velocity = new (0, 0);
         Position = new (0, 0);
 
         GameLoop gm = GameLoop.GetInstance();
