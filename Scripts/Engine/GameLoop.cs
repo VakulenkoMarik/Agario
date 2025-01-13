@@ -70,7 +70,7 @@ public class GameLoop
 
         foreach (IDrawable objectToDraw in drawableObjects)
         {
-            Shape shapeToDraw = objectToDraw.GetShape();
+            Drawable shapeToDraw = objectToDraw.GetMesh();
             scene.Draw(shapeToDraw);
         }
 

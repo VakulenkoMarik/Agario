@@ -19,7 +19,7 @@ public class Food : GameObject, IDrawable
         shape.FillColor = fillColor;
     }
 
-    public Shape GetShape()
+    public Drawable GetMesh()
     {
         return shape;
     }

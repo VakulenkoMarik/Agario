@@ -4,5 +4,5 @@ namespace Agario.Scripts.Engine.Interfaces;
 
 public interface IDrawable
 {
-    public Shape GetShape();
+    public Drawable GetMesh();
 }

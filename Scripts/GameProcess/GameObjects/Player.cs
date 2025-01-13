@@ -94,7 +94,7 @@ public class Player : GameObject, IUpdatable, IDrawable
         shape.Origin = new Vector2f(shape.Radius, shape.Radius);
     }
 
-    public Shape GetShape()
+    public Drawable GetMesh()
     {
         return shape;
     }

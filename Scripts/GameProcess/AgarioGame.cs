@@ -12,10 +12,10 @@ public class AgarioGame : Game
         player = new Player(Color.Blue);
     }
     
-    private int foodVolume = 20;
-    public static List<Food> foodList = new();
-    
+    public List<Food> foodList = new();
     private Player player;
+    
+    private int foodVolume = 20;
 
     public override void Update()
     {
