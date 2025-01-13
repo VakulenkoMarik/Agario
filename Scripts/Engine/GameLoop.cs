@@ -7,8 +7,10 @@ namespace Agario.Scripts.Engine;
 
 public class GameLoop
 {
-    public static List<IDrawable> drawableObjects = new();
-    public static List<IUpdatable> updatableObjects = new();
+    private static GameLoop instance;
+    
+    public List<IDrawable> drawableObjects = new();
+    public List<IUpdatable> updatableObjects = new();
     
     private Color backgroundColor;
     private RenderWindow scene;
@@ -21,6 +23,13 @@ public class GameLoop
         scene.Closed += (sender, e) => scene.Close();
         
         backgroundColor = Color.White;
+
+        instance = this;
+    }
+
+    public static GameLoop GetInstance()
+    {
+        return instance;
     }
     
     public void Run()

@@ -10,7 +10,7 @@ public abstract class Game : IUpdatable
     {
         gameLoop = new GameLoop();
         
-        GameLoop.updatableObjects.Add(this);
+        gameLoop.updatableObjects.Add(this);
     }
 
     public void Start()

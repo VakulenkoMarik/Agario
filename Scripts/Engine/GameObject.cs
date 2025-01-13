@@ -18,27 +18,31 @@ public class GameObject
         Velocity = new (0, 0);
         Position = new (0, 0);
 
+        GameLoop gm = GameLoop.GetInstance();
+
         if (this is IUpdatable updatable)
         {
-            GameLoop.updatableObjects.Add(updatable);
+            gm.updatableObjects.Add(updatable);
         }
 
         if (this is IDrawable drawable)
         {
-            GameLoop.drawableObjects.Add(drawable);
+            gm.drawableObjects.Add(drawable);
         }
     }
     
     public void Destroy()
     {
+        GameLoop gm = GameLoop.GetInstance();
+        
         if (this is IUpdatable updatable)
         {
-            GameLoop.updatableObjects.Remove(updatable);
+            gm.updatableObjects.Remove(updatable);
         }
 
         if (this is IDrawable drawable)
         {
-            GameLoop.drawableObjects.Remove(drawable);
+            gm.drawableObjects.Remove(drawable);
         }
     }
 }
