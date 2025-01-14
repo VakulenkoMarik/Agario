@@ -10,7 +10,8 @@ namespace Agario.Scripts.GameProcess.GameObjects;
 
 public class Player : GameObject, IUpdatable, IDrawable
 {
-    private float speed = 150;
+    private float speed = 120;
+    private float minSpeed = 15;
 
     public float Radius { get; private set; }
     
@@ -115,14 +116,24 @@ public class Player : GameObject, IUpdatable, IDrawable
 
     public void Grow(Food food)
     {
-        Radius += food.Kilo / 2;
+        GainWeight(food.Kilo);
         food.Destroy();
     }
     
     public void Grow(Player playerFood)
     {
-        Radius += playerFood.Radius / 2;
+        GainWeight(playerFood.Radius);
         playerFood.Destroy();
+    }
+
+    private void GainWeight(float kilo)
+    {
+        Radius += kilo / 2;
+
+        if (speed > minSpeed)
+        {
+            speed -= kilo / 1.5f;
+        }
     }
 
     public Drawable GetMesh()
