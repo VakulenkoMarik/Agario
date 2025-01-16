@@ -1,7 +1,6 @@
 using Agario.Scripts.Engine;
-using Agario.Scripts.Engine.ExtensionMethods;
 using Agario.Scripts.Engine.Interfaces;
-using Agario.Scripts.Engine.Settings;
+using Agario.Scripts.Engine.Utils;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;

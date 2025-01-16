@@ -1,8 +1,9 @@
 using SFML.Graphics;
+
 // ReSharper disable InconsistentNaming
 // ReSharper disable RedundantAssignment
 
-namespace Agario.Scripts.Engine.ExtensionMethods;
+namespace Agario.Scripts.Engine.Utils;
 
 public static class ColorExtensions
 {

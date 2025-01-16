@@ -1,4 +1,4 @@
-using Agario.Scripts.Engine.Settings;
+using Agario.Scripts.Engine.Utils;
 using SFML.System;
 // ReSharper disable InconsistentNaming
 

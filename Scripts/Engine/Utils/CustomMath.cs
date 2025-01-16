@@ -1,6 +1,6 @@
 using SFML.System;
 
-namespace Agario.Scripts.Engine.Settings;
+namespace Agario.Scripts.Engine.Utils;
 
 public static class CustomMath
 {

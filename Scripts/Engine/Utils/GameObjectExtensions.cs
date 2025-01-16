@@ -1,8 +1,7 @@
-using Agario.Scripts.Engine.Settings;
 using SFML.Graphics;
 using SFML.System;
 
-namespace Agario.Scripts.Engine.ExtensionMethods;
+namespace Agario.Scripts.Engine.Utils;
 
 public static class GameObjectExtensions
 {
