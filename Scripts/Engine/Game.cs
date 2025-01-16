@@ -1,10 +1,12 @@
 using Agario.Scripts.Engine.Interfaces;
+// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Engine;
 
-public abstract class Game : IUpdatable
+public class Game : IUpdatable
 {
-    private GameLoop gameLoop;
+    private readonly GameLoop gameLoop;
+    private IGameRules gameRules = null!;
 
     public Game()
     {
@@ -13,13 +15,18 @@ public abstract class Game : IUpdatable
         gameLoop.updatableObjects.Add(this);
     }
 
+    public void SetGame(IGameRules rules)
+    {
+        gameRules = rules;
+    }
+
     public void Start()
     {
         gameLoop.Run();
     }
 
-    public virtual void Update()
+    public void Update()
     {
-        // Place the logic that should be updated every game turn here
+        gameRules.Update();
     }
 }

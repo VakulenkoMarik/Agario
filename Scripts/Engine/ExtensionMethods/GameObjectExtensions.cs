@@ -15,11 +15,10 @@ public static class GameObjectExtensions
             && target.ObjectShape is CircleShape c2Shape)
         {
             float distanceSquared = CustomMath.DistanceSquared(object1Center, object2Center);
-
-            float c1ShapeRSquared = c1Shape.Radius * c1Shape.Radius;
-            float c2ShapeRSquared = c2Shape.Radius * c2Shape.Radius;
-
-            return distanceSquared <= c1ShapeRSquared + c2ShapeRSquared;
+            
+            float sumOfRadiuses = c1Shape.Radius + c2Shape.Radius;
+            
+            return distanceSquared <= sumOfRadiuses * sumOfRadiuses;
         }
         
         return false;

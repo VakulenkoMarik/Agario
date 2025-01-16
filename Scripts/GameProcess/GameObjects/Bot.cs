@@ -1,20 +1,18 @@
 using Agario.Scripts.Engine.Settings;
 using SFML.System;
-using Color = SFML.Graphics.Color;
+// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.GameProcess.GameObjects;
 
-public class Bot : Player
+public class Bot(List<Food> foods, List<Player> players) : Player(Configurations.Randomizer.Next(20, 50))
 {
-    public Bot(Color color) : base(color, Configurations.Random.Next(20, 50)) { }
+    private Vector2f targetDirection;
 
-    private Vector2f targetDirection = new(0, 0);
-
-    public void MakeDecision(List<Food> foodList, List<Player> players)
+    private void MakeDecision()
     {
         targetDirection = new Vector2f(0, 0);
         
-        Food? nearestFood = FindNearestFood(foodList);
+        Food? nearestFood = FindNearestFood(foods);
         if (nearestFood != null)
         {
             targetDirection += CustomMath.Normalize(nearestFood.Position - Position) * 0.5f;
@@ -35,15 +33,16 @@ public class Bot : Player
 
     public override void DirectionProcessing()
     {
+        MakeDecision();
         direction = CustomMath.Normalize(targetDirection);
     }
     
-    private Food? FindNearestFood(List<Food> foodList)
+    private Food? FindNearestFood(List<Food> foodsList)
     {
         Food? nearestFood = null;
         float minDistance = float.MaxValue;
 
-        foreach (var food in foodList)
+        foreach (var food in foodsList)
         {
             float distance = CustomMath.DistanceSquared(Position, food.Position);
             
@@ -57,12 +56,12 @@ public class Bot : Player
         return nearestFood;
     }
     
-    private Player? FindSmallerPlayer(List<Player> players)
+    private Player? FindSmallerPlayer(List<Player> playersList)
     {
         Player? target = null;
         float minDistance = float.MaxValue;
 
-        foreach (var player in players)
+        foreach (var player in playersList)
         {
             if (player == this || player.Radius >= Radius)
                 continue;
@@ -79,14 +78,14 @@ public class Bot : Player
         return target;
     }
     
-    private Player? FindBiggerPlayer(List<Player> players)
+    private Player? FindBiggerPlayer(List<Player> playersList)
     {
         Player? threat = null;
         
         float minDistance = float.MaxValue;
         float threatRadius = 100f;
 
-        foreach (var player in players)
+        foreach (var player in playersList)
         {
             if (player == this || player.Radius <= Radius)
                 continue;

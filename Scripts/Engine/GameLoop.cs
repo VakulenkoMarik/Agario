@@ -2,29 +2,30 @@ using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Settings;
 using SFML.Graphics;
 using SFML.Window;
+// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Engine;
 
 public class GameLoop
 {
-    private static GameLoop instance;
+    private static GameLoop instance = null!;
     
-    public List<IDrawable> drawableObjects = new();
-    public List<IUpdatable> updatableObjects = new();
+    public readonly List<IDrawable> drawableObjects = new();
+    public readonly List<IUpdatable> updatableObjects = new();
     
-    private Color backgroundColor;
-    private RenderWindow scene;
+    private readonly Color backgroundColor;
+    private readonly RenderWindow scene;
 
     private bool isEndGameLoop;
     
     public GameLoop()
     {
+        instance = this;
+        
         scene = new RenderWindow(new VideoMode(Configurations.WindowWidth, Configurations.WindowHeight), "Game window");
-        scene.Closed += (sender, e) => scene.Close();
+        scene.Closed += (_, _) => scene.Close();
         
         backgroundColor = Color.White;
-
-        instance = this;
     }
 
     public static GameLoop GetInstance()

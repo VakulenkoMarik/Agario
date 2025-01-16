@@ -1,26 +1,30 @@
 using Agario.Scripts.Engine;
+using Agario.Scripts.Engine.ExtensionMethods;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Settings;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 using Time = Agario.Scripts.Engine.Time;
+// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.GameProcess.GameObjects;
 
 public class Player : GameObject, IUpdatable, IDrawable
 {
     private float speed = 120;
-    private float minSpeed = 15;
+    private readonly float minSpeed = 15;
 
+    private readonly CircleShape shape;
+    
     public float Radius { get; private set; }
     
     protected Vector2f direction;
-    
-    private CircleShape shape;
 
-    public Player(Color fillColor, float radius) : base(new CircleShape(radius))
+    public Player(float radius) : base(new CircleShape(radius))
     {
+        Color fillColor = new Color().GenerateColor(10, 255);
+        
         Radius = radius;
         shape = (CircleShape)ObjectShape;
         direction = new Vector2f(0, 0);
@@ -75,18 +79,18 @@ public class Player : GameObject, IUpdatable, IDrawable
         
         return (directionX, directionY);
     }
-    
-    protected bool CanMove(float newX, float newY)
+
+    private bool CanMove(float newX, float newY)
     {
-        float xborder = newX + shape.Radius * direction.X;
-        float yborder = newY + shape.Radius * direction.Y;
+        float xBorder = newX + shape.Radius * direction.X;
+        float yBorder = newY + shape.Radius * direction.Y;
         
-        if (xborder is < 0 or > Configurations.WindowWidth)
+        if (xBorder is < 0 or > Configurations.WindowWidth)
         {
             return false;
         }
         
-        if (yborder is < 0 or > Configurations.WindowHeight)
+        if (yBorder is < 0 or > Configurations.WindowHeight)
         {
             return false;
         }

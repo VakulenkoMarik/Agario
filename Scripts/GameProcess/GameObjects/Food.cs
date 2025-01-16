@@ -1,20 +1,24 @@
 using Agario.Scripts.Engine;
+using Agario.Scripts.Engine.ExtensionMethods;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Settings;
 using SFML.Graphics;
 using SFML.System;
+// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.GameProcess.GameObjects;
 
 public class Food : GameObject, IDrawable
 {
-    private Random random = Configurations.Random;
-    private CircleShape shape;
+    private readonly Random random = Configurations.Randomizer;
+    private readonly CircleShape shape;
     
     public float Kilo { get; private set; } = 0.5f;
     
-    public Food(Color fillColor) : base(new CircleShape(2f))
+    public Food() : base(new CircleShape(2f))
     {
+        Color fillColor = new Color().GenerateColor(10, 255);
+        
         shape = (CircleShape)ObjectShape;
         shape.FillColor = fillColor;
     }

@@ -1,46 +1,45 @@
 using Agario.Scripts.Engine.Interfaces;
 using SFML.Graphics;
 using SFML.System;
+// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Engine;
 
 public class GameObject
 {
     public Vector2f Position;
-    
     public Shape ObjectShape { get; private set; }
 
-    public GameObject(Shape objectShape)
+    private readonly GameLoop gameLoop;
+
+    protected GameObject(Shape objectShape)
     {
         ObjectShape = objectShape;
-        
         Position = new (0, 0);
 
-        GameLoop gm = GameLoop.GetInstance();
+        gameLoop = GameLoop.GetInstance();
 
         if (this is IUpdatable updatable)
         {
-            gm.updatableObjects.Add(updatable);
+            gameLoop.updatableObjects.Add(updatable);
         }
 
         if (this is IDrawable drawable)
         {
-            gm.drawableObjects.Add(drawable);
+            gameLoop.drawableObjects.Add(drawable);
         }
     }
     
     public void Destroy()
     {
-        GameLoop gm = GameLoop.GetInstance();
-        
         if (this is IUpdatable updatable)
         {
-            gm.updatableObjects.Remove(updatable);
+            gameLoop.updatableObjects.Remove(updatable);
         }
 
         if (this is IDrawable drawable)
         {
-            gm.drawableObjects.Remove(drawable);
+            gameLoop.drawableObjects.Remove(drawable);
         }
     }
 }

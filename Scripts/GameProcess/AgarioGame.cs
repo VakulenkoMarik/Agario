@@ -1,42 +1,40 @@
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.ExtensionMethods;
+using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Settings;
 using Agario.Scripts.GameProcess.GameObjects;
-using SFML.Graphics;
+// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.GameProcess;
 
-public class AgarioGame : Game
+public class AgarioGame : IGameRules
 {
-    private Random random = Configurations.Random;
+    private readonly Random random = Configurations.Randomizer;
     
-    private List<Food> foodList = new();
-    private List<Player> playersList = new();
-    private List<Player> deathList = new();
+    private readonly List<Food> foodList = new();
+    private readonly List<Player> playersList = new();
+    
+    private readonly List<GameObject> destructionList = new();
 
-    private Player activePlayer;
-    
-    private int foodVolume = 50;
-    private int playersVolume = 5;
+    private readonly int foodVolume = 50;
+    private readonly int playersVolume = 5;
 
     public AgarioGame()
     {
-        activePlayer = new Player(Color.Blue, 35f);
+        var activePlayer = new Player(35f);
         playersList.Add(activePlayer);
 
-        AIPlayersInit();
+        AiPlayersInit();
     }
 
-    private void AIPlayersInit()
+    private void AiPlayersInit()
     {
         int maxXPos = Configurations.WindowWidth;
         int maxYPos = Configurations.WindowHeight;
         
         for (int i = 0; i < playersVolume; i++)
         {
-            Color fillColor = new Color().GenerateColor(10, 255);
-            
-            Player player = new Bot(fillColor);
+            Player player = new Bot(foodList, playersList);
             playersList.Add(player);
 
             int x = random.Next(0, maxXPos);
@@ -46,35 +44,20 @@ public class AgarioGame : Game
         }
     }
 
-    public override void Update()
+    public void Update()
     {
+        ClearDeathList();
+        
         TryGenerateFood();
         
-        BotsMovement();
-        
         CollisionsHandling();
-
-        ClearDeathList();
-    }
-
-    private void BotsMovement()
-    {
-        foreach (Player player in playersList)
-        {
-            if (player is Bot bot)
-            {
-                bot.MakeDecision(foodList, playersList);
-            }
-        }
     }
 
     private void TryGenerateFood()
     {
         if (foodList.Count < foodVolume)
         {
-            Color foodFillColor = new Color().GenerateColor(10, 255);
-
-            Food food = new Food(foodFillColor);
+            Food food = new Food();
             foodList.Add(food);
 
             food.PutOnMap();
@@ -89,11 +72,6 @@ public class AgarioGame : Game
 
     private void FoodCollisionHandling()
     {
-        if (playersList.Count <= 0)
-        {
-            return;
-        }
-        
         foreach (Player player in playersList)
         {
             HandlePlayerFoodCollisions(player);
@@ -102,89 +80,60 @@ public class AgarioGame : Game
     
     private void HandlePlayerFoodCollisions(Player player)
     {
-        for (int foodID = 0; foodID < foodList.Count; foodID++)
+        foreach (Food food in foodList)
         {
-            Food food = foodList[foodID];
-
             if (player.CollidesWith(food))
             {
                 player.Grow(food);
-                DismissObject(food);
+                destructionList.Add(food);
             }
         }
     }
 
     private void PlayersCollisionHandling()
     {
-        if (playersList.Count <= 0)
+        foreach (Player attacker in playersList)
         {
-            return;
-        }
-        
-        List<Player> targetList = new List<Player>(playersList);
-
-        foreach (Player player1 in playersList)
-        {
-            HandlePlayerCollisions(player1, targetList);
-
-            targetList.Remove(player1);
+            HandlePlayerPlayerCollisions(attacker, playersList);
         }
     }
     
-    private void HandlePlayerCollisions(Player player1, List<Player> targetList)
+    private void HandlePlayerPlayerCollisions(Player attacker, List<Player> targetsList)
     {
-        foreach (Player player2 in targetList)
+        foreach (Player target in targetsList)
         {
-            if (player1.CollidesWith(player2))
+            if (attacker.Radius <= target.Radius)
             {
-                HandleCollisionResult(player1, player2);
+                continue;
             }
-        }
-    }
-    
-    private void HandleCollisionResult(Player player1, Player player2)
-    {
-        (Player? smaller, Player? bigger) = WhoBigger(player1, player2);
-
-        if (smaller is not null && bigger is not null)
-        {
-            bigger.Grow(smaller);
-            deathList.Add(smaller);
+                
+            if (attacker.CollidesWith(target))
+            {
+                attacker.Grow(target);
+                destructionList.Add(target);
+            }
         }
     }
 
     private void ClearDeathList()
     {
-        foreach (Player ghost in deathList)
+        foreach (GameObject ghost in destructionList)
         {
             DismissObject(ghost);
         }
-    }
-
-    private (Player? smaller, Player? bigger) WhoBigger(Player p1, Player p2)
-    {
-        if (p1.Radius > p2.Radius)
-        {
-            return (p2, p1);
-        }
         
-        if (p1.Radius < p2.Radius)
-        {
-            return (p1, p2);
-        }
-
-        return (null, null);
+        destructionList.Clear();
     }
-    
-    public void DismissObject(GameObject gameObject)
+
+    private void DismissObject(GameObject gameObject)
     {
-        if (gameObject is Player)
+        if (gameObject is Player player)
         {
-            playersList.Remove((Player)gameObject);
+            playersList.Remove(player);
         }
-        else if (gameObject is Food)
+        else if (gameObject is Food food)
         {
-            foodList.Remove((Food)gameObject);
+            foodList.Remove(food);
         }
     }
 }
