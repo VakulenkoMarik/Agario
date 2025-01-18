@@ -7,7 +7,7 @@ namespace Agario.Scripts.Engine.Utils;
 
 public static class ColorExtensions
 {
-    private static readonly Random random = new();
+    private static readonly Random random = Configurations.Randomizer;
     
     public static Color GenerateColor(this Color color, byte minValue, byte maxValue)
     {

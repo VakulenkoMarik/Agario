@@ -13,11 +13,4 @@ public static class CustomMath
         
         return distance;
     }
-    
-    public static Vector2f Normalize(Vector2f vector)
-    {
-        float length = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
-        
-        return length > 0 ? vector / length : new Vector2f(0, 0);
-    }
 }

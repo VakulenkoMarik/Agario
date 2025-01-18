@@ -2,6 +2,8 @@ using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Utils;
 using SFML.System;
 // ReSharper disable InconsistentNaming
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 
 namespace Agario.Scripts.GameProcess.GameObjects;
 
@@ -9,16 +11,16 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
 {
     private Vector2f targetDirection;
 
-    private readonly float fieldOfView = 5000f;
+    private readonly float distanceOfView = 5000f;
 
     private void MakeDecision()
     {
         targetDirection = new Vector2f(0, 0);
 
-        Player? nearestBiggerPlayer = FindPlayer(players, IsBiggerPlayer);
+        Player nearestBiggerPlayer = FindPlayer(players, IsBiggerPlayer);
         AddDirectionAwayFrom(nearestBiggerPlayer, 2.0f);
         
-        Player? nearestSmallerPlayer = FindPlayer(players, IsSmallerPlayer);
+        Player nearestSmallerPlayer = FindPlayer(players, IsSmallerPlayer);
         AddDirectionTowards(nearestSmallerPlayer, 1.0f);
         
         Food? nearestFood = FindNearestFood(foods);
@@ -28,7 +30,7 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
     public override void DirectionProcessing()
     {
         MakeDecision();
-        direction = CustomMath.Normalize(targetDirection);
+        direction = targetDirection.Normalize();
     }
 
     private void AddDirection(GameObject? target, float weight, bool isTowards)
@@ -40,13 +42,15 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
 
         float distanceSquared = CustomMath.DistanceSquared(Position, target.Position);
 
-        if (distanceSquared > fieldOfView * fieldOfView)
+        if (distanceSquared > distanceOfView * distanceOfView)
         {
             return;
         }
         
         float scaledWeight = weight / (distanceSquared + 1);
-        Vector2f newDirection = CustomMath.Normalize(target.Position - Position) * scaledWeight;
+        
+        Vector2f newDirection = target.Position - Position;
+        newDirection = newDirection.Normalize() * scaledWeight;
         
         targetDirection += isTowards ? newDirection : -newDirection;
     }
@@ -80,11 +84,11 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
         return nearestFood;
     }
 
-    private Player? FindPlayer(List<Player> playersList, Func<Player, bool> condition)
+    private Player FindPlayer(List<Player> playersList, Func<Player, bool> condition)
     {
-        Player? closestPlayer = null;
+        Player closestPlayer = null;
         float minDistanceSquared = float.MaxValue;
-        float fieldOfViewSquared = fieldOfView * fieldOfView;
+        float distanceOfViewSquared = distanceOfView * distanceOfView;
 
         foreach (var player in playersList)
         {
@@ -93,7 +97,7 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
 
             float distanceSquared = CustomMath.DistanceSquared(Position, player.Position);
 
-            if (distanceSquared < minDistanceSquared && distanceSquared <= fieldOfViewSquared)
+            if (distanceSquared < minDistanceSquared && distanceSquared <= distanceOfViewSquared)
             {
                 minDistanceSquared = distanceSquared;
                 closestPlayer = player;
