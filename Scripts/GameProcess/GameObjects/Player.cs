@@ -22,10 +22,11 @@ public class Player : GameObject, IUpdatable, IDrawable
 
     public Player(float radius) : base(new CircleShape(radius))
     {
-        Color fillColor = new Color().GenerateColor(10, 255);
-        
         Radius = radius;
+        
         shape = (CircleShape)ObjectShape;
+        Color fillColor = shape.FillColor.GenerateColor(10, 255);
+        
         direction = new Vector2f(0, 0);
         
         ShapeInit(fillColor);
@@ -120,7 +121,6 @@ public class Player : GameObject, IUpdatable, IDrawable
     public void Grow(Food food)
     {
         GainWeight(food.Kilo);
-        food.Destroy();
     }
     
     public void Grow(Player playerFood)

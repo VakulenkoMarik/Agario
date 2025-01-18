@@ -10,12 +10,12 @@ public class Game : IUpdatable
 
     public Game()
     {
-        gameLoop = new GameLoop();
+        gameLoop = new();
         
         gameLoop.updatableObjects.Add(this);
     }
 
-    public void SetGame(IGameRules rules)
+    public void SetGameRules(IGameRules rules)
     {
         gameRules = rules;
     }

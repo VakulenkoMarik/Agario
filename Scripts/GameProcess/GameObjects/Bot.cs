@@ -1,34 +1,28 @@
+using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Utils;
 using SFML.System;
 // ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.GameProcess.GameObjects;
 
-public class Bot(List<Food> foods, List<Player> players) : Player(Configurations.Randomizer.Next(20, 50))
+public class Bot(List<Food> foods, List<Player> players) : Player(Configurations.Randomizer.Next(10, 30))
 {
     private Vector2f targetDirection;
+
+    private readonly float fieldOfView = 5000f;
 
     private void MakeDecision()
     {
         targetDirection = new Vector2f(0, 0);
+
+        Player? nearestBiggerPlayer = FindPlayer(players, IsBiggerPlayer);
+        AddDirectionAwayFrom(nearestBiggerPlayer, 2.0f);
+        
+        Player? nearestSmallerPlayer = FindPlayer(players, IsSmallerPlayer);
+        AddDirectionTowards(nearestSmallerPlayer, 1.0f);
         
         Food? nearestFood = FindNearestFood(foods);
-        if (nearestFood != null)
-        {
-            targetDirection += CustomMath.Normalize(nearestFood.Position - Position) * 0.5f;
-        }
-        
-        Player? smallerPlayer = FindSmallerPlayer(players);
-        if (smallerPlayer != null)
-        {
-            targetDirection += CustomMath.Normalize(smallerPlayer.Position - Position) * 1.0f;
-        }
-        
-        Player? biggerPlayer = FindBiggerPlayer(players);
-        if (biggerPlayer != null)
-        {
-            targetDirection -= CustomMath.Normalize(biggerPlayer.Position - Position) * 2.0f;
-        }
+        AddDirectionTowards(nearestFood, 0.5f);
     }
 
     public override void DirectionProcessing()
@@ -36,69 +30,79 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
         MakeDecision();
         direction = CustomMath.Normalize(targetDirection);
     }
+
+    private void AddDirection(GameObject? target, float weight, bool isTowards)
+    {
+        if (target == null)
+        {
+            return;
+        }
+
+        float distanceSquared = CustomMath.DistanceSquared(Position, target.Position);
+
+        if (distanceSquared > fieldOfView * fieldOfView)
+        {
+            return;
+        }
+        
+        float scaledWeight = weight / (distanceSquared + 1);
+        Vector2f newDirection = CustomMath.Normalize(target.Position - Position) * scaledWeight;
+        
+        targetDirection += isTowards ? newDirection : -newDirection;
+    }
     
+    private void AddDirectionTowards(GameObject? target, float weight)
+    {
+        AddDirection(target, weight, true);
+    }
+
+    private void AddDirectionAwayFrom(GameObject? target, float weight)
+    {
+        AddDirection(target, weight, false);
+    }
+
     private Food? FindNearestFood(List<Food> foodsList)
     {
         Food? nearestFood = null;
-        float minDistance = float.MaxValue;
+        float minDistanceSquared = float.MaxValue;
 
         foreach (var food in foodsList)
         {
-            float distance = CustomMath.DistanceSquared(Position, food.Position);
-            
-            if (distance < minDistance)
+            float distanceSquared = CustomMath.DistanceSquared(Position, food.Position);
+
+            if (distanceSquared < minDistanceSquared)
             {
-                minDistance = distance;
+                minDistanceSquared = distanceSquared;
                 nearestFood = food;
             }
         }
 
         return nearestFood;
     }
-    
-    private Player? FindSmallerPlayer(List<Player> playersList)
+
+    private Player? FindPlayer(List<Player> playersList, Func<Player, bool> condition)
     {
-        Player? target = null;
-        float minDistance = float.MaxValue;
+        Player? closestPlayer = null;
+        float minDistanceSquared = float.MaxValue;
+        float fieldOfViewSquared = fieldOfView * fieldOfView;
 
         foreach (var player in playersList)
         {
-            if (player == this || player.Radius >= Radius)
+            if (player == this || !condition(player))
                 continue;
 
-            float distance = CustomMath.DistanceSquared(Position, player.Position);
-            
-            if (distance < minDistance)
+            float distanceSquared = CustomMath.DistanceSquared(Position, player.Position);
+
+            if (distanceSquared < minDistanceSquared && distanceSquared <= fieldOfViewSquared)
             {
-                minDistance = distance;
-                target = player;
+                minDistanceSquared = distanceSquared;
+                closestPlayer = player;
             }
         }
 
-        return target;
+        return closestPlayer;
     }
     
-    private Player? FindBiggerPlayer(List<Player> playersList)
-    {
-        Player? threat = null;
-        
-        float minDistance = float.MaxValue;
-        float threatRadius = 100f;
-
-        foreach (var player in playersList)
-        {
-            if (player == this || player.Radius <= Radius)
-                continue;
-
-            float distance = CustomMath.DistanceSquared(Position, player.Position);
-
-            if (distance < minDistance && distance <= threatRadius * threatRadius)
-            {
-                minDistance = distance;
-                threat = player;
-            }
-        }
-
-        return threat;
-    }
+    private bool IsSmallerPlayer(Player player) => player.Radius < Radius;
+    private bool IsBiggerPlayer(Player player) => player.Radius > Radius;
 }

@@ -8,10 +8,10 @@ public class Boot
 {
     private static void Main(string[] args)
     {
-        Game game = new Game();
-        
+        Game game = new();
         IGameRules rules = new AgarioGame();
-        game.SetGame(rules);
+        
+        game.SetGameRules(rules);
         
         game.Start();
     }

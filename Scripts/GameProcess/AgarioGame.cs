@@ -20,7 +20,7 @@ public class AgarioGame : IGameRules
 
     public AgarioGame()
     {
-        var activePlayer = new Player(35f);
+        var activePlayer = new Player(20f);
         playersList.Add(activePlayer);
 
         AiPlayersInit();
@@ -118,13 +118,13 @@ public class AgarioGame : IGameRules
     {
         foreach (GameObject ghost in destructionList)
         {
-            DismissObject(ghost);
+            RecyclingObject(ghost);
         }
         
         destructionList.Clear();
     }
 
-    private void DismissObject(GameObject gameObject)
+    private void RecyclingObject(GameObject gameObject)
     {
         if (gameObject is Player player)
         {
@@ -132,7 +132,7 @@ public class AgarioGame : IGameRules
         }
         else if (gameObject is Food food)
         {
-            foodList.Remove(food);
+            food.NewFood();
         }
     }
 }

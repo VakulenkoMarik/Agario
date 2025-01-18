@@ -16,10 +16,18 @@ public class Food : GameObject, IDrawable
     
     public Food() : base(new CircleShape(2f))
     {
-        Color fillColor = new Color().GenerateColor(10, 255);
-        
         shape = (CircleShape)ObjectShape;
+        
+        Color fillColor = shape.FillColor.GenerateColor(10, 255);
         shape.FillColor = fillColor;
+    }
+
+    public void NewFood()
+    {
+        Color fillColor = shape.FillColor.GenerateColor(10, 255);
+        shape.FillColor = fillColor;
+        
+        PutOnMap();
     }
 
     public Drawable GetMesh()
