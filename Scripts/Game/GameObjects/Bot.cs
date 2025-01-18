@@ -18,13 +18,13 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
     {
         targetDirection = new Vector2f(0, 0);
 
-        Player nearestBiggerPlayer = FindPlayer(players, IsBiggerPlayer);
+        Player nearestBiggerPlayer = FindClosestPlayer(players, IsBiggerPlayer);
         AddDirectionAwayFrom(nearestBiggerPlayer, 2.0f);
         
-        Player nearestSmallerPlayer = FindPlayer(players, IsSmallerPlayer);
+        Player nearestSmallerPlayer = FindClosestPlayer(players, IsSmallerPlayer);
         AddDirectionTowards(nearestSmallerPlayer, 1.0f);
         
-        Food? nearestFood = FindNearestFood(foods);
+        Food nearestFood = foods.FindNearestFood(Position);
         AddDirectionTowards(nearestFood, 0.5f);
     }
 
@@ -66,35 +66,19 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
         AddDirection(target, weight, false);
     }
 
-    private Food? FindNearestFood(List<Food> foodsList)
-    {
-        Food? nearestFood = null;
-        float minDistanceSquared = float.MaxValue;
-
-        foreach (var food in foodsList)
-        {
-            float distanceSquared = CustomMath.DistanceSquared(Position, food.Position);
-
-            if (distanceSquared < minDistanceSquared)
-            {
-                minDistanceSquared = distanceSquared;
-                nearestFood = food;
-            }
-        }
-
-        return nearestFood;
-    }
-
-    private Player FindPlayer(List<Player> playersList, Func<Player, bool> condition)
+    private Player FindClosestPlayer(List<Player> playersList, Func<Player, bool> condition)
     {
         Player closestPlayer = null;
+        
         float minDistanceSquared = float.MaxValue;
         float distanceOfViewSquared = distanceOfView * distanceOfView;
 
         foreach (var player in playersList)
         {
             if (player == this || !condition(player))
+            {
                 continue;
+            }
 
             float distanceSquared = CustomMath.DistanceSquared(Position, player.Position);
 
