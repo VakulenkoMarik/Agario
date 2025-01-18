@@ -1,10 +1,11 @@
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
-using Agario.Scripts.GameProcess.GameObjects;
+using Agario.Scripts.Game.GameObjects;
+
 // ReSharper disable InconsistentNaming
 
-namespace Agario.Scripts.GameProcess;
+namespace Agario.Scripts.Game;
 
 public class AgarioGame : IGameRules
 {

@@ -1,11 +1,12 @@
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Utils;
 using SFML.System;
+
 // ReSharper disable InconsistentNaming
 #pragma warning disable CS8603 // Possible null reference return.
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 
-namespace Agario.Scripts.GameProcess.GameObjects;
+namespace Agario.Scripts.Game.GameObjects;
 
 public class Bot(List<Food> foods, List<Player> players) : Player(Configurations.Randomizer.Next(10, 30))
 {

@@ -7,7 +7,7 @@ using SFML.Window;
 using Time = Agario.Scripts.Engine.Time;
 // ReSharper disable InconsistentNaming
 
-namespace Agario.Scripts.GameProcess.GameObjects;
+namespace Agario.Scripts.Game.GameObjects;
 
 public class Player : GameObject, IUpdatable, IDrawable
 {

@@ -3,9 +3,10 @@ using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using SFML.Graphics;
 using SFML.System;
+
 // ReSharper disable InconsistentNaming
 
-namespace Agario.Scripts.GameProcess.GameObjects;
+namespace Agario.Scripts.Game.GameObjects;
 
 public class Food : GameObject, IDrawable
 {
