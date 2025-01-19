@@ -71,11 +71,11 @@ public class Player : GameObject, IUpdatable, IDrawable
 
     private (float, float) HumanDirectionProc()
     {
-        float directionX = (Keyboard.IsKeyPressed(Keyboard.Key.D) ? 1 : 0) - 
-                          (Keyboard.IsKeyPressed(Keyboard.Key.A) ? 1 : 0);
+        float directionX = (Keyboard.IsKeyPressed(Configurations.ActivePlayerKeyToRight) ? 1 : 0) - 
+                          (Keyboard.IsKeyPressed(Configurations.ActivePlayerKeyToLeft) ? 1 : 0);
         
-        float directionY = (Keyboard.IsKeyPressed(Keyboard.Key.S) ? 1 : 0) - 
-                          (Keyboard.IsKeyPressed(Keyboard.Key.W) ? 1 : 0);
+        float directionY = (Keyboard.IsKeyPressed(Configurations.ActivePlayerKeyToDown) ? 1 : 0) - 
+                          (Keyboard.IsKeyPressed(Configurations.ActivePlayerKeyToUp) ? 1 : 0);
         
         return (directionX, directionY);
     }
