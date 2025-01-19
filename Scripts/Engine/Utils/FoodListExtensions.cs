@@ -1,26 +1,25 @@
-using Agario.Scripts.Game.GameObjects;
 using SFML.System;
 
 namespace Agario.Scripts.Engine.Utils;
 
 public static class FoodListExtensions
 {
-    public static Food FindNearestFood(this List<Food> foodsList, Vector2f position)
+    public static T FindClosestGameObject<T>(this List<T> list, Vector2f position) where T : GameObject
     {
-        Food? nearestFood = null;
+        GameObject? nearestGameObject = null;
         float minDistanceSquared = float.MaxValue;
 
-        foreach (var food in foodsList)
+        foreach (var go in list)
         {
-            float distanceSquared = CustomMath.DistanceSquared(position, food.Position);
+            float distanceSquared = CustomMath.DistanceSquared(position, go.Position);
 
             if (distanceSquared < minDistanceSquared)
             {
                 minDistanceSquared = distanceSquared;
-                nearestFood = food;
+                nearestGameObject = go;
             }
         }
 
-        return nearestFood;
+        return nearestGameObject as T;
     }
 }

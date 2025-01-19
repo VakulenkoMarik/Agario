@@ -24,7 +24,7 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
         Player nearestSmallerPlayer = FindClosestPlayer(players, IsSmallerPlayer);
         AddDirectionTowards(nearestSmallerPlayer, 1.0f);
         
-        Food nearestFood = foods.FindNearestFood(Position);
+        Food nearestFood = foods.FindClosestGameObject(Position);
         AddDirectionTowards(nearestFood, 0.5f);
     }
 
