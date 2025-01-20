@@ -1,4 +1,5 @@
 using Agario.Scripts.Engine;
+using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using SFML.System;
 
@@ -12,28 +13,28 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
 {
     private Vector2f targetDirection;
 
-    private readonly float distanceOfView = 5000f;
+    private readonly float distanceOfView = 4000f;
 
+    public Vector2f VectorFromInput()
+    {
+        MakeDecision();
+        return targetDirection.Normalize();
+    }
+    
     private void MakeDecision()
     {
         targetDirection = new Vector2f(0, 0);
 
         Player nearestBiggerPlayer = FindClosestPlayer(players, IsBiggerPlayer);
-        AddDirectionAwayFrom(nearestBiggerPlayer, 2.0f);
+        AddDirectionAwayFrom(nearestBiggerPlayer, 4.0f);
         
         Player nearestSmallerPlayer = FindClosestPlayer(players, IsSmallerPlayer);
-        AddDirectionTowards(nearestSmallerPlayer, 1.0f);
+        AddDirectionTowards(nearestSmallerPlayer, 2.0f);
         
         Food nearestFood = foods.FindClosestGameObject(Position);
         AddDirectionTowards(nearestFood, 0.5f);
     }
-
-    public override void DirectionProcessing()
-    {
-        MakeDecision();
-        direction = targetDirection.Normalize();
-    }
-
+    
     private void AddDirection(GameObject? target, float weight, bool isTowards)
     {
         if (target == null)
@@ -43,17 +44,15 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
 
         float distanceSquared = CustomMath.DistanceSquared(Position, target.Position);
 
-        if (distanceSquared > distanceOfView * distanceOfView)
+        if (distanceSquared <= distanceOfView * distanceOfView)
         {
-            return;
+            float scaledWeight = weight / (distanceSquared + 1);
+        
+            Vector2f newDirection = target.Position - Position;
+            newDirection = newDirection.Normalize() * scaledWeight;
+        
+            targetDirection += isTowards ? newDirection : -newDirection;
         }
-        
-        float scaledWeight = weight / (distanceSquared + 1);
-        
-        Vector2f newDirection = target.Position - Position;
-        newDirection = newDirection.Normalize() * scaledWeight;
-        
-        targetDirection += isTowards ? newDirection : -newDirection;
     }
     
     private void AddDirectionTowards(GameObject? target, float weight)
@@ -94,4 +93,5 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
     
     private bool IsSmallerPlayer(Player player) => player.Radius < Radius;
     private bool IsBiggerPlayer(Player player) => player.Radius > Radius;
+    
 }

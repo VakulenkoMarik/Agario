@@ -10,8 +10,8 @@ public static class GameObjectExtensions
         Vector2f object1Center = gameObject.Position;
         Vector2f object2Center = target.Position;
 
-        if (gameObject.ObjectShape is CircleShape c1Shape
-            && target.ObjectShape is CircleShape c2Shape)
+        if (gameObject.GetMesh() is CircleShape c1Shape
+            && target.GetMesh() is CircleShape c2Shape)
         {
             float distanceSquared = CustomMath.DistanceSquared(object1Center, object2Center);
             

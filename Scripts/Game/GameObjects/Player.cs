@@ -1,36 +1,46 @@
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
+using Agario.Scripts.Game.InputProviders;
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
 using Time = Agario.Scripts.Engine.Time;
 // ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Game.GameObjects;
 
-public class Player : GameObject, IUpdatable, IDrawable
+public class Player : GameObject, IUpdatable, IInputHandler
 {
+    public float Radius { get; private set; }
+    
     private float speed = 120;
     private readonly float minSpeed = 15;
 
     private readonly CircleShape shape;
+    private readonly IInputProvider InputProvider;
     
-    public float Radius { get; private set; }
-    
-    protected Vector2f direction;
+    private Vector2f direction;
 
     public Player(float radius) : base(new CircleShape(radius))
     {
-        Radius = radius;
+        InputProvider = ChoseInputProvider();
         
         shape = (CircleShape)ObjectShape;
-        Color fillColor = shape.FillColor.GenerateColor(10, 255);
         
         direction = new Vector2f(0, 0);
         
-        ShapeInit(fillColor);
+        ShapeInit();
         PositionInit();
+    }
+
+    private IInputProvider ChoseInputProvider()
+    {
+        if (this is Bot bot)
+        {
+            return new BotInputProvider(bot);
+        }
+        
+        return new PlayerInputProvider();
     }
 
     public void Drop(float x, float y)
@@ -38,8 +48,9 @@ public class Player : GameObject, IUpdatable, IDrawable
         Position = new Vector2f(x, y);
     }
 
-    private void ShapeInit(Color fillColor)
+    private void ShapeInit()
     {
+        Color fillColor = shape.FillColor.GenerateColor(10, 255);
         shape.FillColor = fillColor;
         
         shape.Origin = new Vector2f(shape.Radius, shape.Radius);
@@ -57,27 +68,7 @@ public class Player : GameObject, IUpdatable, IDrawable
     
     public void Update()
     {
-        DirectionProcessing();
         TryMove();
-        UpdateMesh();
-    }
-
-    public virtual void DirectionProcessing()
-    {
-        (float dX, float dY) = HumanDirectionProc();
-
-        direction = new Vector2f(dX, dY);
-    }
-
-    private (float, float) HumanDirectionProc()
-    {
-        float directionX = (Keyboard.IsKeyPressed(Configurations.ActivePlayerKeyToRight) ? 1 : 0) - 
-                          (Keyboard.IsKeyPressed(Configurations.ActivePlayerKeyToLeft) ? 1 : 0);
-        
-        float directionY = (Keyboard.IsKeyPressed(Configurations.ActivePlayerKeyToDown) ? 1 : 0) - 
-                          (Keyboard.IsKeyPressed(Configurations.ActivePlayerKeyToUp) ? 1 : 0);
-        
-        return (directionX, directionY);
     }
 
     private bool CanMove(float newX, float newY)
@@ -107,13 +98,19 @@ public class Player : GameObject, IUpdatable, IDrawable
         {
             return;
         }
+        
+        UpdatePosition(new Vector2f(x, y));
+    }
 
-        Position = new Vector2f(x, y);
+    private void UpdatePosition(Vector2f vector)
+    {
+        Position = vector;
+        
+        shape.Position = Position;
     }
 
     private void UpdateMesh()
     {
-        shape.Position = Position;
         shape.Radius = Radius;
         shape.Origin = new Vector2f(Radius, Radius);
     }
@@ -121,12 +118,16 @@ public class Player : GameObject, IUpdatable, IDrawable
     public void Grow(Food food)
     {
         GainWeight(food.Kilo);
+        
+        UpdateMesh();
     }
     
     public void Grow(Player playerFood)
     {
         GainWeight(playerFood.Radius);
         playerFood.Destroy();
+        
+        UpdateMesh();
     }
 
     private void GainWeight(float kilo)
@@ -135,12 +136,15 @@ public class Player : GameObject, IUpdatable, IDrawable
 
         if (speed > minSpeed)
         {
-            speed -= kilo / 1.5f;
+            speed -= kilo / 1.2f;
         }
     }
 
-    public Drawable GetMesh()
+    public void HandleInput()
     {
-        return shape;
+        direction = InputFromProvider();
     }
+
+    private Vector2f InputFromProvider()
+        => InputProvider.GetInput();
 }

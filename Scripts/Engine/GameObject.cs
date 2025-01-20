@@ -5,10 +5,10 @@ using SFML.System;
 
 namespace Agario.Scripts.Engine;
 
-public class GameObject
+public class GameObject : IDrawable
 {
     public Vector2f Position;
-    public Shape ObjectShape { get; private set; }
+    protected Shape ObjectShape { get; private set; }
 
     private readonly GameLoop gameLoop;
 
@@ -19,6 +19,11 @@ public class GameObject
 
         gameLoop = GameLoop.GetInstance();
 
+        AddObjectToLists();
+    }
+
+    private void AddObjectToLists()
+    {
         if (this is IUpdatable updatable)
         {
             gameLoop.updatableObjects.Add(updatable);
@@ -28,9 +33,14 @@ public class GameObject
         {
             gameLoop.drawableObjects.Add(drawable);
         }
+
+        if (this is IInputHandler handler)
+        {
+            gameLoop.inputHandlerObjects.Add(handler);
+        }
     }
-    
-    public void Destroy()
+
+    protected void Destroy()
     {
         if (this is IUpdatable updatable)
         {
@@ -41,5 +51,15 @@ public class GameObject
         {
             gameLoop.drawableObjects.Remove(drawable);
         }
+        
+        if (this is IInputHandler handler)
+        {
+            gameLoop.inputHandlerObjects.Remove(handler);
+        }
+    }
+
+    public Drawable GetMesh()
+    {
+        return ObjectShape;
     }
 }
