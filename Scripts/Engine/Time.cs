@@ -1,14 +1,15 @@
 using SFML.System;
+// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Engine;
 
 public static class Time
 {
     private const int TargetFPS = 60;
-    public const float UntilUpdateTime = 1f / TargetFPS;
+    private const float UntilUpdateTime = 1f / TargetFPS;
     
     public static float deltaTime { get; private set; }
-    private static Clock clock = new();
+    private static readonly Clock clock = new();
 
     public static void Update()
     {

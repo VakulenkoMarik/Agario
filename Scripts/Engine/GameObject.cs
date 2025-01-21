@@ -1,4 +1,5 @@
 using Agario.Scripts.Engine.Interfaces;
+using Agario.Scripts.Engine.Utils;
 using SFML.Graphics;
 using SFML.System;
 // ReSharper disable InconsistentNaming
@@ -44,17 +45,17 @@ public class GameObject : IDrawable
     {
         if (this is IUpdatable updatable)
         {
-            gameLoop.updatableObjects.Remove(updatable);
+            gameLoop.updatableObjects.RemoveSwap(updatable);
         }
 
         if (this is IDrawable drawable)
         {
-            gameLoop.drawableObjects.Remove(drawable);
+            gameLoop.drawableObjects.RemoveSwap(drawable);
         }
         
         if (this is IInputHandler handler)
         {
-            gameLoop.inputHandlerObjects.Remove(handler);
+            gameLoop.inputHandlerObjects.RemoveSwap(handler);
         }
     }
 
