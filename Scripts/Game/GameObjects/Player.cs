@@ -136,7 +136,7 @@ public class Player : GameObject, IUpdatable, IInputHandler
 
         if (speed > minSpeed)
         {
-            speed -= kilo / 1.2f;
+            speed -= kilo / 1.5f;
         }
     }
 

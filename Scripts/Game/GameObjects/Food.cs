@@ -1,5 +1,4 @@
 using Agario.Scripts.Engine;
-using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using SFML.Graphics;
 using SFML.System;
@@ -8,7 +7,7 @@ using SFML.System;
 
 namespace Agario.Scripts.Game.GameObjects;
 
-public class Food : GameObject, IDrawable
+public class Food : GameObject
 {
     private readonly Random random = Configurations.Randomizer;
     private readonly CircleShape shape;
@@ -29,11 +28,6 @@ public class Food : GameObject, IDrawable
         shape.FillColor = fillColor;
         
         PutOnMap();
-    }
-
-    public Drawable GetMesh()
-    {
-        return shape;
     }
 
     public void PutOnMap()

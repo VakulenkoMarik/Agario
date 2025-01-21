@@ -47,10 +47,15 @@ public class AgarioGame : IGameRules
     public void Update()
     {
         ClearDeathList();
-        
-        TryGenerateFood();
+
+        StartOfNewObjects();
         
         CollisionsHandling();
+    }
+
+    private void StartOfNewObjects()
+    {
+        TryGenerateFood();
     }
 
     private void TryGenerateFood()
@@ -129,7 +134,7 @@ public class AgarioGame : IGameRules
     {
         if (gameObject is Player player)
         {
-            playersList.Remove(player);
+            playersList.RemoveSwap(player);
         }
         else if (gameObject is Food food)
         {
