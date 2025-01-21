@@ -17,7 +17,7 @@ public class Player : GameObject, IUpdatable, IInputHandler
     private readonly float minSpeed = 15;
 
     private readonly CircleShape shape;
-    private readonly IInputProvider InputProvider;
+    private IInputProvider InputProvider;
     
     private Vector2f direction;
 
@@ -143,8 +143,36 @@ public class Player : GameObject, IUpdatable, IInputHandler
     public void HandleInput()
     {
         direction = InputFromProvider();
+
+        if (InputProvider is PlayerInputProvider provider)
+        {
+            if (provider.CanSwapBodies())
+            {
+                SwitchBodiesWith();
+            }
+        }
     }
 
     private Vector2f InputFromProvider()
         => InputProvider.GetInput();
+
+    public void ChangeInputProvider(IInputProvider provider)
+    {
+        InputProvider = provider;
+    }
+
+    private void SwitchBodiesWith()
+    {
+        int index = Configurations.Randomizer.Next(0, AgarioGame.playersList.Count);
+        Player playerToSwitch = AgarioGame.playersList[index];
+
+        if (playerToSwitch == this)
+        {
+            return;
+        }
+
+        ChangeInputProvider(new BotInputProvider(playerToSwitch as Bot));
+
+        playerToSwitch.ChangeInputProvider(new PlayerInputProvider());
+    }
 }

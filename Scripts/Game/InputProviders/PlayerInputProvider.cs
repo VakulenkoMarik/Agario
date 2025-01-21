@@ -25,4 +25,12 @@ public class PlayerInputProvider : IInputProvider
 
         return inputDelta.Normalize();
     }
+
+    public bool CanSwapBodies()
+    {
+        if (Keyboard.IsKeyPressed(Keyboard.Key.F))
+            return true;
+
+        return false;
+    }
 }

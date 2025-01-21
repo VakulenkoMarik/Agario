@@ -12,7 +12,7 @@ public class AgarioGame : IGameRules
     private readonly Random random = Configurations.Randomizer;
     
     private readonly List<Food> foodList = new();
-    private readonly List<Player> playersList = new();
+    public static readonly List<Player> playersList = new();
     
     private readonly List<GameObject> destructionList = new();
 
