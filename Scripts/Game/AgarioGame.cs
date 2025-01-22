@@ -11,7 +11,7 @@ public class AgarioGame : IGameRules
 {
     private readonly Random random = Configurations.Randomizer;
     
-    private readonly List<Food> foodList = new();
+    public static readonly List<Food> foodList = new();
     public static readonly List<Player> playersList = new();
     
     private readonly List<GameObject> destructionList = new();
@@ -34,7 +34,7 @@ public class AgarioGame : IGameRules
         
         for (int i = 0; i < playersVolume; i++)
         {
-            Player player = new Bot(foodList, playersList);
+            Player player = new Bot();
             playersList.Add(player);
 
             int x = random.Next(0, maxXPos);

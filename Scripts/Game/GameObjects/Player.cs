@@ -156,23 +156,11 @@ public class Player : GameObject, IUpdatable, IInputHandler
     private Vector2f InputFromProvider()
         => InputProvider.GetInput();
 
-    public void ChangeInputProvider(IInputProvider provider)
-    {
-        InputProvider = provider;
-    }
-
     private void SwitchBodiesWith()
     {
         int index = Configurations.Randomizer.Next(0, AgarioGame.playersList.Count);
         Player playerToSwitch = AgarioGame.playersList[index];
-
-        if (playerToSwitch == this)
-        {
-            return;
-        }
-
-        ChangeInputProvider(new BotInputProvider(playerToSwitch as Bot));
-
-        playerToSwitch.ChangeInputProvider(new PlayerInputProvider());
+        
+        (InputProvider, playerToSwitch.InputProvider) = (playerToSwitch.InputProvider, InputProvider);
     }
 }

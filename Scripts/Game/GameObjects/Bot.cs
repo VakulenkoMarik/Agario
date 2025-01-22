@@ -9,7 +9,7 @@ using SFML.System;
 
 namespace Agario.Scripts.Game.GameObjects;
 
-public class Bot(List<Food> foods, List<Player> players) : Player(Configurations.Randomizer.Next(10, 30))
+public class Bot() : Player(Configurations.Randomizer.Next(10, 30))
 {
     private Vector2f targetDirection;
 
@@ -25,33 +25,31 @@ public class Bot(List<Food> foods, List<Player> players) : Player(Configurations
     {
         targetDirection = new Vector2f(0, 0);
 
-        Player nearestBiggerPlayer = FindClosestPlayer(players, IsBiggerPlayer);
+        Player nearestBiggerPlayer = FindClosestPlayer(AgarioGame.playersList, IsBiggerPlayer);
         AddDirectionAwayFrom(nearestBiggerPlayer, 4.0f);
         
-        Player nearestSmallerPlayer = FindClosestPlayer(players, IsSmallerPlayer);
+        Player nearestSmallerPlayer = FindClosestPlayer(AgarioGame.playersList, IsSmallerPlayer);
         AddDirectionTowards(nearestSmallerPlayer, 2.0f);
         
-        Food nearestFood = foods.FindClosestGameObject(Position);
+        Food nearestFood = AgarioGame.foodList.FindClosestGameObject(Position);
         AddDirectionTowards(nearestFood, 0.5f);
     }
     
     private void AddDirection(GameObject? target, float weight, bool isTowards)
     {
-        if (target == null)
+        if (target != null)
         {
-            return;
-        }
+            float distanceSquared = CustomMath.DistanceSquared(Position, target.Position);
 
-        float distanceSquared = CustomMath.DistanceSquared(Position, target.Position);
-
-        if (distanceSquared <= distanceOfView * distanceOfView)
-        {
-            float scaledWeight = weight / (distanceSquared + 1);
+            if (distanceSquared <= distanceOfView * distanceOfView)
+            {
+                float scaledWeight = weight / (distanceSquared + 1);
         
-            Vector2f newDirection = target.Position - Position;
-            newDirection = newDirection.Normalize() * scaledWeight;
+                Vector2f newDirection = target.Position - Position;
+                newDirection = newDirection.Normalize() * scaledWeight;
         
-            targetDirection += isTowards ? newDirection : -newDirection;
+                targetDirection += isTowards ? newDirection : -newDirection;
+            }
         }
     }
     
