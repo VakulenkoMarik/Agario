@@ -12,7 +12,6 @@ public class GameLoop
     
     public readonly List<IDrawable> drawableObjects = new();
     public readonly List<IUpdatable> updatableObjects = new();
-    public readonly List<IInputHandler> inputHandlerObjects = new();
     
     private readonly Color backgroundColor;
     private readonly RenderWindow scene;
@@ -40,7 +39,7 @@ public class GameLoop
         
         while (!IsEndGameLoop())
         {
-            CheckInput();
+            Input();
             Update();
             Render();
         }
@@ -56,13 +55,13 @@ public class GameLoop
         isEndGameLoop = false;
     }
     
-    private void CheckInput()
+    private void Input()
     {
         scene.DispatchEvents();
 
-        foreach (IInputHandler handler in inputHandlerObjects)
+        foreach (var key in InputSystem.Input.Keys.Values)
         {
-            handler.HandleInput();
+            key.UpdateStatus();
         }
     }
     
@@ -73,6 +72,11 @@ public class GameLoop
         foreach (IUpdatable objectToUpdate in updatableObjects.ToList())
         {
             objectToUpdate.Update();
+        }
+        
+        foreach (var key in InputSystem.Input.Keys.Values)
+        {
+            key.TryActivateEvent();
         }
     }
     

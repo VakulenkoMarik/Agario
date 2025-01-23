@@ -34,11 +34,6 @@ public class GameObject : IDrawable
         {
             gameLoop.drawableObjects.Add(drawable);
         }
-
-        if (this is IInputHandler handler)
-        {
-            gameLoop.inputHandlerObjects.Add(handler);
-        }
     }
 
     protected void Destroy()
@@ -51,11 +46,6 @@ public class GameObject : IDrawable
         if (this is IDrawable drawable)
         {
             gameLoop.drawableObjects.RemoveSwap(drawable);
-        }
-        
-        if (this is IInputHandler handler)
-        {
-            gameLoop.inputHandlerObjects.RemoveSwap(handler);
         }
     }
 

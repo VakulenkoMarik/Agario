@@ -1,9 +1,11 @@
 using Agario.Scripts.Engine;
+using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Game.InputProviders;
 using SFML.Graphics;
 using SFML.System;
+using SFML.Window;
 using Time = Agario.Scripts.Engine.Time;
 // ReSharper disable InconsistentNaming
 
