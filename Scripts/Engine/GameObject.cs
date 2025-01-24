@@ -29,11 +29,9 @@ public class GameObject : IDrawable
         {
             gameLoop.updatableObjects.Add(updatable);
         }
-
-        if (this is IDrawable drawable)
-        {
-            gameLoop.drawableObjects.Add(drawable);
-        }
+        
+        gameLoop.drawableObjects.Add(this);
+        
     }
 
     protected void Destroy()
@@ -42,11 +40,8 @@ public class GameObject : IDrawable
         {
             gameLoop.updatableObjects.RemoveSwap(updatable);
         }
-
-        if (this is IDrawable drawable)
-        {
-            gameLoop.drawableObjects.RemoveSwap(drawable);
-        }
+        
+        gameLoop.drawableObjects.RemoveSwap(this);
     }
 
     public Drawable GetMesh()

@@ -9,7 +9,9 @@ public static class Configurations
 
     public static readonly Random Randomizer = new();
 
-    public static readonly ActivePlayerKeys PlayerKeys = new(
+    public static readonly Keyboard.Key SwapPlayersControllersKey = Keyboard.Key.F;
+    
+    public static readonly ActivePlayerMoveKeys PlayerMoveKeys = new(
         Keyboard.Key.W,
         Keyboard.Key.S,
         Keyboard.Key.D,
@@ -17,7 +19,7 @@ public static class Configurations
     );
 }
 
-public readonly record struct ActivePlayerKeys(
+public readonly record struct ActivePlayerMoveKeys(
     Keyboard.Key KeyToUp,
     Keyboard.Key KeyToDown,
     Keyboard.Key KeyToRight,

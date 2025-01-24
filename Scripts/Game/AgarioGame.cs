@@ -1,7 +1,9 @@
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
+using Agario.Scripts.Game.Controllers;
 using Agario.Scripts.Game.GameObjects;
+using SFML.System;
 
 // ReSharper disable InconsistentNaming
 
@@ -21,10 +23,24 @@ public class AgarioGame : IGameRules
 
     public AgarioGame()
     {
-        var activePlayer = new Player(20f);
-        playersList.Add(activePlayer);
-
+        ActivePlayerInit();
+        
         AiPlayersInit();
+    }
+
+    private void ActivePlayerInit()
+    {
+        float posX = Configurations.WindowWidth / 2f;
+        float posY = Configurations.WindowHeight / 2f;
+        
+        Player activePlayer = new(20f)
+        {
+            Position = new Vector2f(posX, posY)
+        };
+
+        activePlayer.SetController(new HumanController(activePlayer));
+        
+        playersList.Add(activePlayer);
     }
 
     private void AiPlayersInit()
@@ -34,13 +50,15 @@ public class AgarioGame : IGameRules
         
         for (int i = 0; i < playersVolume; i++)
         {
-            Player player = new Bot();
+            Player player = new(Configurations.Randomizer.Next(10, 30));
+            player.SetController(new BotController(player));
+            
             playersList.Add(player);
 
             int x = random.Next(0, maxXPos);
             int y = random.Next(0, maxYPos);
             
-            player.Drop(x, y);
+            player.Position = new Vector2f(x, y);
         }
     }
 

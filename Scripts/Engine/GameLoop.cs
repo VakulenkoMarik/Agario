@@ -59,10 +59,7 @@ public class GameLoop
     {
         scene.DispatchEvents();
 
-        foreach (var key in InputSystem.Input.Keys.Values)
-        {
-            key.UpdateStatus();
-        }
+        InputSystem.Input.UpdateKeyStatuses();
     }
     
     private void Update()

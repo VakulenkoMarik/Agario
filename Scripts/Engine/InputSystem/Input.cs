@@ -21,4 +21,12 @@ public static class Input
     {
         Keys[name].SetOnKeyPressedEvent(action);
     }
+
+    public static void UpdateKeyStatuses()
+    {
+        foreach (var key in Keys.Values)
+        {
+            key.UpdateStatus();
+        }
+    }
 }

@@ -1,9 +1,10 @@
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
+using Agario.Scripts.Game.Controllers;
 using SFML.Graphics;
 using SFML.System;
-using Time = Agario.Scripts.Engine.Time;
+
 // ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Game.GameObjects;
@@ -12,39 +13,26 @@ public class Player : GameObject, IUpdatable
 {
     public float Radius { get; private set; }
     
-    private float speed = 120;
-    private readonly float minSpeed = 15;
-
     private readonly CircleShape shape;
-    /*private IInputProvider InputProvider;*/
-    
-    public Vector2f Direction { get; private set; }
+
+    private Controller movementController = null!;
 
     public Player(float radius) : base(new CircleShape(radius))
     {
-        /*InputProvider = ChoseInputProvider();*/
-        
         shape = (CircleShape)ObjectShape;
         
-        Direction = new Vector2f(0, 0);
-        
         ShapeInit();
-        PositionInit();
     }
 
-    /*private IInputProvider ChoseInputProvider()
+    public void SetController(Controller controller)
     {
-        if (this is Bot bot)
-        {
-            return new BotInputProvider(bot);
-        }
-        
-        return new PlayerInputProvider();
-    }*/
+        movementController = controller;
+    }
 
-    public void Drop(float x, float y)
+    public void Update()
     {
-        Position = new Vector2f(x, y);
+        movementController.Update();
+        UpdateMesh();
     }
 
     private void ShapeInit()
@@ -56,110 +44,47 @@ public class Player : GameObject, IUpdatable
 
         Radius = shape.Radius;
     }
-    
-    private void PositionInit()
-    {
-        float posX = Configurations.WindowWidth / 2f;
-        float posY = Configurations.WindowHeight / 2f;
-
-        Position = new Vector2f(posX, posY);
-    }
-    
-    public void Update()
-    {
-        TryMove();
-    }
-
-    private bool CanMove(float newX, float newY)
-    {
-        float xBorder = newX + shape.Radius * Direction.X;
-        float yBorder = newY + shape.Radius * Direction.Y;
-        
-        if (xBorder is < 0 or > Configurations.WindowWidth)
-        {
-            return false;
-        }
-        
-        if (yBorder is < 0 or > Configurations.WindowHeight)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    private void TryMove()
-    {
-        float x = Position.X + speed * Direction.X * Time.deltaTime;
-        float y = Position.Y + speed * Direction.Y * Time.deltaTime;
-
-        if (!CanMove(x, y))
-        {
-            return;
-        }
-        
-        UpdatePosition(new Vector2f(x, y));
-    }
-
-    private void UpdatePosition(Vector2f vector)
-    {
-        Position = vector;
-        
-        shape.Position = Position;
-    }
 
     private void UpdateMesh()
     {
-        shape.Radius = Radius;
         shape.Origin = new Vector2f(Radius, Radius);
-    }
-
-    public void Grow(Food food)
-    {
-        GainWeight(food.Kilo);
         
-        UpdateMesh();
+        shape.Radius = Radius;
+        shape.Position = Position;
     }
     
-    public void Grow(Player playerFood)
+    public void Grow(GameObject target)
     {
-        GainWeight(playerFood.Radius);
-        playerFood.Destroy();
+        float kiloToAdd = 0;
         
+        if (target is Food food)
+        {
+            kiloToAdd = food.Kilo;
+        }
+        else if (target is Player player)
+        {
+            kiloToAdd = player.Radius;
+            player.Destroy();
+        }
+        
+        GainWeight(kiloToAdd);
         UpdateMesh();
     }
 
     private void GainWeight(float kilo)
     {
         Radius += kilo / 2;
-
-        if (speed > minSpeed)
-        {
-            speed -= kilo / 1.5f;
-        }
-    }
-
-    /*public void HandleInput()
-    {
-        direction = InputFromProvider();
-
-        if (InputProvider is PlayerInputProvider provider)
-        {
-            if (provider.CanSwapBodies())
-            {
-                SwitchBodiesWith();
-            }
-        }
-    }
-
-    private Vector2f InputFromProvider()
-        => InputProvider.GetInput();
-
-    private void SwitchBodiesWith()
-    {
-        int index = Configurations.Randomizer.Next(0, AgarioGame.playersList.Count);
-        Player playerToSwitch = AgarioGame.playersList[index];
         
-        (InputProvider, playerToSwitch.InputProvider) = (playerToSwitch.InputProvider, InputProvider);
-    }*/
+        movementController.ChangeSpeedByKilo(kilo);
+    }
+
+    public void SwapControllersWith(Player playerToSwap)
+    {
+        playerToSwap.movementController.ChangePlayer(this);
+        movementController.ChangePlayer(playerToSwap);
+        
+        (movementController, playerToSwap.movementController)
+            = (playerToSwap.movementController, movementController);
+        
+    }
 }
