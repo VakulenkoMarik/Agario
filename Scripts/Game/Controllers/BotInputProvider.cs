@@ -1,10 +1,9 @@
-using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Game.GameObjects;
 using SFML.System;
 
-namespace Agario.Scripts.Game.InputProviders;
+namespace Agario.Scripts.Game.Controllers;
 
-public class BotInputProvider(Bot bot) : IInputProvider
+public class BotInputProvider(Bot bot)
 {
     public Vector2f GetInput()
     {

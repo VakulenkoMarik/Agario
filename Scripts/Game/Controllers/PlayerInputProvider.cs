@@ -1,11 +1,10 @@
-using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using SFML.System;
 using SFML.Window;
 
-namespace Agario.Scripts.Game.InputProviders;
+namespace Agario.Scripts.Game.Controllers;
 
-public class PlayerInputProvider : IInputProvider
+public class PlayerInputProvider
 {
     public Vector2f GetInput()
     {

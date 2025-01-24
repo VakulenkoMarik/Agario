@@ -1,17 +1,14 @@
 using Agario.Scripts.Engine;
-using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
-using Agario.Scripts.Game.InputProviders;
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
 using Time = Agario.Scripts.Engine.Time;
 // ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Game.GameObjects;
 
-public class Player : GameObject, IUpdatable, IInputHandler
+public class Player : GameObject, IUpdatable
 {
     public float Radius { get; private set; }
     
@@ -19,23 +16,23 @@ public class Player : GameObject, IUpdatable, IInputHandler
     private readonly float minSpeed = 15;
 
     private readonly CircleShape shape;
-    private IInputProvider InputProvider;
+    /*private IInputProvider InputProvider;*/
     
-    private Vector2f direction;
+    public Vector2f Direction { get; private set; }
 
     public Player(float radius) : base(new CircleShape(radius))
     {
-        InputProvider = ChoseInputProvider();
+        /*InputProvider = ChoseInputProvider();*/
         
         shape = (CircleShape)ObjectShape;
         
-        direction = new Vector2f(0, 0);
+        Direction = new Vector2f(0, 0);
         
         ShapeInit();
         PositionInit();
     }
 
-    private IInputProvider ChoseInputProvider()
+    /*private IInputProvider ChoseInputProvider()
     {
         if (this is Bot bot)
         {
@@ -43,7 +40,7 @@ public class Player : GameObject, IUpdatable, IInputHandler
         }
         
         return new PlayerInputProvider();
-    }
+    }*/
 
     public void Drop(float x, float y)
     {
@@ -75,8 +72,8 @@ public class Player : GameObject, IUpdatable, IInputHandler
 
     private bool CanMove(float newX, float newY)
     {
-        float xBorder = newX + shape.Radius * direction.X;
-        float yBorder = newY + shape.Radius * direction.Y;
+        float xBorder = newX + shape.Radius * Direction.X;
+        float yBorder = newY + shape.Radius * Direction.Y;
         
         if (xBorder is < 0 or > Configurations.WindowWidth)
         {
@@ -93,8 +90,8 @@ public class Player : GameObject, IUpdatable, IInputHandler
 
     private void TryMove()
     {
-        float x = Position.X + speed * direction.X * Time.deltaTime;
-        float y = Position.Y + speed * direction.Y * Time.deltaTime;
+        float x = Position.X + speed * Direction.X * Time.deltaTime;
+        float y = Position.Y + speed * Direction.Y * Time.deltaTime;
 
         if (!CanMove(x, y))
         {
@@ -142,7 +139,7 @@ public class Player : GameObject, IUpdatable, IInputHandler
         }
     }
 
-    public void HandleInput()
+    /*public void HandleInput()
     {
         direction = InputFromProvider();
 
@@ -164,5 +161,5 @@ public class Player : GameObject, IUpdatable, IInputHandler
         Player playerToSwitch = AgarioGame.playersList[index];
         
         (InputProvider, playerToSwitch.InputProvider) = (playerToSwitch.InputProvider, InputProvider);
-    }
+    }*/
 }
