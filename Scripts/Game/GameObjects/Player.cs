@@ -1,21 +1,22 @@
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
-using Agario.Scripts.Game.Controllers;
 using SFML.Graphics;
 using SFML.System;
+using Time = Agario.Scripts.Engine.Time;
 
 // ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Game.GameObjects;
 
-public class Player : GameObject, IUpdatable
+public class Player : GameObject, IUpdatable, IDrawable
 {
     public float Radius { get; private set; }
     
     private readonly CircleShape shape;
-
-    private Controller movementController = null!;
+    
+    private float speed = 120;
+    private const float minSpeed = 15;
 
     public Player(float radius) : base(new CircleShape(radius))
     {
@@ -23,15 +24,9 @@ public class Player : GameObject, IUpdatable
         
         ShapeInit();
     }
-
-    public void SetController(Controller controller)
-    {
-        movementController = controller;
-    }
-
+    
     public void Update()
     {
-        movementController.Update();
         UpdateMesh();
     }
 
@@ -74,17 +69,46 @@ public class Player : GameObject, IUpdatable
     private void GainWeight(float kilo)
     {
         Radius += kilo / 2;
-        
-        movementController.ChangeSpeedByKilo(kilo);
+
+        if (speed - kilo >= minSpeed)
+        {
+            speed -= kilo;
+        }
     }
 
-    public void SwapControllersWith(Player playerToSwap)
+    public CircleShape GetShape()
     {
-        playerToSwap.movementController.ChangePlayer(this);
-        movementController.ChangePlayer(playerToSwap);
+        return shape;
+    }
+    
+    private bool CanMove(float newX, float newY, Vector2f direction)
+    {
+        float xBorder = newX + Radius * direction.X;
+        float yBorder = newY + Radius * direction.Y;
         
-        (movementController, playerToSwap.movementController)
-            = (playerToSwap.movementController, movementController);
+        if (xBorder is < 0 or > Configurations.WindowWidth)
+        {
+            return false;
+        }
         
+        if (yBorder is < 0 or > Configurations.WindowHeight)
+        {
+            return false;
+        }
+
+        return true;
+    }
+    
+    public void TryMove(Vector2f direction)
+    {
+        float x = Position.X + speed * direction.X * Time.deltaTime;
+        float y = Position.Y + speed * direction.Y * Time.deltaTime;
+
+        if (!CanMove(x, y, direction))
+        {
+            return;
+        }
+        
+        Position = new Vector2f(x, y);
     }
 }

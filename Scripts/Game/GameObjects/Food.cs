@@ -1,4 +1,5 @@
 using Agario.Scripts.Engine;
+using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using SFML.Graphics;
 using SFML.System;
@@ -7,7 +8,7 @@ using SFML.System;
 
 namespace Agario.Scripts.Game.GameObjects;
 
-public class Food : GameObject
+public class Food : GameObject, IDrawable
 {
     private readonly Random random = Configurations.Randomizer;
     private readonly CircleShape shape;

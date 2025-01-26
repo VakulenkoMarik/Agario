@@ -29,4 +29,27 @@ public static class Input
             key.UpdateStatus();
         }
     }
+    
+    public static void RegisterControllerKey(Keyboard.Key eventKey, Action action, string name, bool onKeyPressed = true)
+    {
+        AddKey(eventKey, name);
+
+        if (onKeyPressed)
+        {
+            AddEventOnPressedToKey(action, name);
+            return;
+        }
+        
+        AddEventOnDownToKey(action, name);
+    }
+    
+    public static void UnRegisterControllerKey(string name)
+    {
+        Keys.TryGetValue(name, out var value);
+
+        if (value is not null)
+        {
+            Keys.Remove(name);
+        }
+    }
 }

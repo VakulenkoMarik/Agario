@@ -39,8 +39,7 @@ public record EventKey(Keyboard.Key eventKey)
         {
             onKeyDownAction.Invoke();
         }
-        
-        if (wasKeyPressed && isKeyPressed && onKeyPressedAction != null)
+        else if (wasKeyPressed && isKeyPressed && onKeyPressedAction != null)
         {
             onKeyPressedAction.Invoke();
         }

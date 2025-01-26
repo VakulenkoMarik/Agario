@@ -3,6 +3,9 @@ using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Game.GameObjects;
 using SFML.System;
 // ReSharper disable InconsistentNaming
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 
 namespace Agario.Scripts.Game.Controllers;
 
@@ -10,8 +13,13 @@ public class BotController(Player player) : Controller(player)
 {
     private Vector2f targetDirection;
 
-    private readonly float distanceOfView = 4000f;
-    private readonly Player player = player;
+    private readonly float distanceOfView = 6000f;
+    
+    public void Delete()
+    {
+        player = null;
+        Destroy();
+    }
 
     protected override Vector2f GetDirection()
     {
@@ -23,14 +31,17 @@ public class BotController(Player player) : Controller(player)
     {
         targetDirection = new Vector2f(0, 0);
 
-        Player nearestBiggerPlayer = FindClosestPlayer(AgarioGame.playersList, IsBiggerPlayer);
+        Player nearestBiggerPlayer = FindClosestPlayer(AgarioGame.controllersList, IsBiggerPlayer);
         AddDirectionAwayFrom(nearestBiggerPlayer, 4.0f);
         
-        Player nearestSmallerPlayer = FindClosestPlayer(AgarioGame.playersList, IsSmallerPlayer);
+        Player nearestSmallerPlayer = FindClosestPlayer(AgarioGame.controllersList, IsSmallerPlayer);
         AddDirectionTowards(nearestSmallerPlayer, 2.0f);
-        
-        Food nearestFood = AgarioGame.foodList.FindClosestGameObject(player.Position);
-        AddDirectionTowards(nearestFood, 0.5f);
+
+        if (player != null)
+        {
+            Food nearestFood = AgarioGame.foodList.FindClosestGameObject(player.Position);
+            AddDirectionTowards(nearestFood, 0.5f);
+        }
     }
     
     private void AddDirection(GameObject? target, float weight, bool isTowards)
@@ -61,26 +72,28 @@ public class BotController(Player player) : Controller(player)
         AddDirection(target, weight, false);
     }
 
-    private Player FindClosestPlayer(List<Player> playersList, Func<Player, bool> condition)
+    private Player FindClosestPlayer(List<Controller> controllersList, Func<Player, bool> condition)
     {
         Player closestPlayer = null;
         
         float minDistanceSquared = float.MaxValue;
         float distanceOfViewSquared = distanceOfView * distanceOfView;
 
-        foreach (var playerInList in playersList)
+        foreach (var controllerInList in controllersList)
         {
-            if (playerInList == player || !condition(playerInList))
+            Player target = controllerInList.player;
+            
+            if (target is null || target == player || !condition(target))
             {
                 continue;
             }
 
-            float distanceSquared = CustomMath.DistanceSquared(player.Position, playerInList.Position);
+            float distanceSquared = CustomMath.DistanceSquared(player.Position, target.Position);
 
             if (distanceSquared < minDistanceSquared && distanceSquared <= distanceOfViewSquared)
             {
                 minDistanceSquared = distanceSquared;
-                closestPlayer = playerInList;
+                closestPlayer = target;
             }
         }
 

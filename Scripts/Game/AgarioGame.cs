@@ -14,9 +14,9 @@ public class AgarioGame : IGameRules
     private readonly Random random = Configurations.Randomizer;
     
     public static readonly List<Food> foodList = new();
-    public static readonly List<Player> playersList = new();
+    public static readonly List<Controller> controllersList = new();
     
-    private readonly List<GameObject> destructionList = new();
+    private static readonly List<GameObject> destructionList = new();
 
     private readonly int foodVolume = 50;
     private readonly int playersVolume = 5;
@@ -38,9 +38,9 @@ public class AgarioGame : IGameRules
             Position = new Vector2f(posX, posY)
         };
 
-        activePlayer.SetController(new HumanController(activePlayer));
+        Controller controller = new HumanController(activePlayer);
         
-        playersList.Add(activePlayer);
+        controllersList.Add(controller);
     }
 
     private void AiPlayersInit()
@@ -51,14 +51,15 @@ public class AgarioGame : IGameRules
         for (int i = 0; i < playersVolume; i++)
         {
             Player player = new(Configurations.Randomizer.Next(10, 30));
-            player.SetController(new BotController(player));
             
-            playersList.Add(player);
-
             int x = random.Next(0, maxXPos);
             int y = random.Next(0, maxYPos);
             
             player.Position = new Vector2f(x, y);
+            
+            Controller controller = new BotController(player);
+            
+            controllersList.Add(controller);
         }
     }
 
@@ -95,9 +96,12 @@ public class AgarioGame : IGameRules
 
     private void FoodCollisionHandling()
     {
-        foreach (Player player in playersList)
+        foreach (Controller cont in controllersList)
         {
-            HandlePlayerFoodCollisions(player);
+            if (cont.player == null)
+                continue;
+            
+            HandlePlayerFoodCollisions(cont.player);
         }
     }
     
@@ -105,36 +109,33 @@ public class AgarioGame : IGameRules
     {
         foreach (Food food in foodList)
         {
-            if (player.CollidesWith(food))
-            {
-                player.Grow(food);
-                destructionList.Add(food);
-            }
+            player.FoodLunchAttempt(food);
         }
     }
 
     private void PlayersCollisionHandling()
     {
-        foreach (Player attacker in playersList)
+        foreach (Controller cont in controllersList)
         {
-            HandlePlayerPlayerCollisions(attacker, playersList);
+            if (cont.player == null)
+                continue;
+            
+            HandlePlayerPlayerCollisions(cont.player, controllersList);
         }
     }
     
-    private void HandlePlayerPlayerCollisions(Player attacker, List<Player> targetsList)
+    private void HandlePlayerPlayerCollisions(Player attacker, List<Controller> targetsList)
     {
-        foreach (Player target in targetsList)
+        foreach (Controller target in targetsList)
         {
-            if (attacker.Radius <= target.Radius)
+            Player? player = target.player;
+            
+            if (player is null || attacker.Radius <= player.Radius)
             {
                 continue;
             }
-                
-            if (attacker.CollidesWith(target))
-            {
-                attacker.Grow(target);
-                destructionList.Add(target);
-            }
+
+            attacker.PlayerLunchAttempt(target);
         }
     }
 
@@ -150,13 +151,24 @@ public class AgarioGame : IGameRules
 
     private void RecyclingObject(GameObject gameObject)
     {
-        if (gameObject is Player player)
+        if (gameObject is Controller controller)
         {
-            playersList.RemoveSwap(player);
+            if (controller is BotController botController)
+            {
+                botController.Delete();
+                return;
+            }
+
+            controller.player = null;
         }
         else if (gameObject is Food food)
         {
             food.NewFood();
         }
+    }
+
+    public static void AddToDeathList(GameObject victim)
+    {
+        destructionList.Add(victim);
     }
 }
