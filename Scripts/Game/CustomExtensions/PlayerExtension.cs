@@ -1,9 +1,10 @@
-using Agario.Scripts.Game;
+using Agario.Scripts.Engine.Utils.Extensions;
 using Agario.Scripts.Game.Controllers;
 using Agario.Scripts.Game.GameObjects;
+
 #pragma warning disable CS8604 // Possible null reference argument.
 
-namespace Agario.Scripts.Engine.Utils;
+namespace Agario.Scripts.Game.CustomExtensions;
 
 public static class PlayerExtension
 {

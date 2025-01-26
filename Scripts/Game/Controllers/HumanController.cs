@@ -1,5 +1,6 @@
 using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Utils;
+using Agario.Scripts.Engine.Utils.Extensions;
 using Agario.Scripts.Game.GameObjects;
 using SFML.System;
 

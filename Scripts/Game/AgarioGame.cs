@@ -2,6 +2,7 @@ using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Game.Controllers;
+using Agario.Scripts.Game.CustomExtensions;
 using Agario.Scripts.Game.GameObjects;
 using SFML.System;
 

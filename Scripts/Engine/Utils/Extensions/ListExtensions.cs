@@ -1,6 +1,6 @@
 using SFML.System;
 
-namespace Agario.Scripts.Engine.Utils;
+namespace Agario.Scripts.Engine.Utils.Extensions;
 
 public static class ListExtensions
 {
