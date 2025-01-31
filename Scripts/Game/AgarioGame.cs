@@ -12,7 +12,7 @@ namespace Agario.Scripts.Game;
 
 public class AgarioGame : IGameRules
 {
-    private readonly Random random = Configurations.Randomizer;
+    private readonly Random random = ProgramConfig.Randomizer;
     
     public static readonly List<Food> foodList = new();
     public static readonly List<Controller> controllersList = new();
@@ -28,8 +28,8 @@ public class AgarioGame : IGameRules
 
     private void ActivePlayerInit()
     {
-        float posX = Configurations.Data.WindowWidth / 2f;
-        float posY = Configurations.Data.WindowHeight / 2f;
+        float posX = ProgramConfig.Data.WindowWidth / 2f;
+        float posY = ProgramConfig.Data.WindowHeight / 2f;
         
         Player activePlayer = new(20f)
         {
@@ -43,12 +43,12 @@ public class AgarioGame : IGameRules
 
     private void AiPlayersInit()
     {
-        int maxXPos = Configurations.Data.WindowWidth;
-        int maxYPos = Configurations.Data.WindowHeight;
+        int maxXPos = ProgramConfig.Data.WindowWidth;
+        int maxYPos = ProgramConfig.Data.WindowHeight;
         
         for (int i = 0; i < GameData.PlayersVolume; i++)
         {
-            Player player = new(Configurations.Randomizer.Next(10, 30));
+            Player player = new(ProgramConfig.Randomizer.Next(10, 30));
             
             int x = random.Next(0, maxXPos);
             int y = random.Next(0, maxYPos);
