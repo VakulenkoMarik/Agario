@@ -9,8 +9,13 @@ public static class PathUtils
         return Path.Combine(projectRoot, path);
     }
     
-    public static string GetIniFile()
+    public static string GetProgramIniFile()
     {
-        return Get("Config.ini");
+        return Get("ProgramConf.ini");
+    }
+    
+    public static string GetGameIniFile()
+    {
+        return Get("GameConf.ini");
     }
 }

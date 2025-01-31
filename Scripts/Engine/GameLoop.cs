@@ -22,8 +22,8 @@ public class GameLoop
     {
         instance = this;
 
-        uint width = (uint)Configurations.Root.WindowWidth;
-        uint height = (uint)Configurations.Root.WindowHeight;
+        uint width = (uint)Configurations.Data.WindowWidth;
+        uint height = (uint)Configurations.Data.WindowHeight;
         
         scene = new RenderWindow(new VideoMode(width, height), "Game window");
         scene.Closed += (_, _) => scene.Close();
