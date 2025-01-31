@@ -34,8 +34,8 @@ public class Food : GameObject, IDrawable
 
     public void PutOnMap()
     {
-        int x = random.Next(0, Configurations.WindowWidth);
-        int y = random.Next(0, Configurations.WindowHeight);
+        int x = random.Next(0, Configurations.Root.WindowWidth);
+        int y = random.Next(0, Configurations.Root.WindowHeight);
         
         Position = new Vector2f(x, y);
         

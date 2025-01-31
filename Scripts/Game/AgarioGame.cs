@@ -19,9 +19,6 @@ public class AgarioGame : IGameRules
     
     private static readonly List<GameObject> destructionList = new();
 
-    private readonly int foodVolume = 50;
-    private readonly int playersVolume = 5;
-
     public AgarioGame()
     {
         ActivePlayerInit();
@@ -31,8 +28,8 @@ public class AgarioGame : IGameRules
 
     private void ActivePlayerInit()
     {
-        float posX = Configurations.WindowWidth / 2f;
-        float posY = Configurations.WindowHeight / 2f;
+        float posX = Configurations.Root.WindowWidth / 2f;
+        float posY = Configurations.Root.WindowHeight / 2f;
         
         Player activePlayer = new(20f)
         {
@@ -46,10 +43,10 @@ public class AgarioGame : IGameRules
 
     private void AiPlayersInit()
     {
-        int maxXPos = Configurations.WindowWidth;
-        int maxYPos = Configurations.WindowHeight;
+        int maxXPos = Configurations.Root.WindowWidth;
+        int maxYPos = Configurations.Root.WindowHeight;
         
-        for (int i = 0; i < playersVolume; i++)
+        for (int i = 0; i < Configurations.Root.PlayersVolume; i++)
         {
             Player player = new(Configurations.Randomizer.Next(10, 30));
             
@@ -80,7 +77,7 @@ public class AgarioGame : IGameRules
 
     private void TryGenerateFood()
     {
-        if (foodList.Count < foodVolume)
+        if (foodList.Count < Configurations.Root.FoodVolume)
         {
             Food food = new Food();
             foodList.Add(food);

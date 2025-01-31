@@ -1,4 +1,6 @@
 using Agario.Scripts.Engine.Interfaces;
+using Agario.Scripts.Engine.Utils;
+
 // ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Engine;
@@ -10,6 +12,8 @@ public class Game : IUpdatable
 
     public Game()
     {
+        Configurations.Init();
+        
         gameLoop = new();
         
         gameLoop.updatableObjects.Add(this);

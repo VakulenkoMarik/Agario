@@ -87,12 +87,12 @@ public class Player : GameObject, IUpdatable, IDrawable
         float xBorder = newX + Radius * direction.X;
         float yBorder = newY + Radius * direction.Y;
         
-        if (xBorder is < 0 or > Configurations.WindowWidth)
+        if (xBorder < 0 || xBorder > Configurations.Root.WindowWidth)
         {
             return false;
         }
         
-        if (yBorder is < 0 or > Configurations.WindowHeight)
+        if (yBorder < 0 || yBorder > Configurations.Root.WindowHeight)
         {
             return false;
         }

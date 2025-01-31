@@ -16,12 +16,12 @@ public class HumanController : Controller
     {
         player = newPlayer;
 
-        Input.RegisterControllerKey(Configurations.PlayerMoveKeys.KeyToUp, DeltaYToUp, "moveHumanToUp");
-        Input.RegisterControllerKey(Configurations.PlayerMoveKeys.KeyToDown, DeltaYToDown, "moveHumanToDown");
-        Input.RegisterControllerKey(Configurations.PlayerMoveKeys.KeyToLeft, DeltaXToLeft, "moveHumanToLeft");
-        Input.RegisterControllerKey(Configurations.PlayerMoveKeys.KeyToRight, DeltaXToRight, "moveHumanToRight");
+        Input.RegisterControllerKey(Configurations.Root.PlayerMoveKeys.KeyToUp, DeltaYToUp, "moveHumanToUp");
+        Input.RegisterControllerKey(Configurations.Root.PlayerMoveKeys.KeyToDown, DeltaYToDown, "moveHumanToDown");
+        Input.RegisterControllerKey(Configurations.Root.PlayerMoveKeys.KeyToLeft, DeltaXToLeft, "moveHumanToLeft");
+        Input.RegisterControllerKey(Configurations.Root.PlayerMoveKeys.KeyToRight, DeltaXToRight, "moveHumanToRight");
         
-        Input.RegisterControllerKey(Configurations.SwapPlayersControllersKey, SwitchBodiesWithRandomPlayer, "swapControllers", false);
+        Input.RegisterControllerKey(Configurations.Root.SwapPlayersControllersKey, SwitchBodiesWithRandomPlayer, "swapControllers", false);
     }
 
     protected override Vector2f GetDirection()
