@@ -12,8 +12,6 @@ namespace Agario.Scripts.Game;
 
 public class AgarioGame : IGameRules
 {
-    private readonly Random random = ProgramConfig.Randomizer;
-    
     public static readonly List<Food> foodList = new();
     public static readonly List<Controller> controllersList = new();
     
@@ -48,10 +46,10 @@ public class AgarioGame : IGameRules
         
         for (int i = 0; i < GameData.PlayersVolume; i++)
         {
-            Player player = new(ProgramConfig.Randomizer.Next(10, 30));
+            Player player = new(Randomizer.Next(10, 30));
             
-            int x = random.Next(0, maxXPos);
-            int y = random.Next(0, maxYPos);
+            int x = Randomizer.Next(0, maxXPos);
+            int y = Randomizer.Next(0, maxYPos);
             
             player.Position = new Vector2f(x, y);
             

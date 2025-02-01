@@ -47,7 +47,7 @@ public class HumanController : Controller
     
     private void SwitchBodiesWithRandomPlayer()
     {
-        int index = ProgramConfig.Randomizer.Next(0, AgarioGame.controllersList.Count);
+        int index = Randomizer.Next(0, AgarioGame.controllersList.Count);
         Controller controllerToSwitch = AgarioGame.controllersList[index];
 
         (controllerToSwitch.player, player) = (player, controllerToSwitch.player);

@@ -11,7 +11,6 @@ namespace Agario.Scripts.Game.GameObjects;
 
 public class Food : GameObject, IDrawable
 {
-    private readonly Random random = ProgramConfig.Randomizer;
     private readonly CircleShape shape;
     
     public float Kilo { get; private set; } = 0.5f;
@@ -34,8 +33,8 @@ public class Food : GameObject, IDrawable
 
     public void PutOnMap()
     {
-        int x = random.Next(0, ProgramConfig.Data.WindowWidth);
-        int y = random.Next(0, ProgramConfig.Data.WindowHeight);
+        int x = Randomizer.Next(0, ProgramConfig.Data.WindowWidth);
+        int y = Randomizer.Next(0, ProgramConfig.Data.WindowHeight);
         
         Position = new Vector2f(x, y);
         
