@@ -16,6 +16,9 @@
 # Mono auto generated files
 mono_crash.*
 
+!bin/Debug/net8.0/GameConf.ini
+!bin/Debug/net8.0/ProgramConf.ini
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
