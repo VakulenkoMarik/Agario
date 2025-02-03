@@ -11,9 +11,16 @@ public class Game : IUpdatable
 
     public Game()
     {
+        GameInit();
+        
         gameLoop = new();
         
         gameLoop.updatableObjects.Add(this);
+    }
+
+    private void GameInit()
+    {
+        ProgramConfig.Init();
     }
 
     public void SetGameRules(IGameRules rules)

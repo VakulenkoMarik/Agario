@@ -1,12 +1,21 @@
+using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using SFML.Window;
 using Sini;
+// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Game;
 
-public static class GameData
+public class GameData
 {
-    static GameData()
+    public int FoodVolume { get; private set; }
+    public int PlayersVolume { get; private set; }
+    
+    public Keyboard.Key SwapPlayersControllersKey { get; private set; }
+    
+    public ActivePlayerMoveKeys PlayerMoveKeys { get; private set; }
+    
+    public void Load()
     {
         var ini = new IniFile(PathUtils.GetGameIniFile());
 
@@ -22,13 +31,6 @@ public static class GameData
             ini.GetPrimitive("Controls", "KeyToLeft", Keyboard.Key.A)
         );
     }
-    
-    public static readonly int FoodVolume;
-    public static readonly int PlayersVolume;
-    
-    public static readonly Keyboard.Key SwapPlayersControllersKey;
-    
-    public static ActivePlayerMoveKeys PlayerMoveKeys;
 }
 
 public readonly record struct ActivePlayerMoveKeys(

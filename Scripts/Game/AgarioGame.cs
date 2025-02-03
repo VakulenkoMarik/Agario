@@ -19,11 +19,18 @@ public class AgarioGame : IGameRules
 
     public AgarioGame()
     {
+        GameInit();
+        
         ActivePlayerInit();
         
         AiPlayersInit();
     }
 
+    private void GameInit()
+    {
+        GameConfig.SetData(new GameData());
+    }
+    
     private void ActivePlayerInit()
     {
         float posX = ProgramConfig.Data.WindowWidth / 2f;
@@ -44,7 +51,7 @@ public class AgarioGame : IGameRules
         int maxXPos = ProgramConfig.Data.WindowWidth;
         int maxYPos = ProgramConfig.Data.WindowHeight;
         
-        for (int i = 0; i < GameData.PlayersVolume; i++)
+        for (int i = 0; i < GameConfig.Data.PlayersVolume; i++)
         {
             Player player = new(Randomizer.Next(10, 30));
             
@@ -75,7 +82,7 @@ public class AgarioGame : IGameRules
 
     private void TryGenerateFood()
     {
-        if (foodList.Count < GameData.FoodVolume)
+        if (foodList.Count < GameConfig.Data.FoodVolume)
         {
             Food food = new Food();
             foodList.Add(food);

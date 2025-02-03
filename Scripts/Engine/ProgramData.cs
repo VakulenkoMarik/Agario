@@ -1,3 +1,4 @@
+using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using Sini;
 
@@ -5,15 +6,14 @@ namespace Agario.Scripts.Engine;
 
 public class ProgramData
 {
-    public readonly int WindowHeight;
-    public readonly int WindowWidth;
+    public int WindowHeight { get; private set; }
+    public int WindowWidth { get; private set; }
     
-    public ProgramData()
+    public void Load()
     {
         var ini = new IniFile(PathUtils.GetProgramIniFile());
         
         WindowHeight = ini.GetInt("Window", "WindowHeight", 100);
         WindowWidth = ini.GetInt("Window", "WindowWidth", 100);
     }
-    
 }
