@@ -3,8 +3,8 @@ namespace Agario.Scripts.Engine.Utils;
 
 public static class PathUtils
 {
-    private const string programIniFilePath = "ProgramConf.ini";
-    private const string gameIniFilePath = "GameConf.ini";
+    private const string programIniFilePath = "Files\\ProgramConf.ini";
+    private const string gameIniFilePath = "Files\\GameConf.ini";
     
     public static string Get(string path)
     {
