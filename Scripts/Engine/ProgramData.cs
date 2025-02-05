@@ -1,4 +1,3 @@
-using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using Sini;
 
