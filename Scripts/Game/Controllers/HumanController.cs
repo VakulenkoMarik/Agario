@@ -1,3 +1,4 @@
+using Agario.Scripts.Engine.Audio;
 using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Engine.Utils.Extensions;
@@ -29,6 +30,11 @@ public class HumanController : Controller
         Vector2f deltaDirection = inputDelta.Normalize();
         inputDelta.Y = 0;
         inputDelta.X = 0;
+
+        if (deltaDirection.X != 0 || deltaDirection.Y != 0)
+        {
+            AudioPlayer.Instance.PlayIfNotPlaying("Movement");
+        }
         
         return deltaDirection;
     }

@@ -58,6 +58,17 @@ public class AudioPlayer
             toPlay.Play();
         }
     }
+    
+    public void PlayIfNotPlaying(string name)
+    {
+        if (sounds.TryGetValue(name, out var toPlay))
+        {
+            if (toPlay.Status != SoundStatus.Playing)
+            {
+                toPlay.Play();
+            }
+        }
+    }
 
     // Planned to be redeveloped
     public void Init()

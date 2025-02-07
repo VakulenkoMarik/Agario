@@ -51,7 +51,7 @@ public class AgarioGame : IGameRules
         int maxXPos = ProgramConfig.Data.WindowWidth;
         int maxYPos = ProgramConfig.Data.WindowHeight;
         
-        for (int i = 0; i < GameConfig.Data.PlayersVolume; i++)
+        for (int i = 0; i < GameConfig.Data.PlayersVolume - 1; i++)
         {
             Player player = new(Randomizer.Next(10, 30));
             
@@ -173,5 +173,23 @@ public class AgarioGame : IGameRules
     public static void AddToDeathList(GameObject victim)
     {
         destructionList.Add(victim);
+    }
+
+    public static int ActivePlayersCount
+    {
+        get
+        {
+            int count = 0;
+            
+            foreach (Controller cont in controllersList)
+            {
+                if (cont.player is not null)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
     }
 }
