@@ -35,15 +35,31 @@ public class AudioPlayer
     {
         return sounds.GetValueOrDefault(name);
     }
+    
+    public void AddAudio(Sound audio, string name)
+    {
+        sounds.Add(name, audio);
+    }
+    
+    public void TryRemoveAudio(string name)
+    {
+        if (sounds.TryGetValue(name, out var audio))
+        {
+            audio.TurnOff();
+            sounds.Remove(name);
+        }
+    }
 
-    public void Play(string name)
+    public void Play(string name, bool oneShot = true)
     {
         if (sounds.TryGetValue(name, out var toPlay))
         {
+            toPlay.Loop = !oneShot;
             toPlay.Play();
         }
     }
 
+    // Planned to be redeveloped
     public void Init()
     {
         var ini = new IniFile(PathUtils.GetGameIniFile());
