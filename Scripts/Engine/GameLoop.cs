@@ -12,10 +12,10 @@ public class GameLoop
     public readonly List<IDrawable> drawableObjects = new();
     public readonly List<IUpdatable> updatableObjects = new();
     
-    private readonly Color backgroundColor;
+    private Color backgroundColor;
     private readonly RenderWindow scene;
 
-    private bool isEndGameLoop;
+    private bool isEndGameLoop = false;
     
     public GameLoop()
     {
@@ -25,9 +25,23 @@ public class GameLoop
         uint height = (uint)ProgramConfig.Data.WindowHeight;
         
         scene = new RenderWindow(new VideoMode(width, height), "Game window");
-        scene.Closed += (_, _) => scene.Close();
+    }
+    
+    private void Init()
+    {
+        AddEndLoopAction(scene.Close);
         
         backgroundColor = Color.White;
+    }
+
+    public void AddEndLoopAction(Action action)
+    {
+        scene.Closed += (_, _) => action();
+    }
+
+    public void Stop()
+    {
+        isEndGameLoop = true;
     }
 
     public static GameLoop GetInstance()
@@ -45,16 +59,6 @@ public class GameLoop
             Update();
             Render();
         }
-    }
-
-    public void Stop()
-    {
-        isEndGameLoop = true;
-    }
-
-    private void Init()
-    {
-        isEndGameLoop = false;
     }
     
     private void Input()

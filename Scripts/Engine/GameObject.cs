@@ -9,18 +9,31 @@ namespace Agario.Scripts.Engine;
 public class GameObject
 {
     public Vector2f Position;
-    protected Shape ObjectShape { get; private set; }
+    protected Shape? ObjectShape { get; private set; }
 
-    private readonly GameLoop gameLoop;
+    private GameLoop gameLoop = null!;
 
     protected GameObject(Shape objectShape)
     {
+        ValuesInit();
+        
         ObjectShape = objectShape;
+
+        AddObjectToLists();
+    }
+    
+    protected GameObject()
+    {
+        ValuesInit();
+
+        AddObjectToLists();
+    }
+
+    private void ValuesInit()
+    {
         Position = new (0, 0);
 
         gameLoop = GameLoop.GetInstance();
-
-        AddObjectToLists();
     }
 
     private void AddObjectToLists()
