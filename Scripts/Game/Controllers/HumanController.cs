@@ -1,11 +1,11 @@
-using Agario.Scripts.Engine.Audio;
+// ReSharper disable InconsistentNaming
+
 using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Engine.Utils.Extensions;
+using Agario.Scripts.Game.Audio;
 using Agario.Scripts.Game.GameObjects;
 using SFML.System;
-
-// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Game.Controllers;
 
@@ -31,10 +31,7 @@ public class HumanController : Controller
         inputDelta.Y = 0;
         inputDelta.X = 0;
 
-        if (deltaDirection.X != 0 || deltaDirection.Y != 0)
-        {
-            AudioPlayer.Instance.PlayIfNotPlaying("Movement");
-        }
+        AudioSystem.Instance.Play(AudioType.Movement, deltaDirection);
         
         return deltaDirection;
     }

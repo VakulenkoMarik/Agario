@@ -1,4 +1,3 @@
-using Agario.Scripts.Engine.Audio;
 using Agario.Scripts.Engine.Interfaces;
 
 // ReSharper disable InconsistentNaming
@@ -17,19 +16,11 @@ public class Game : IUpdatable
         gameLoop = new();
         
         gameLoop.updatableObjects.Add(this);
-
-        AudioInit();
     }
 
     private void FilesInit()
     {
         ProgramConfig.Init();
-    }
-    
-    private void AudioInit()
-    {
-        AudioPlayer.SetInstance(new AudioPlayer());
-        AudioPlayer.Instance.Init();
     }
 
     public void SetGameRules(IGameRules rules)

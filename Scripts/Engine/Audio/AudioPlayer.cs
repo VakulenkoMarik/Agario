@@ -1,15 +1,14 @@
+// ReSharper disable InconsistentNaming
+
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Engine.Utils.Extensions;
 using SFML.Audio;
 using Sini;
 
-// ReSharper disable InconsistentNaming
-
 namespace Agario.Scripts.Engine.Audio;
 
 public class AudioPlayer
 {
-    public static AudioPlayer Instance { get; private set; } = null!;
     private readonly Dictionary<string, Sound> sounds = new();
 
     public AudioPlayer()
@@ -24,11 +23,6 @@ public class AudioPlayer
         {
             s.TurnOff();
         }
-    }
-
-    public static void SetInstance(AudioPlayer audioPlayer)
-    {
-        Instance = audioPlayer;
     }
 
     public Sound? TryGet(string name)
@@ -69,9 +63,8 @@ public class AudioPlayer
             }
         }
     }
-
-    // Planned to be redeveloped
-    public void Init()
+    
+    public void Load()
     {
         var ini = new IniFile(PathUtils.GetGameIniFile());
         var keys = ini.GetKeys("Audio");

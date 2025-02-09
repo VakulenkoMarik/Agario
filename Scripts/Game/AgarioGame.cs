@@ -1,12 +1,13 @@
+// ReSharper disable InconsistentNaming
+
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
+using Agario.Scripts.Game.Audio;
 using Agario.Scripts.Game.Controllers;
 using Agario.Scripts.Game.CustomExtensions;
 using Agario.Scripts.Game.GameObjects;
 using SFML.System;
-
-// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Game;
 
@@ -29,6 +30,7 @@ public class AgarioGame : IGameRules
     private void GameInit()
     {
         GameConfig.SetData(new GameData());
+        AudioSystem.SetInstance(new AudioSystem());
     }
     
     private void ActivePlayerInit()

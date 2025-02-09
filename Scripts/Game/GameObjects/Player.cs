@@ -1,12 +1,12 @@
+// ReSharper disable InconsistentNaming
+
 using Agario.Scripts.Engine;
-using Agario.Scripts.Engine.Audio;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils.Extensions;
+using Agario.Scripts.Game.Audio;
 using SFML.Graphics;
 using SFML.System;
 using Time = Agario.Scripts.Engine.Time;
-
-// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Game.GameObjects;
 
@@ -62,26 +62,11 @@ public class Player : GameObject, IUpdatable, IDrawable
             kiloToAdd = player.Radius;
             player.Destroy();
 
-            PlayerAudioProcessing();
+            AudioSystem.Instance.Play(AudioType.SomeoneWasKilled);
         }
         
         GainWeight(kiloToAdd);
         UpdateMesh();
-    }
-
-    private void PlayerAudioProcessing()
-    {
-        if (AgarioGame.ActivePlayersCount == GameConfig.Data.PlayersVolume)
-        {
-            AudioPlayer.Instance.Play("FirstKill");
-        }
-
-        if (AgarioGame.ActivePlayersCount == 2)
-        {
-            AudioPlayer.Instance.Play("TheLastSurvivor");
-        }
-            
-        AudioPlayer.Instance.Play("Bite");
     }
 
     private void GainWeight(float kilo)
