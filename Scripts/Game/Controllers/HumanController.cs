@@ -30,8 +30,11 @@ public class HumanController : Controller
         Vector2f deltaDirection = inputDelta.Normalize();
         inputDelta.Y = 0;
         inputDelta.X = 0;
-
-        AudioSystem.Instance.Play(AudioType.Movement, deltaDirection);
+        
+        if (deltaDirection.X != 0 || deltaDirection.Y != 0)
+        {
+            AudioSystem.Instance.Play(AudioType.Movement);
+        }
         
         return deltaDirection;
     }

@@ -38,13 +38,14 @@ public class AudioSystem
         Action toPlay = type switch
         {
             AudioType.SomeoneWasKilled => methods.SomeoneWasKilled,
+            AudioType.Movement => methods.Movement,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
         toPlay.Invoke();
     }
 
-    public void Play(AudioType type, params object[] args)
+    /*public void Play(AudioType type, params object[] args)
     {
         Action<object[]> toPlay = type switch
         {
@@ -53,7 +54,7 @@ public class AudioSystem
         };
 
         toPlay.Invoke(args);
-    }
+    }*/
 
     public void Mute(bool isMute)
     {

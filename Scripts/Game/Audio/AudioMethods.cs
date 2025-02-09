@@ -7,12 +7,9 @@ namespace Agario.Scripts.Game.Audio;
 
 public readonly struct AudioMethods(AudioPlayer audioPlayer)
 {
-    public void Movement(Vector2f deltaDirection)
+    public void Movement()
     {
-        if (deltaDirection.X != 0 || deltaDirection.Y != 0)
-        {
-            audioPlayer.PlayIfNotPlaying("Movement");
-        }
+        audioPlayer.PlayIfNotPlaying("Movement");
     }
     
     public void SomeoneWasKilled()
