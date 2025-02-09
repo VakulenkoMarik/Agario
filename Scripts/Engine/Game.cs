@@ -1,3 +1,4 @@
+using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.Interfaces;
 
 // ReSharper disable InconsistentNaming

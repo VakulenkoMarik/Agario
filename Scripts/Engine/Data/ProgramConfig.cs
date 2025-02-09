@@ -1,5 +1,6 @@
 // ReSharper disable InconsistentNaming
-namespace Agario.Scripts.Engine;
+
+namespace Agario.Scripts.Engine.Data;
 
 public static class ProgramConfig
 {

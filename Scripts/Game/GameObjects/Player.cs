@@ -1,6 +1,7 @@
 // ReSharper disable InconsistentNaming
 
 using Agario.Scripts.Engine;
+using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils.Extensions;
 using Agario.Scripts.Game.Audio;

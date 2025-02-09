@@ -1,7 +1,7 @@
 using Agario.Scripts.Engine.Utils;
 using Sini;
 
-namespace Agario.Scripts.Engine;
+namespace Agario.Scripts.Engine.Data;
 
 public class ProgramData
 {
