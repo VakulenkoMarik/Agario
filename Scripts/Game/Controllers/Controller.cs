@@ -1,9 +1,10 @@
+// ReSharper disable InconsistentNaming
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Game.GameObjects;
 using SFML.System;
-// ReSharper disable InconsistentNaming
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
 
 namespace Agario.Scripts.Game.Controllers;
 

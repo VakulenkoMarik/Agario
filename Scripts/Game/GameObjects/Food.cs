@@ -1,3 +1,5 @@
+// ReSharper disable InconsistentNaming
+
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.Interfaces;
@@ -5,8 +7,6 @@ using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Engine.Utils.Extensions;
 using SFML.Graphics;
 using SFML.System;
-
-// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Game.GameObjects;
 

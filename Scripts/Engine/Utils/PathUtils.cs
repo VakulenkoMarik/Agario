@@ -1,4 +1,5 @@
 // ReSharper disable InconsistentNaming
+
 namespace Agario.Scripts.Engine.Utils;
 
 public static class PathUtils

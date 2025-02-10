@@ -2,7 +2,6 @@
 
 using Agario.Scripts.Engine.Audio;
 using SFML.Audio;
-using SFML.System;
 
 namespace Agario.Scripts.Game.Audio;
 

@@ -1,5 +1,6 @@
-using SFML.System;
 // ReSharper disable InconsistentNaming
+
+using SFML.System;
 
 namespace Agario.Scripts.Engine;
 

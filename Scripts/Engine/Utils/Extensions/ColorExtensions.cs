@@ -1,7 +1,7 @@
-using SFML.Graphics;
-
 // ReSharper disable InconsistentNaming
 // ReSharper disable RedundantAssignment
+
+using SFML.Graphics;
 
 namespace Agario.Scripts.Engine.Utils.Extensions;
 

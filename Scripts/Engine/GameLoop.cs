@@ -1,8 +1,9 @@
+// ReSharper disable InconsistentNaming
+
 using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.Interfaces;
 using SFML.Graphics;
 using SFML.Window;
-// ReSharper disable InconsistentNaming
 
 namespace Agario.Scripts.Engine;
 

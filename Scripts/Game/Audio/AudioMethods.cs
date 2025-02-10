@@ -1,7 +1,6 @@
 // ReSharper disable InconsistentNaming
 
 using Agario.Scripts.Engine.Audio;
-using SFML.System;
 
 namespace Agario.Scripts.Game.Audio;
 

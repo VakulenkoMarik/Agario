@@ -1,8 +1,8 @@
+#pragma warning disable CS8604 // Possible null reference argument.
+
 using Agario.Scripts.Engine.Utils.Extensions;
 using Agario.Scripts.Game.Controllers;
 using Agario.Scripts.Game.GameObjects;
-
-#pragma warning disable CS8604 // Possible null reference argument.
 
 namespace Agario.Scripts.Game.CustomExtensions;
 
