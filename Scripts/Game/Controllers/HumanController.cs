@@ -12,6 +12,7 @@ namespace Agario.Scripts.Game.Controllers;
 public class HumanController : Controller
 {
     private Vector2f inputDelta;
+    private AudioSystem audioSystem => ServiceLocator.Instance.Get<AudioSystem>();
 
     public HumanController(Player newPlayer) : base(newPlayer)
     {
@@ -33,7 +34,7 @@ public class HumanController : Controller
         
         if (deltaDirection.X != 0 || deltaDirection.Y != 0)
         {
-            AudioSystem.Instance.Play(AudioType.Movement);
+            audioSystem.Play(AudioType.Movement);
         }
         
         return deltaDirection;

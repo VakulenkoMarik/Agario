@@ -1,8 +1,12 @@
 // ReSharper disable InconsistentNaming
+#pragma warning disable CS8601 // Possible null reference assignment.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8618, CS9264
 
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.Interfaces;
+using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Engine.Utils.Extensions;
 using Agario.Scripts.Game.Audio;
 using SFML.Graphics;
@@ -16,6 +20,7 @@ public class Player : GameObject, IUpdatable, IDrawable
     public float Radius { get; private set; }
     
     private readonly CircleShape shape;
+    private AudioSystem audioSystem => ServiceLocator.Instance.Get<AudioSystem>();
     
     private float speed = 120;
     private const float minSpeed = 15;
@@ -63,7 +68,7 @@ public class Player : GameObject, IUpdatable, IDrawable
             kiloToAdd = player.Radius;
             player.Destroy();
 
-            AudioSystem.Instance.Play(AudioType.SomeoneWasKilled);
+            audioSystem.Play(AudioType.SomeoneWasKilled);
         }
         
         GainWeight(kiloToAdd);

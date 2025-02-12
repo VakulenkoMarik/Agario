@@ -1,6 +1,7 @@
 // ReSharper disable InconsistentNaming
 
 using Agario.Scripts.Engine.Audio;
+using Agario.Scripts.Engine.Interfaces;
 using SFML.Audio;
 
 namespace Agario.Scripts.Game.Audio;
@@ -12,10 +13,8 @@ public enum AudioType
     Background,
 }
 
-public class AudioSystem
+public class AudioSystem : IGameUtility
 {
-    public static AudioSystem Instance { get; private set; } = null!;
-
     private float listenerPresetVolume = Listener.GlobalVolume;
 
     private AudioMethods methods;
@@ -28,11 +27,6 @@ public class AudioSystem
         audioPlayer.Load();
 
         methods = new AudioMethods(audioPlayer);
-    }
-
-    public static void SetInstance(AudioSystem system)
-    {
-        Instance = system;
     }
 
     public void Play(AudioType type)

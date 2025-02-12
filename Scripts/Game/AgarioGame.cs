@@ -31,10 +31,18 @@ public class AgarioGame : IGameRules
     private void GameInit()
     {
         GameConfig.SetData(new GameData());
-        AudioSystem.SetInstance(new AudioSystem());
+        ServiceLocatorInit();
+
+        AudioSystem system = ServiceLocator.Instance.Get<AudioSystem>();
         
-        AudioSystem.Instance.Play(AudioType.Background);
-        AudioSystem.Instance.SetVolume("Background", 20);
+        system.Play(AudioType.Background);
+        system.SetVolume("Background", 20);
+    }
+
+    private void ServiceLocatorInit()
+    {
+        ServiceLocator.Instance.Register(new AudioSystem());
+        ServiceLocator.Instance.Register(new PauseActivator());
     }
     
     private void ActivePlayerInit()
