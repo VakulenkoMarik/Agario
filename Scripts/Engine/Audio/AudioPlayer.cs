@@ -71,7 +71,7 @@ public class AudioPlayer
         
         foreach (var key in keys)
         {
-            string path = ini.GetStr("Audio", key, "");
+            string path = Path.Combine("Resources", ini.GetStr("Audio", key, ""));
 
             if (!string.IsNullOrEmpty(path))
             {
