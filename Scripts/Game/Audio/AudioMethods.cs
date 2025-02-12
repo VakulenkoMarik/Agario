@@ -11,6 +11,11 @@ public readonly struct AudioMethods(AudioPlayer audioPlayer)
         audioPlayer.PlayIfNotPlaying("Movement");
     }
     
+    public void Background()
+    {
+        audioPlayer.Play("Background", false);
+    }
+    
     public void SomeoneWasKilled()
     {
         if (AgarioGame.ActivePlayersCount == GameConfig.Data.PlayersVolume)
@@ -21,6 +26,7 @@ public readonly struct AudioMethods(AudioPlayer audioPlayer)
         if (AgarioGame.ActivePlayersCount == 2)
         {
             audioPlayer.Play("TheLastSurvivor");
+            audioPlayer.TryGet("Background")?.Stop();
         }
             
         audioPlayer.Play("Bite");

@@ -32,6 +32,9 @@ public class AgarioGame : IGameRules
     {
         GameConfig.SetData(new GameData());
         AudioSystem.SetInstance(new AudioSystem());
+        
+        AudioSystem.Instance.Play(AudioType.Background);
+        AudioSystem.Instance.SetVolume("Background", 20);
     }
     
     private void ActivePlayerInit()

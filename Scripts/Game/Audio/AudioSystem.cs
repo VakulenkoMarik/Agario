@@ -9,6 +9,7 @@ public enum AudioType
 {
     SomeoneWasKilled,
     Movement,
+    Background,
 }
 
 public class AudioSystem
@@ -18,10 +19,12 @@ public class AudioSystem
     private float listenerPresetVolume = Listener.GlobalVolume;
 
     private AudioMethods methods;
+    
+    private readonly AudioPlayer audioPlayer;
 
     public AudioSystem()
     {
-        AudioPlayer audioPlayer = new();
+        audioPlayer = new();
         audioPlayer.Load();
 
         methods = new AudioMethods(audioPlayer);
@@ -38,22 +41,22 @@ public class AudioSystem
         {
             AudioType.SomeoneWasKilled => methods.SomeoneWasKilled,
             AudioType.Movement => methods.Movement,
+            AudioType.Background => methods.Background,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
         toPlay.Invoke();
     }
 
-    /*public void Play(AudioType type, params object[] args)
+    public void SetVolume(string name, int value)
     {
-        Action<object[]> toPlay = type switch
-        {
-            AudioType.Movement => parameters => methods.Movement((Vector2f)parameters[0]),
-            _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
-        };
+        Sound? sound = audioPlayer.TryGet(name);
 
-        toPlay.Invoke(args);
-    }*/
+        if (sound is not null)
+        {
+            sound.Volume = value;
+        }
+    }
 
     public void Mute(bool isMute)
     {
