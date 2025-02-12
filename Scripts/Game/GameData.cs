@@ -12,6 +12,7 @@ public class GameData
     public int PlayersVolume { get; private set; }
     
     public Keyboard.Key SwapPlayersControllersKey { get; private set; }
+    public Keyboard.Key PauseKey { get; private set; }
     
     public ActivePlayerMoveKeys PlayerMoveKeys { get; private set; }
     
@@ -22,7 +23,8 @@ public class GameData
         FoodVolume = ini.GetInt("Game", "FoodVolume", 1);
         PlayersVolume = ini.GetInt("Game", "PlayersVolume", 1);
 
-        SwapPlayersControllersKey = ini.GetPrimitive("Controls", "SwapKey", Keyboard.Key.F);
+        SwapPlayersControllersKey = ini.GetPrimitive("Controls", "SwapPlayersControllersKey", Keyboard.Key.F);
+        PauseKey = ini.GetPrimitive("Controls", "PauseKey", Keyboard.Key.F);
 
         PlayerMoveKeys = new ActivePlayerMoveKeys(
             ini.GetPrimitive("Controls", "KeyToUp", Keyboard.Key.W),

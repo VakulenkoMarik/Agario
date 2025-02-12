@@ -5,7 +5,7 @@ namespace Agario.Scripts.Engine;
 
 public class PauseActivator : IPauseHandler, IGameUtility
 {
-    private List<IPauseHandler> handlers = new();
+    private readonly List<IPauseHandler> handlers = new();
     public bool IsPause { get; private set; }
 
     public void Register(IPauseHandler hand)
@@ -16,6 +16,11 @@ public class PauseActivator : IPauseHandler, IGameUtility
     public void UnRegister(IPauseHandler hand)
     {
         handlers.RemoveSwap(hand);
+    }
+
+    public void PauseToggle()
+    {
+        SetPause(!IsPause);
     }
     
     public void SetPause(bool isPause)

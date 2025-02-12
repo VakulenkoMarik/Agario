@@ -2,6 +2,7 @@
 
 using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Data;
+using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Game.Audio;
@@ -19,6 +20,8 @@ public class AgarioGame : IGameRules
     
     private static readonly List<GameObject> destructionList = new();
 
+    private PauseActivator pauseActivator => ServiceLocator.Instance.Get<PauseActivator>();
+
     public AgarioGame()
     {
         GameInit();
@@ -30,11 +33,18 @@ public class AgarioGame : IGameRules
 
     private void GameInit()
     {
+        // Configurations
         GameConfig.SetData(new GameData());
-        ServiceLocatorInit();
-
-        AudioSystem system = ServiceLocator.Instance.Get<AudioSystem>();
         
+        // Service locator
+        ServiceLocatorInit();
+        
+        // Input
+        PauseActivator activator = ServiceLocator.Instance.Get<PauseActivator>();
+        Input.RegisterControllerKey(GameConfig.Data.PauseKey, activator.PauseToggle, "pause", false);
+        
+        // Audio system
+        AudioSystem system = ServiceLocator.Instance.Get<AudioSystem>();
         system.Play(AudioType.Background);
         system.SetVolume("Background", 20);
     }
@@ -82,11 +92,14 @@ public class AgarioGame : IGameRules
 
     public void Update()
     {
-        ClearDeathList();
+        if (!pauseActivator.IsPause)
+        {
+            ClearDeathList();
 
-        StartOfNewObjects();
+            StartOfNewObjects();
         
-        CollisionsHandling();
+            CollisionsHandling();
+        }
     }
 
     private void StartOfNewObjects()
