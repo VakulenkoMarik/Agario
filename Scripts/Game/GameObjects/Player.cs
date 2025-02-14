@@ -28,6 +28,20 @@ public class Player : GameObject, IUpdatable, IDrawable
     public Player(float radius) : base(new CircleShape(radius))
     {
         shape = (CircleShape)ObjectShape;
+
+        /*List<Texture> a =
+        [
+            new(""),
+            new(""),
+            new("")
+        ];
+        Animation anim = new Animation(a, 0.2f);
+        Animator.Init(shape, anim, "idle");*/
+        
+        //  |
+        // \/
+
+        /*AnimationsFactory.SetAnimations(Animator);*/
         
         ShapeInit();
     }

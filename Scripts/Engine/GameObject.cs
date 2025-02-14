@@ -1,5 +1,6 @@
 // ReSharper disable InconsistentNaming
 
+using Agario.Scripts.Engine.Animations;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils.Extensions;
 using SFML.Graphics;
@@ -11,21 +12,20 @@ public class GameObject
 {
     public Vector2f Position;
     protected Shape? ObjectShape { get; private set; }
+    public Animator Animator { get; private set; }
 
     private GameLoop gameLoop = null!;
 
-    protected GameObject(Shape objectShape)
+    protected GameObject(Shape? objectShape = null)
     {
         ValuesInit();
-        
-        ObjectShape = objectShape;
 
-        AddObjectToLists();
-    }
-    
-    protected GameObject()
-    {
-        ValuesInit();
+        if (objectShape is not null)
+        {
+            ObjectShape = objectShape;
+        }
+        
+        Animator = new();
 
         AddObjectToLists();
     }
@@ -48,6 +48,8 @@ public class GameObject
         {
             gameLoop.drawableObjects.Add(drawable);
         }
+        
+        gameLoop.updatableObjects.Add(Animator);
     }
 
     protected void Destroy()
