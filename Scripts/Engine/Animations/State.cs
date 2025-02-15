@@ -1,11 +1,39 @@
 namespace Agario.Scripts.Engine.Animations;
 
-public class State(string name, Animation animation)
+public class State(Animation animation, string name)
 {
-    public string Name { get; } = name;
     public Animation Animation { get; } = animation;
+    public string Name { get; } = name;
 
-    public virtual void OnEnter() { }
-    public virtual void OnExit() { }
-    public virtual void Update() => Animation.Update();
+    public bool Trigger { get; private set; }
+
+    public void SetTrigger()
+        => Trigger = true;
+
+    public void OnEnter()
+    {
+        Animation.Reset();
+
+        OnEnterAction();
+    }
+    
+    public void OnExit()
+    {
+        Trigger = false;
+
+        OnExitAction();
+    }
+
+    public void Update()
+    {
+        Animation.Update();
+        
+        if (Animation.IsFinished())
+        {
+            OnExit();
+        }
+    }
+        
+    protected virtual void OnEnterAction() { }
+    protected virtual void OnExitAction() { }
 }

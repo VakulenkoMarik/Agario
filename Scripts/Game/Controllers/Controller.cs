@@ -19,7 +19,6 @@ public class Controller : GameObject, IUpdatable
     protected Controller(Player player) : base(player.GetShape())
     {
         this.player = player;
-        
     }
 
     public void ChangePlayer(Player newPlayer)

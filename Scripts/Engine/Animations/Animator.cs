@@ -8,16 +8,42 @@ public class Animator : IUpdatable
     private FiniteStateMachine? fsm;
     private Shape? sprite;
 
-    public void Init(Shape targetSprite, Animation firsAnim, string animName)
+    private readonly List<State> states = new();
+
+    public void Init(Shape targetSprite, State firsAnim)
     {
-        State state = new(animName, firsAnim);
-        fsm = new(state);
+        GameLoop.GetInstance().updatableObjects.Add(this);
+        
+        fsm = new(firsAnim);
+        states.Add(firsAnim);
 
         sprite = targetSprite;
     }
 
+    public void SetTrigger(string name)
+    {
+        State? targetState = null;
+        
+        foreach (var state in states)
+        {
+            if (state.Name == name)
+            {
+                targetState = state;
+            }
+        }
+        
+        targetState?.SetTrigger();
+    }
+
     public void AddTransition(State from, State to, Func<bool> condition)
-        => fsm?.AddTransition(from, to, condition);
+    {
+        fsm?.AddTransition(from, to, condition);
+
+        if (!states.Contains(to))
+        {
+            states.Add(to);
+        }
+    }
     
     public void Update()
     {

@@ -29,19 +29,7 @@ public class Player : GameObject, IUpdatable, IDrawable
     {
         shape = (CircleShape)ObjectShape;
 
-        /*List<Texture> a =
-        [
-            new(""),
-            new(""),
-            new("")
-        ];
-        Animation anim = new Animation(a, 0.2f);
-        Animator.Init(shape, anim, "idle");*/
-        
-        //  |
-        // \/
-
-        /*AnimationsFactory.SetAnimations(Animator);*/
+        Animator = AnimationsFactory.CreateAnimator(AnimateObjectType.Player, shape);
         
         ShapeInit();
     }
@@ -72,7 +60,7 @@ public class Player : GameObject, IUpdatable, IDrawable
     public void Grow(GameObject target)
     {
         float kiloToAdd = 0;
-        
+
         if (target is Food food)
         {
             kiloToAdd = food.Kilo;
@@ -106,6 +94,11 @@ public class Player : GameObject, IUpdatable, IDrawable
     
     private bool CanMove(float newX, float newY, Vector2f direction)
     {
+        if (direction.X == 0 && direction.Y == 0)
+        {
+            return false;
+        }
+        
         float xBorder = newX + Radius * direction.X;
         float yBorder = newY + Radius * direction.Y;
         
@@ -133,5 +126,6 @@ public class Player : GameObject, IUpdatable, IDrawable
         }
         
         Position = new Vector2f(x, y);
+        Animator?.SetTrigger("movement");
     }
 }

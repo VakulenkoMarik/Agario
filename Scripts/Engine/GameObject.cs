@@ -12,7 +12,7 @@ public class GameObject
 {
     public Vector2f Position;
     protected Shape? ObjectShape { get; private set; }
-    public Animator Animator { get; private set; }
+    protected Animator? Animator { get; set; }
 
     private GameLoop gameLoop = null!;
 
@@ -24,8 +24,6 @@ public class GameObject
         {
             ObjectShape = objectShape;
         }
-        
-        Animator = new();
 
         AddObjectToLists();
     }
@@ -48,8 +46,6 @@ public class GameObject
         {
             gameLoop.drawableObjects.Add(drawable);
         }
-        
-        gameLoop.updatableObjects.Add(Animator);
     }
 
     protected void Destroy()
