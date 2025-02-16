@@ -63,8 +63,8 @@ public static class AnimationsFactory
         
         Animator animator = new();
         animator.Init(target, idleState);
-        animator.AddTransition(idleState, moveState, () => moveState.Trigger);
-        animator.AddTransition(moveState, idleState, () => !moveState.Trigger);
+        //animator.AddTransition(idleState, moveState, () => moveState.Trigger);
+        //animator.AddTransition(moveState, idleState, () => !moveState.Trigger);
         
         return animator;
     }

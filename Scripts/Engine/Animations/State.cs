@@ -5,11 +5,6 @@ public class State(Animation animation, string name)
     public Animation Animation { get; } = animation;
     public string Name { get; } = name;
 
-    public bool Trigger { get; private set; }
-
-    public void SetTrigger()
-        => Trigger = true;
-
     public void OnEnter()
     {
         Animation.Reset();
@@ -19,8 +14,6 @@ public class State(Animation animation, string name)
     
     public void OnExit()
     {
-        Trigger = false;
-
         OnExitAction();
     }
 

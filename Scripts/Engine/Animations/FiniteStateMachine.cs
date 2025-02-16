@@ -1,21 +1,22 @@
+// ReSharper disable CollectionNeverQueried.Local
+
 using SFML.Graphics;
 
 namespace Agario.Scripts.Engine.Animations;
 
-public class FiniteStateMachine(State initialState)
+public class FiniteStateMachine(State initialState, Dictionary<State, List<Transition>> combinations)
 {
     private State currentState = initialState;
-    private readonly Dictionary<State, List<Transition>> combination = new();
 
     public void Update()
     {
-        List<Transition> currentStateTransitions = combination[currentState];
+        List<Transition> currentStateTransitions = combinations[currentState];
         
         foreach (var transition in currentStateTransitions)
         {
-            if (transition.Condition.Invoke())
+            if (transition.CanDoTransition())
             {
-                ChangeState(transition.TargetState);
+                DoTransition(transition.TargetState);
                 break;
             }
         }
@@ -23,13 +24,8 @@ public class FiniteStateMachine(State initialState)
         currentState.Update();
     }
     
-    public void AddTransition(State from, State to, Func<bool> condition)
-    {
-        if (!combination.ContainsKey(from))
-            combination[from] = new List<Transition>();
-
-        combination[from].Add(new Transition(to, condition));
-    }
+    private void DoTransition(State toState)
+        => ChangeState(toState);
     
     private void ChangeState(State newState)
     {
@@ -38,5 +34,6 @@ public class FiniteStateMachine(State initialState)
         currentState.OnEnter();
     }
     
-    public Texture GetCurrentTexture() => currentState.Animation.GetCurrentFrame();
+    public Texture GetCurrentTexture()
+        => currentState.Animation.GetCurrentFrame();
 }

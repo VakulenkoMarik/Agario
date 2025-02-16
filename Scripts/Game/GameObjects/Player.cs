@@ -126,6 +126,6 @@ public class Player : GameObject, IUpdatable, IDrawable
         }
         
         Position = new Vector2f(x, y);
-        Animator?.SetTrigger("movement");
+        //Animator?.SetTrigger("movement");
     }
 }
