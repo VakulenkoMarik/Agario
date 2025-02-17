@@ -35,5 +35,5 @@ public class FiniteStateMachine(State initialState, Dictionary<State, List<Trans
     }
     
     public Texture GetCurrentTexture()
-        => currentState.Animation.GetCurrentFrame();
+        => currentState.TargetAnimation.GetCurrentFrame();
 }

@@ -18,6 +18,8 @@ public class Animator : IUpdatable
     {
         GameLoop.GetInstance().updatableObjects.Add(this);
         
+        AddState(firsAnim);
+        
         fsm = new(firsAnim, combinations);
 
         sprite = targetSprite;
@@ -50,18 +52,18 @@ public class Animator : IUpdatable
         => FindRequiredCondition(bools, name)?.SetActive(activate);
     
     public void AddTriggerToTransition(string triggerName, string stateFrom, string stateTo)
-        => AddConditionToTransition(triggerName, stateFrom, stateTo, triggers);
+        => AddConditionToTransition(triggerName, true, stateFrom, stateTo, triggers);
 
-    public void AddBooleanToTransition(string booleanName, string stateFrom, string stateTo)
-        => AddConditionToTransition(booleanName, stateFrom, stateTo, bools);
+    public void AddBooleanToTransition(string booleanName, bool active, string stateFrom, string stateTo)
+        => AddConditionToTransition(booleanName, active, stateFrom, stateTo, bools);
     
-    private void AddConditionToTransition<T>(string conditionName, string stateFrom, string stateTo, List<T> conditions) 
+    private void AddConditionToTransition<T>(string conditionName, bool isActive, string stateFrom, string stateTo, List<T> conditions) 
         where T : AnimationCondition
     {
         var condition = FindRequiredCondition(conditions, conditionName);
         if (condition is not null)
         {
-            FindRequiredTransition(stateFrom, stateTo)?.AddCondition(() => condition.IsActive);
+            FindRequiredTransition(stateFrom, stateTo)?.AddCondition(() => condition.IsActive == isActive);
         }
     }
 
@@ -90,12 +92,28 @@ public class Animator : IUpdatable
         return null;
     }
     
-    public void CreateState(string name, Animation animation)
+    public void AddState(State state)
+        => combinations.Add(state, new());
+    
+    public void CreateState(string name, Animation animation, bool hasExitTime)
     {
-        State state = new(animation, name);
+        State state = new(animation, name, hasExitTime);
         List<Transition> transitions = new();
         
         combinations.Add(state, transitions);
+    }
+
+    public State? TryGetState(string name)
+    {
+        foreach (var state in combinations.Keys)
+        {
+            if (state.Name == name)
+            {
+                return state;
+            }
+        }
+
+        return null;
     }
     
     public void CreateTransition(string from, string to)

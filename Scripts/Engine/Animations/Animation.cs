@@ -6,6 +6,8 @@ public class Animation(List<Texture> frames, float frameTime)
 {
     private float elapsedTime;
     private int currentFrame;
+
+    public bool HasExitTime;
     
     public Texture GetCurrentFrame()
         => frames[currentFrame];
@@ -18,10 +20,19 @@ public class Animation(List<Texture> frames, float frameTime)
     public void Update()
     {
         elapsedTime += Time.deltaTime;
+        
         if (elapsedTime >= frameTime)
         {
             elapsedTime = 0;
-            currentFrame = (currentFrame + 1) % frames.Count;
+
+            if (!HasExitTime)
+            {
+                currentFrame = (currentFrame + 1) % frames.Count;
+            }
+            else if (currentFrame < frames.Count - 1)
+            {
+                currentFrame++;
+            }
         }
     }
 

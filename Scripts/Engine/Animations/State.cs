@@ -1,13 +1,23 @@
+// ReSharper disable InconsistentNaming
+
 namespace Agario.Scripts.Engine.Animations;
 
-public class State(Animation animation, string name)
+public sealed class State
 {
-    public Animation Animation { get; } = animation;
-    public string Name { get; } = name;
+    public Animation TargetAnimation { get; }
+    public string Name { get; }
+
+    public State(Animation targetAnimation, string name, bool hasExitTime = true)
+    {
+        TargetAnimation = targetAnimation;
+        TargetAnimation.HasExitTime = hasExitTime;
+        
+        Name = name;
+    }
 
     public void OnEnter()
     {
-        Animation.Reset();
+        TargetAnimation.Reset();
 
         OnEnterAction();
     }
@@ -19,14 +29,14 @@ public class State(Animation animation, string name)
 
     public void Update()
     {
-        Animation.Update();
+        TargetAnimation.Update();
         
-        if (Animation.IsFinished())
+        if (TargetAnimation.IsFinished())
         {
             OnExit();
         }
     }
-        
-    protected virtual void OnEnterAction() { }
-    protected virtual void OnExitAction() { }
+
+    private void OnEnterAction() { }
+    private void OnExitAction() { }
 }

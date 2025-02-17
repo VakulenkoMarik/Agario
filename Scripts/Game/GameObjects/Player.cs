@@ -8,6 +8,7 @@ using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Engine.Utils.Extensions;
+using Agario.Scripts.Game.Animations;
 using Agario.Scripts.Game.Audio;
 using SFML.Graphics;
 using SFML.System;
@@ -122,10 +123,12 @@ public class Player : GameObject, IUpdatable, IDrawable
 
         if (!CanMove(x, y, direction))
         {
+            Animator?.SetBool("isWalk", false);
             return;
         }
         
         Position = new Vector2f(x, y);
-        //Animator?.SetTrigger("movement");
+        
+        Animator?.SetBool("isWalk", true);
     }
 }
