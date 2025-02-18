@@ -7,14 +7,16 @@ namespace Agario.Scripts.Game.Audio;
 public readonly struct AudioMethods(AudioPlayer audioPlayer)
 {
     public void Movement()
-    {
-        audioPlayer.PlayIfNotPlaying("Movement");
-    }
+        => audioPlayer.PlayIfNotPlaying("Movement");
+    
+    public void Running()
+        => audioPlayer.Play("Running");
+    
+    public void Happy()
+        => audioPlayer.Play("Happy");
     
     public void Background()
-    {
-        audioPlayer.Play("Background", false);
-    }
+        => audioPlayer.Play("Background", false);
     
     public void SomeoneWasKilled()
     {

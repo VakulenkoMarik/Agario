@@ -29,6 +29,9 @@ public class Player : GameObject, IUpdatable, IDrawable
         {
             isRun = value;
             currentSpeed = value ? defaultValues.runSpeed : defaultValues.walkSpeed;
+            
+            if (value)
+                audioSystem.Play(AudioType.Running);
         }
     }
     
@@ -113,6 +116,7 @@ public class Player : GameObject, IUpdatable, IDrawable
     public void MakeHappy()
     {
         Animator?.SetTrigger("isHappy");
+        audioSystem.Play(AudioType.Happy);
     }
     
     private bool CanMove(float newX, float newY, Vector2f direction)

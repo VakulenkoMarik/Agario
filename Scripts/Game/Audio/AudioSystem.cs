@@ -10,6 +10,8 @@ public enum AudioType
 {
     SomeoneWasKilled,
     Movement,
+    Happy,
+    Running,
     Background,
 }
 
@@ -36,6 +38,8 @@ public class AudioSystem : IGameUtility
             AudioType.SomeoneWasKilled => methods.SomeoneWasKilled,
             AudioType.Movement => methods.Movement,
             AudioType.Background => methods.Background,
+            AudioType.Running => methods.Running,
+            AudioType.Happy => methods.Happy,
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
