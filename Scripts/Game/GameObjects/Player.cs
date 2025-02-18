@@ -43,7 +43,7 @@ public class Player : GameObject, IUpdatable, IDrawable
         currentSpeed = defaultValues.walkSpeed;
         
         shape = (CircleShape)ObjectShape;
-        Animator = AnimationsFactory.CreateAnimator(AnimateObjectType.Player, shape);
+        Animator = AnimatorsFactory.CreateAnimator(AnimateObjectType.Player, shape);
         
         ShapeInit();
     }

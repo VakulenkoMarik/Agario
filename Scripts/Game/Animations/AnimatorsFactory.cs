@@ -11,7 +11,7 @@ public enum AnimateObjectType
     Player,
 }
 
-public static class AnimationsFactory
+public static class AnimatorsFactory
 {
     private static readonly AnimationsList animationsList = new();
     private static readonly AnimatorsList animatorsList = new();
