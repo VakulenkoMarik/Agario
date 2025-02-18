@@ -8,40 +8,39 @@ public record EventKey(Keyboard.Key eventKey)
 {
     private Action? onKeyDownAction;
     private Action? onKeyPressedAction;
+    private Action? onKeyUpAction;
 
     private bool isKeyPressed;
     private bool wasKeyPressed;
 
     public void SetOnKeyDownEvent(Action action)
-    {
-        onKeyDownAction += action;
-    }
-    
+        => onKeyDownAction += action;
+
     public void SetOnKeyPressedEvent(Action action)
-    {
-        onKeyPressedAction += action;
-    }
+        => onKeyPressedAction += action;
+
+    public void SetOnKeyUpEvent(Action action)
+        => onKeyUpAction += action;
 
     public void UpdateStatus()
     {
         wasKeyPressed = isKeyPressed;
-        isKeyPressed = CheckClick();
-    }
-
-    private bool CheckClick()
-    {
-        return Keyboard.IsKeyPressed(eventKey);
+        isKeyPressed = Keyboard.IsKeyPressed(eventKey);
     }
 
     public void TryActivateEvent()
     {
-        if (!wasKeyPressed && isKeyPressed && onKeyDownAction != null)
+        if (!wasKeyPressed && isKeyPressed)
         {
-            onKeyDownAction.Invoke();
+            onKeyDownAction?.Invoke();
         }
-        else if (wasKeyPressed && isKeyPressed && onKeyPressedAction != null)
+        else if (wasKeyPressed && isKeyPressed)
         {
-            onKeyPressedAction.Invoke();
+            onKeyPressedAction?.Invoke();
+        }
+        else if (wasKeyPressed && !isKeyPressed)
+        {
+            onKeyUpAction?.Invoke();
         }
     }
 }

@@ -60,7 +60,7 @@ public class AgarioGame : IGameRules
         float posX = ProgramConfig.Data.WindowWidth / 2f;
         float posY = ProgramConfig.Data.WindowHeight / 2f;
         
-        Player activePlayer = new(50f)
+        Player activePlayer = new(30f)
         {
             Position = new Vector2f(posX, posY)
         };

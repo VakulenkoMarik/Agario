@@ -1,6 +1,7 @@
 // ReSharper disable InconsistentNaming
 #pragma warning disable CS8601 // Possible null reference assignment.
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8604 // Possible null reference argument.
 #pragma warning disable CS8618, CS9264
 
 using Agario.Scripts.Engine;
@@ -19,17 +20,29 @@ namespace Agario.Scripts.Game.GameObjects;
 public class Player : GameObject, IUpdatable, IDrawable
 {
     public float Radius { get; private set; }
+    private float currentSpeed;
+    
+    private bool isRun;
+    public bool IsRun
+    {
+        set
+        {
+            isRun = value;
+            currentSpeed = value ? defaultValues.runSpeed : defaultValues.walkSpeed;
+        }
+    }
     
     private readonly CircleShape shape;
-    private AudioSystem audioSystem => ServiceLocator.Instance.Get<AudioSystem>();
+    private readonly AudioSystem audioSystem = ServiceLocator.Instance.Get<AudioSystem>();
     
-    private float speed = 120;
-    private const float minSpeed = 15;
+    private PlayerDefaultValues defaultValues;
 
     public Player(float radius) : base(new CircleShape(radius))
     {
+        defaultValues = new PlayerDefaultValues();
+        currentSpeed = defaultValues.walkSpeed;
+        
         shape = (CircleShape)ObjectShape;
-
         Animator = AnimationsFactory.CreateAnimator(AnimateObjectType.Player, shape);
         
         ShapeInit();
@@ -82,10 +95,14 @@ public class Player : GameObject, IUpdatable, IDrawable
     {
         Radius += kilo / 2;
 
-        if (speed - kilo >= minSpeed)
-        {
-            speed -= kilo;
-        }
+        ReduceSpeed(ref defaultValues.walkSpeed, kilo);
+        ReduceSpeed(ref defaultValues.runSpeed, kilo);
+    }
+    
+    private void ReduceSpeed(ref float speed, float reduction)
+    {
+        if (speed - reduction >= defaultValues.minSpeed)
+            speed -= reduction;
     }
 
     public CircleShape GetShape()
@@ -95,40 +112,44 @@ public class Player : GameObject, IUpdatable, IDrawable
     
     private bool CanMove(float newX, float newY, Vector2f direction)
     {
-        if (direction.X == 0 && direction.Y == 0)
-        {
-            return false;
-        }
-        
         float xBorder = newX + Radius * direction.X;
         float yBorder = newY + Radius * direction.Y;
         
         if (xBorder < 0 || xBorder > ProgramConfig.Data.WindowWidth)
-        {
             return false;
-        }
         
         if (yBorder < 0 || yBorder > ProgramConfig.Data.WindowHeight)
-        {
             return false;
-        }
 
         return true;
     }
     
     public void TryMove(Vector2f direction)
     {
-        float x = Position.X + speed * direction.X * Time.deltaTime;
-        float y = Position.Y + speed * direction.Y * Time.deltaTime;
-
-        if (!CanMove(x, y, direction))
+        if (direction is not { X: 0, Y: 0 })
         {
-            Animator?.SetBool("isWalk", false);
-            return;
+            float x = Position.X + currentSpeed * direction.X * Time.deltaTime;
+            float y = Position.Y + currentSpeed * direction.Y * Time.deltaTime;
+
+            if (CanMove(x, y, direction))
+            {
+                Position = new Vector2f(x, y);
+        
+                Animator?.SetBool("isWalk", true);
+                Animator?.SetBool("isRun", isRun);
+                
+                return;
+            }
         }
         
-        Position = new Vector2f(x, y);
-        
-        Animator?.SetBool("isWalk", true);
+        Animator?.SetBool("isRun", false);
+        Animator?.SetBool("isWalk", false);
     }
+}
+
+public struct PlayerDefaultValues()
+{
+    public float walkSpeed = 120;
+    public float runSpeed = 220;
+    public float minSpeed { get; private set; } = 15;
 }

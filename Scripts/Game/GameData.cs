@@ -30,7 +30,8 @@ public class GameData
             ini.GetPrimitive("Controls", "KeyToUp", Keyboard.Key.W),
             ini.GetPrimitive("Controls", "KeyToDown", Keyboard.Key.S),
             ini.GetPrimitive("Controls", "KeyToRight", Keyboard.Key.D),
-            ini.GetPrimitive("Controls", "KeyToLeft", Keyboard.Key.A)
+            ini.GetPrimitive("Controls", "KeyToLeft", Keyboard.Key.A),
+            ini.GetPrimitive("Controls", "KeyToRun", Keyboard.Key.Space)
         );
     }
 }
@@ -39,5 +40,6 @@ public readonly record struct ActivePlayerMoveKeys(
     Keyboard.Key KeyToUp,
     Keyboard.Key KeyToDown,
     Keyboard.Key KeyToRight,
-    Keyboard.Key KeyToLeft
+    Keyboard.Key KeyToLeft,
+    Keyboard.Key KeyToRun
 );

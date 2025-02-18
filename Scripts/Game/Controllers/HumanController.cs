@@ -23,6 +23,18 @@ public class HumanController : Controller
         Input.RegisterControllerKey(GameConfig.Data.PlayerMoveKeys.KeyToLeft, DeltaXToLeft, "moveHumanToLeft");
         Input.RegisterControllerKey(GameConfig.Data.PlayerMoveKeys.KeyToRight, DeltaXToRight, "moveHumanToRight");
         
+        Input.RegisterControllerKey(GameConfig.Data.PlayerMoveKeys.KeyToRun, () =>
+        {
+            if (player != null)
+                player.IsRun = true;
+        }, "humanWantRun", false);
+        
+        Input.AddEventOnUpToKey(() =>
+        {
+            if (player != null)
+                player.IsRun = false;
+        }, "humanWantRun");
+        
         Input.RegisterControllerKey(GameConfig.Data.SwapPlayersControllersKey, SwitchBodiesWithRandomPlayer, "swapControllers", false);
     }
 

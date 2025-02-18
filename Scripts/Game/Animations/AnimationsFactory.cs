@@ -37,11 +37,24 @@ public static class AnimationsFactory
 
         animator.Init(target, new(animationsList.PlayerIdle, "idle", false));
         animator.AddState(new(animationsList.PlayerWalk, "walk", false));
+        animator.AddState(new(animationsList.PlayerRun, "run", false));
         
         animator.CreateTransition("idle", "walk");
         animator.CreateTransition("walk", "idle");
+        
+        animator.CreateTransition("walk", "run");
+        
+        animator.CreateTransition("run", "idle");
+        animator.CreateTransition("run", "walk");
+        
         animator.AddBooleanToTransition("isWalk", true, "idle", "walk");
         animator.AddBooleanToTransition("isWalk", false, "walk", "idle");
+        
+        animator.AddBooleanToTransition("isRun", true, "walk", "run");
+        animator.AddBooleanToTransition("isRun", false, "run", "walk");
+        
+        animator.AddBooleanToTransition("isRun", false, "run", "idle");
+        animator.AddBooleanToTransition("isWalk", false, "run", "idle");
 
         return animator;
     }
