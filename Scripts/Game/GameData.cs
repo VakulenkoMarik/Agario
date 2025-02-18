@@ -13,6 +13,7 @@ public class GameData
     
     public Keyboard.Key SwapPlayersControllersKey { get; private set; }
     public Keyboard.Key PauseKey { get; private set; }
+    public Keyboard.Key Happy { get; private set; }
     
     public ActivePlayerMoveKeys PlayerMoveKeys { get; private set; }
     
@@ -25,6 +26,7 @@ public class GameData
 
         SwapPlayersControllersKey = ini.GetPrimitive("Controls", "SwapPlayersControllersKey", Keyboard.Key.F);
         PauseKey = ini.GetPrimitive("Controls", "PauseKey", Keyboard.Key.F);
+        Happy = ini.GetPrimitive("Controls", "Happy", Keyboard.Key.F);
 
         PlayerMoveKeys = new ActivePlayerMoveKeys(
             ini.GetPrimitive("Controls", "KeyToUp", Keyboard.Key.W),

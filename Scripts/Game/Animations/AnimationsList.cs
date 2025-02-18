@@ -15,6 +15,8 @@ public struct AnimationsList()
     
     private static readonly Texture PlayerRun1 = new(PathUtils.Get(@"Resources\Textures\PlayerRun1.png"));
     private static readonly Texture PlayerRun2 = new(PathUtils.Get(@"Resources\Textures\PlayerRun2.png"));
+    
+    private static readonly Texture PlayerHappy1 = new(PathUtils.Get(@"Resources\Textures\PlayerHappy1.png"));
 
     public readonly Animation PlayerIdle = new([
         PlayerIdle1,
@@ -32,4 +34,9 @@ public struct AnimationsList()
         PlayerRun1,
         PlayerRun2,
     ], 0.2f);
+    
+    public readonly Animation PlayerHappy = new([
+        PlayerHappy1,
+        PlayerHappy1,
+    ], 2f);
 }

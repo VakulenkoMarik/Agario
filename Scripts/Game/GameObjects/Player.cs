@@ -109,6 +109,11 @@ public class Player : GameObject, IUpdatable, IDrawable
     {
         return shape;
     }
+
+    public void MakeHappy()
+    {
+        Animator?.SetTrigger("isHappy");
+    }
     
     private bool CanMove(float newX, float newY, Vector2f direction)
     {

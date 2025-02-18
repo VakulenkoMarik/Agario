@@ -34,24 +34,28 @@ public static class AnimationsFactory
     private static Animator CreatePlayerAnimator(Shape target)
     {
         Animator animator = animatorsList.GetPlayerAnimator();
-
+        
         animator.Init(target, new(animationsList.PlayerIdle, "idle", false));
         animator.AddState(new(animationsList.PlayerWalk, "walk", false));
         animator.AddState(new(animationsList.PlayerRun, "run", false));
+        animator.AddState(new(animationsList.PlayerHappy, "happy"));
         
-        animator.CreateTransition("idle", "walk");
-        animator.CreateTransition("walk", "idle");
+        animator.CreateDoubleTransition("idle", "happy");
+        animator.CreateDoubleTransition("walk", "happy");
+        animator.CreateDoubleTransition("run", "happy");
         
-        animator.CreateTransition("walk", "run");
+        animator.AddTriggerToTransition("isHappy", "idle", "happy");
+        animator.AddTriggerToTransition("isHappy","walk", "happy");
+        animator.AddTriggerToTransition("isHappy","run", "happy");
+        
+        animator.AddBooleansToTransition(false, "happy", "idle", "isRun", "isWalk");
+        animator.AddBooleansToTransition(true, "happy", "run", "isRun", "isWalk");
+        animator.AddBooleanToTransition("isWalk", true, "happy", "walk");
+        
+        animator.CreateDoubleTransition("idle", "walk", "isWalk");
+        animator.CreateDoubleTransition("walk", "run", "isRun");
         
         animator.CreateTransition("run", "idle");
-        animator.CreateTransition("run", "walk");
-        
-        animator.AddBooleanToTransition("isWalk", true, "idle", "walk");
-        animator.AddBooleanToTransition("isWalk", false, "walk", "idle");
-        
-        animator.AddBooleanToTransition("isRun", true, "walk", "run");
-        animator.AddBooleanToTransition("isRun", false, "run", "walk");
         
         animator.AddBooleanToTransition("isRun", false, "run", "idle");
         animator.AddBooleanToTransition("isWalk", false, "run", "idle");

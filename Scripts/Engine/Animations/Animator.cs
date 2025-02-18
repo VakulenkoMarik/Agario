@@ -56,6 +56,17 @@ public class Animator : IUpdatable
 
     public void AddBooleanToTransition(string booleanName, bool active, string stateFrom, string stateTo)
         => AddConditionToTransition(booleanName, active, stateFrom, stateTo, bools);
+
+    public void AddBooleansToTransition(bool active, string stateFrom, string stateTo, params string[] booleans)
+    {
+        foreach (var booleanName in booleans)
+        {
+            if (!string.IsNullOrEmpty(booleanName))
+            {
+                AddConditionToTransition(booleanName, active, stateFrom, stateTo, bools);
+            }
+        }
+    }
     
     private void AddConditionToTransition<T>(string conditionName, bool isActive, string stateFrom, string stateTo, List<T> conditions) 
         where T : AnimationCondition
@@ -94,14 +105,6 @@ public class Animator : IUpdatable
     
     public void AddState(State state)
         => combinations.Add(state, new());
-    
-    public void CreateState(string name, Animation animation, bool hasExitTime)
-    {
-        State state = new(animation, name, hasExitTime);
-        List<Transition> transitions = new();
-        
-        combinations.Add(state, transitions);
-    }
 
     public State? TryGetState(string name)
     {
@@ -137,7 +140,28 @@ public class Animator : IUpdatable
 
         if (stateFrom is not null && stateTo is not null)
         {
-            combinations[stateFrom].Add(new Transition(stateTo));
+            combinations[stateFrom].Add(new Transition(stateFrom, stateTo));
         }
+    }
+    
+    public void CreateDoubleTransition(string state1, string state2, params string[] conditions)
+    {
+        CreateTransition(state1, state2);
+        CreateTransition(state2, state1);
+
+        foreach (var name in conditions)
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                AddDoubleBooleanToTransition(name, true, state1, state2);
+                AddDoubleBooleanToTransition(name, false, state2, state1);
+            }
+        }
+    }
+
+    public void AddDoubleBooleanToTransition(string booleanName, bool active, string state1, string state2)
+    {
+        AddConditionToTransition(booleanName, active, state1, state2, bools);
+        AddConditionToTransition(booleanName, !active, state2, state1, bools);
     }
 }

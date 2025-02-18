@@ -35,6 +35,13 @@ public class HumanController : Controller
                 player.IsRun = false;
         }, "humanWantRun");
         
+        Input.RegisterControllerKey(GameConfig.Data.Happy, () =>
+        {
+            if (player != null)
+                player.MakeHappy();
+                
+        }, "makeHumanHappy", false);
+        
         Input.RegisterControllerKey(GameConfig.Data.SwapPlayersControllersKey, SwitchBodiesWithRandomPlayer, "swapControllers", false);
     }
 
