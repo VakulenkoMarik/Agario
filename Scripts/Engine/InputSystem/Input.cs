@@ -6,6 +6,9 @@ public static class Input
 {
     public static Dictionary<string, EventKey> Keys { get; private set; } = new();
 
+    public static void SetKeys(Dictionary<string, EventKey> keys)
+        => Keys = keys;
+    
     public static void AddKey(Keyboard.Key key, string name)
         => Keys.TryAdd(name, new EventKey(key));
     

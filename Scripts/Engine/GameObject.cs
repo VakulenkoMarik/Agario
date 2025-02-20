@@ -2,7 +2,7 @@
 
 using Agario.Scripts.Engine.Animations;
 using Agario.Scripts.Engine.Interfaces;
-using Agario.Scripts.Engine.Utils.Extensions;
+using Agario.Scripts.Engine.Scene;
 using SFML.Graphics;
 using SFML.System;
 
@@ -13,8 +13,6 @@ public class GameObject
     public Vector2f Position;
     protected Shape? ObjectShape { get; private set; }
     public Animator? Animator { get; init; }
-
-    private GameLoop gameLoop = null!;
 
     protected GameObject(Shape? objectShape = null)
     {
@@ -29,40 +27,26 @@ public class GameObject
     }
 
     private void ValuesInit()
-    {
-        Position = new (0, 0);
-
-        gameLoop = GameLoop.GetInstance();
-    }
+        => Position = new (0, 0);
 
     private void AddObjectToLists()
     {
         if (this is IUpdatable updatable)
-        {
-            gameLoop.updatableObjects.Add(updatable);
-        }
+            SceneLoader.GetCurrentScene().AddUpdatableObject(updatable);
         
         if (this is IDrawable drawable)
-        {
-            gameLoop.drawableObjects.Add(drawable);
-        }
+            SceneLoader.GetCurrentScene().AddDrawableObject(drawable);
     }
 
     protected void Destroy()
     {
         if (this is IUpdatable updatable)
-        {
-            gameLoop.updatableObjects.RemoveSwap(updatable);
-        }
+            SceneLoader.GetCurrentScene().DestroyUpdatableObject(updatable);
         
         if (this is IDrawable drawable)
-        {
-            gameLoop.drawableObjects.RemoveSwap(drawable);
-        }
+            SceneLoader.GetCurrentScene().DestroyDrawableObject(drawable);
     }
 
     public Drawable GetMesh()
-    {
-        return ObjectShape;
-    }
+        => ObjectShape;
 }

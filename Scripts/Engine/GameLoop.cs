@@ -11,8 +11,8 @@ public class GameLoop
 {
     private static GameLoop instance = null!;
     
-    public readonly List<IDrawable> drawableObjects = new();
-    public readonly List<IUpdatable> updatableObjects = new();
+    private List<IDrawable>? drawableObjects;
+    private List<IUpdatable>? updatableObjects;
     
     private Color backgroundColor;
     private readonly RenderWindow scene;
@@ -27,6 +27,12 @@ public class GameLoop
         uint height = (uint)ProgramConfig.Data.WindowHeight;
         
         scene = new RenderWindow(new VideoMode(width, height), "Game window");
+    }
+
+    public void SetData(List<IUpdatable> updatables, List<IDrawable> drawables)
+    {
+        drawableObjects = drawables;
+        updatableObjects = updatables;
     }
     
     private void Init()

@@ -1,5 +1,6 @@
 using Agario.Scripts.Engine.Animations.AnimationConditions;
 using Agario.Scripts.Engine.Interfaces;
+using Agario.Scripts.Engine.Scene;
 using SFML.Graphics;
 
 namespace Agario.Scripts.Engine.Animations;
@@ -16,7 +17,7 @@ public class Animator : IUpdatable
 
     public void Init(Shape targetSprite, State firsAnim)
     {
-        GameLoop.GetInstance().updatableObjects.Add(this);
+        SceneLoader.GetCurrentScene()?.AddUpdatableObject(this);
         
         AddState(firsAnim);
         
@@ -27,15 +28,13 @@ public class Animator : IUpdatable
     
     public void Update()
     {
-        if (sprite is not null && fsm is not null)
-        {
-            fsm.Update();
-            sprite.Texture = fsm.GetCurrentTexture();
+        fsm?.Update();
+        if (sprite != null) 
+            sprite.Texture = fsm?.GetCurrentTexture();
 
-            foreach (var trigger in triggers)
-            {
-                trigger.Reset();
-            }
+        foreach (var trigger in triggers)
+        {
+            trigger.Reset();
         }
     }
 

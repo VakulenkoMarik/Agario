@@ -1,41 +1,29 @@
 // ReSharper disable InconsistentNaming
 
 using Agario.Scripts.Engine.Data;
-using Agario.Scripts.Engine.Interfaces;
+using Agario.Scripts.Engine.Utils;
+using Agario.Scripts.Game.Audio;
 
 namespace Agario.Scripts.Engine;
 
-public class Game : IUpdatable
+public class Game
 {
     private readonly GameLoop gameLoop;
-    private IGameRules gameRules = null!;
 
     public Game()
     {
-        FilesInit();
+        ProgramConfig.Init();
         
         gameLoop = new();
-        
-        gameLoop.updatableObjects.Add(this);
+        ServiceLocatorInit();
     }
-
-    private void FilesInit()
+    
+    private void ServiceLocatorInit()
     {
-        ProgramConfig.Init();
-    }
-
-    public void SetGameRules(IGameRules rules)
-    {
-        gameRules = rules;
+        ServiceLocator.Instance.Register(new AudioSystem());
+        ServiceLocator.Instance.Register(new PauseActivator());
     }
 
     public void Start()
-    {
-        gameLoop.Run();
-    }
-
-    public void Update()
-    {
-        gameRules.Update();
-    }
+        => gameLoop.Run();
 }

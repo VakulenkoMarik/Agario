@@ -4,6 +4,7 @@ using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Interfaces;
+using Agario.Scripts.Engine.Scene;
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Game.Audio;
 using Agario.Scripts.Game.Controllers;
@@ -13,7 +14,7 @@ using SFML.System;
 
 namespace Agario.Scripts.Game;
 
-public class AgarioGame : IGameRules
+public class AgarioGame : IUpdatable
 {
     public static readonly List<Food> foodList = new();
     public static readonly List<Controller> controllersList = new();
@@ -33,11 +34,10 @@ public class AgarioGame : IGameRules
 
     private void GameInit()
     {
+        SceneLoader.GetCurrentScene().AddUpdatableObject(this);
+        
         // Configurations
         GameConfig.SetData(new GameData());
-        
-        // Service locator
-        ServiceLocatorInit();
         
         // Input
         PauseActivator activator = ServiceLocator.Instance.Get<PauseActivator>();
@@ -47,12 +47,6 @@ public class AgarioGame : IGameRules
         AudioSystem system = ServiceLocator.Instance.Get<AudioSystem>();
         system.Play(AudioType.Background);
         system.SetVolume("Background", 20);
-    }
-
-    private void ServiceLocatorInit()
-    {
-        ServiceLocator.Instance.Register(new AudioSystem());
-        ServiceLocator.Instance.Register(new PauseActivator());
     }
     
     private void ActivePlayerInit()
