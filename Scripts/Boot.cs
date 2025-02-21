@@ -8,9 +8,9 @@ public class Boot
     private static void Main(string[] args)
     {
         Engine.Game game = new Engine.Game();
-        SceneLoader.Init("Game");
-
-        AgarioGame mainGame = new AgarioGame();
+        SceneLoader.Init("MainMenu", new MainMenu());
+        SceneLoader.AddScene("Game", new AgarioGame());
+        
         game.Start();
     }
 }

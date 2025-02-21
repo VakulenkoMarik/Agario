@@ -4,16 +4,21 @@ using Agario.Scripts.Engine.Utils.Extensions;
 
 namespace Agario.Scripts.Engine.Scene;
 
-public class Scene(string name)
+public class Scene(string name, ISceneRules rules)
 {
     public readonly string Name = name;
     
     private readonly List<IUpdatable> updatableObjects = new();
     private readonly List<IDrawable> drawableObjects = new();
     public Dictionary<string, EventKey> InputKeys = new();
-    
+
+    public ISceneRules SceneRules { get; private set; } = rules;
+
     public void SetThisAsCurrentScene()
-        => SceneLoader.SetCurrentScene(Name);
+    {
+        SceneLoader.SetCurrentScene(Name);
+        SceneRules.Start();
+    }
     
     public void AddUpdatableObject(IUpdatable updatable)
         => updatableObjects.Add(updatable);

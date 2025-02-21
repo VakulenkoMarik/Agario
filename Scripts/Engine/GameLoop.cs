@@ -85,7 +85,7 @@ public class GameLoop
             objectToUpdate.Update();
         }
         
-        foreach (var key in InputSystem.Input.Keys.Values)
+        foreach (var key in InputSystem.Input.Keys.Values.ToList())
         {
             key.TryActivateEvent();
         }

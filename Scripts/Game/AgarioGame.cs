@@ -14,7 +14,7 @@ using SFML.System;
 
 namespace Agario.Scripts.Game;
 
-public class AgarioGame : IUpdatable
+public class AgarioGame : ISceneRules, IUpdatable
 {
     public static readonly List<Food> foodList = new();
     public static readonly List<Controller> controllersList = new();
@@ -23,7 +23,7 @@ public class AgarioGame : IUpdatable
 
     private PauseActivator pauseActivator => ServiceLocator.Instance.Get<PauseActivator>();
 
-    public AgarioGame()
+    public void Start()
     {
         GameInit();
         

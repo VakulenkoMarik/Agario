@@ -1,6 +1,7 @@
 // ReSharper disable InconsistentNaming
 
 using Agario.Scripts.Engine.Data;
+using Agario.Scripts.Engine.Scene;
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Game.Audio;
 
@@ -25,5 +26,8 @@ public class Game
     }
 
     public void Start()
-        => gameLoop.Run();
+    {
+        SceneLoader.StartCurrentScene();
+        gameLoop.Run();
+    }
 }
