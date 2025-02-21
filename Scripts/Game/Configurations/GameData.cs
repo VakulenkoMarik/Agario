@@ -4,7 +4,7 @@ using Agario.Scripts.Engine.Utils;
 using SFML.Window;
 using Sini;
 
-namespace Agario.Scripts.Game;
+namespace Agario.Scripts.Game.Configurations;
 
 public class GameData
 {

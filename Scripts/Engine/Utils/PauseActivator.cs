@@ -1,7 +1,7 @@
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils.Extensions;
 
-namespace Agario.Scripts.Engine;
+namespace Agario.Scripts.Engine.Utils;
 
 public class PauseActivator : IPauseHandler, IGameUtility
 {

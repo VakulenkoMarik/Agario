@@ -7,6 +7,7 @@ using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Engine.Utils.Extensions;
 using Agario.Scripts.Game.GameObjects;
+using Agario.Scripts.Game.ScenesRules;
 using SFML.System;
 
 namespace Agario.Scripts.Game.Controllers;

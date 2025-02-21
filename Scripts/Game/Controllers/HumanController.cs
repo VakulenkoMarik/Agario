@@ -4,7 +4,9 @@ using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Engine.Utils.Extensions;
 using Agario.Scripts.Game.Audio;
+using Agario.Scripts.Game.Configurations;
 using Agario.Scripts.Game.GameObjects;
+using Agario.Scripts.Game.ScenesRules;
 using SFML.System;
 
 namespace Agario.Scripts.Game.Controllers;

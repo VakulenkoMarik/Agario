@@ -1,5 +1,6 @@
 using Agario.Scripts.Engine.Scene;
 using Agario.Scripts.Game;
+using Agario.Scripts.Game.ScenesRules;
 
 namespace Agario.Scripts;
 

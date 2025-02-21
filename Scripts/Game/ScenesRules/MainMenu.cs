@@ -3,7 +3,7 @@ using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Scene;
 using SFML.Window;
 
-namespace Agario.Scripts.Game;
+namespace Agario.Scripts.Game.ScenesRules;
 
 public class MainMenu : ISceneRules
 {

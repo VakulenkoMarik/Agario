@@ -3,6 +3,7 @@
 using Agario.Scripts.Engine.Utils.Extensions;
 using Agario.Scripts.Game.Controllers;
 using Agario.Scripts.Game.GameObjects;
+using Agario.Scripts.Game.ScenesRules;
 
 namespace Agario.Scripts.Game.CustomExtensions;
 

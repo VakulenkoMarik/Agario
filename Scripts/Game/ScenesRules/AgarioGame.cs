@@ -7,12 +7,13 @@ using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Scene;
 using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Game.Audio;
+using Agario.Scripts.Game.Configurations;
 using Agario.Scripts.Game.Controllers;
 using Agario.Scripts.Game.CustomExtensions;
 using Agario.Scripts.Game.GameObjects;
 using SFML.System;
 
-namespace Agario.Scripts.Game;
+namespace Agario.Scripts.Game.ScenesRules;
 
 public class AgarioGame : ISceneRules, IUpdatable
 {

@@ -1,4 +1,4 @@
-namespace Agario.Scripts.Game;
+namespace Agario.Scripts.Game.Configurations;
 
 public static class GameConfig
 {
