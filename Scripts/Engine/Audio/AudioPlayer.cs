@@ -11,12 +11,6 @@ public class AudioPlayer
 {
     private readonly Dictionary<string, Sound> sounds = new();
 
-    public AudioPlayer()
-    {
-        GameLoop gl = GameLoop.GetInstance();
-        gl.AddEndLoopAction(Dispose);
-    }
-
     public void Dispose()
     {
         foreach (Sound s in sounds.Values)
@@ -26,14 +20,10 @@ public class AudioPlayer
     }
 
     public Sound? TryGet(string name)
-    {
-        return sounds.GetValueOrDefault(name);
-    }
+        => sounds.GetValueOrDefault(name);
     
     public void AddAudio(Sound audio, string name)
-    {
-        sounds.Add(name, audio);
-    }
+        => sounds.Add(name, audio);
     
     public void TryRemoveAudio(string name)
     {

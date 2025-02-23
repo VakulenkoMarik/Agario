@@ -2,6 +2,7 @@
 
 using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.Interfaces;
+using Agario.Scripts.Engine.Scene;
 using SFML.Graphics;
 using SFML.Window;
 
@@ -9,24 +10,20 @@ namespace Agario.Scripts.Engine;
 
 public class GameLoop
 {
-    private static GameLoop instance = null!;
-    
     private List<IDrawable>? drawableObjects;
     private List<IUpdatable>? updatableObjects;
     
     private Color backgroundColor;
-    private readonly RenderWindow scene;
+    private readonly RenderWindow render;
 
-    private bool isEndGameLoop = false;
+    private bool isEndGameLoop;
     
     public GameLoop()
     {
-        instance = this;
-
         uint width = (uint)ProgramConfig.Data.WindowWidth;
         uint height = (uint)ProgramConfig.Data.WindowHeight;
         
-        scene = new RenderWindow(new VideoMode(width, height), "Game window");
+        render = new RenderWindow(new VideoMode(width, height), "Game window");
     }
 
     public void SetData(List<IUpdatable> updatables, List<IDrawable> drawables)
@@ -37,25 +34,16 @@ public class GameLoop
     
     private void Init()
     {
-        AddEndLoopAction(scene.Close);
+        AddEndLoopAction(render.Close);
         
         backgroundColor = Color.White;
     }
 
     public void AddEndLoopAction(Action action)
-    {
-        scene.Closed += (_, _) => action();
-    }
+        => render.Closed += (_, _) => action();
 
     public void Stop()
-    {
-        isEndGameLoop = true;
-    }
-
-    public static GameLoop GetInstance()
-    {
-        return instance;
-    }
+        => isEndGameLoop = true;
     
     public void Run()
     {
@@ -71,7 +59,7 @@ public class GameLoop
     
     private void Input()
     {
-        scene.DispatchEvents();
+        render.DispatchEvents();
 
         InputSystem.Input.UpdateKeyStatuses();
     }
@@ -80,9 +68,14 @@ public class GameLoop
     {
         Time.Update();
         
-        foreach (IUpdatable objectToUpdate in updatableObjects.ToList())
+        SceneLoader.CurrentScene?.Update();
+
+        if (updatableObjects is not null)
         {
-            objectToUpdate.Update();
+            foreach (IUpdatable objectToUpdate in updatableObjects.ToList())
+            {
+                objectToUpdate.Update();
+            }
         }
         
         foreach (var key in InputSystem.Input.Keys.Values.ToList())
@@ -93,19 +86,22 @@ public class GameLoop
     
     private void Render()
     {
-        scene.Clear(backgroundColor);
+        render.Clear(backgroundColor);
 
-        foreach (IDrawable objectToDraw in drawableObjects)
+        if (drawableObjects is not null)
         {
-            Drawable shapeToDraw = objectToDraw.GetMesh();
-            scene.Draw(shapeToDraw);
+            foreach (IDrawable objectToDraw in drawableObjects)
+            {
+                Drawable shapeToDraw = objectToDraw.GetMesh();
+                render.Draw(shapeToDraw);
+            }
         }
 
-        scene.Display();
+        render.Display();
     }
 
     private bool IsEndGameLoop()
     {
-        return !scene.IsOpen || isEndGameLoop;
+        return !render.IsOpen || isEndGameLoop;
     }
 }

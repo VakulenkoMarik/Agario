@@ -2,6 +2,7 @@
 
 using Agario.Scripts.Engine.Audio;
 using Agario.Scripts.Engine.Interfaces;
+using Agario.Scripts.Engine.Scene;
 using SFML.Audio;
 
 namespace Agario.Scripts.Game.Audio;
@@ -29,6 +30,8 @@ public class AudioSystem : IGameUtility
         audioPlayer.Load();
 
         methods = new AudioMethods(audioPlayer);
+        
+        SceneLoader.AddOnExitGameAction(audioPlayer.Dispose);
     }
 
     public void Play(AudioType type)

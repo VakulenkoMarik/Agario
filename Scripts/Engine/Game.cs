@@ -3,7 +3,6 @@
 using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.Scene;
 using Agario.Scripts.Engine.Utils;
-using Agario.Scripts.Game.Audio;
 
 namespace Agario.Scripts.Engine;
 
@@ -13,21 +12,43 @@ public class Game
 
     public Game()
     {
-        ProgramConfig.Init();
+        FilesInit();
         
         gameLoop = new();
+        
+        ObjectsInit();
+    }
+
+    private void FilesInit()
+    {
+        ProgramConfig.Init();
+    }
+
+    private void ObjectsInit()
+    {
+        SceneLoader.Init(gameLoop);
+        
         ServiceLocatorInit();
     }
     
     private void ServiceLocatorInit()
     {
-        ServiceLocator.Instance.Register(new AudioSystem());
         ServiceLocator.Instance.Register(new PauseActivator());
     }
 
     public void Start()
     {
-        SceneLoader.StartCurrentScene();
-        gameLoop.Run();
+        try
+        {
+            string? currentSceneName = SceneLoader.CurrentScene?.Name;
+            SceneLoader.LoadScene(currentSceneName);
+        
+            gameLoop.Run();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("You cannot start the game: " + e);
+            throw;
+        }
     }
 }

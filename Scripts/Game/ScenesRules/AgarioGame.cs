@@ -6,6 +6,7 @@ using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Scene;
 using Agario.Scripts.Engine.Utils;
+using Agario.Scripts.Engine.Utils.Extensions;
 using Agario.Scripts.Game.Audio;
 using Agario.Scripts.Game.Configurations;
 using Agario.Scripts.Game.Controllers;
@@ -15,12 +16,12 @@ using SFML.System;
 
 namespace Agario.Scripts.Game.ScenesRules;
 
-public class AgarioGame : ISceneRules, IUpdatable
+public class AgarioGame : ISceneRules
 {
-    public static readonly List<Food> foodList = new();
-    public static readonly List<Controller> controllersList = new();
+    public static List<Food> foodList;
+    public static List<Controller> controllersList;
     
-    private static readonly List<GameObject> destructionList = new();
+    private static List<GameObject> destructionList;
 
     private PauseActivator pauseActivator => ServiceLocator.Instance.Get<PauseActivator>();
 
@@ -35,10 +36,9 @@ public class AgarioGame : ISceneRules, IUpdatable
 
     private void GameInit()
     {
-        SceneLoader.GetCurrentScene().AddUpdatableObject(this);
-        
-        // Configurations
-        GameConfig.SetData(new GameData());
+        foodList = new();
+        controllersList = new();
+        destructionList = new();
         
         // Input
         PauseActivator activator = ServiceLocator.Instance.Get<PauseActivator>();
@@ -94,8 +94,14 @@ public class AgarioGame : ISceneRules, IUpdatable
             StartOfNewObjects();
         
             CollisionsHandling();
+            
+            if (ActivePlayersCount == 1)
+                OnEndGame();
         }
     }
+    
+    private void OnEndGame()
+        => SceneLoader.LoadScene("MainMenu");
 
     private void StartOfNewObjects()
     {
@@ -181,6 +187,7 @@ public class AgarioGame : ISceneRules, IUpdatable
             if (controller is BotController botController)
             {
                 botController.Delete();
+                controllersList.RemoveSwap(botController);
                 return;
             }
 

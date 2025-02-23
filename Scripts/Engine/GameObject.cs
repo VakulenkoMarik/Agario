@@ -32,19 +32,19 @@ public class GameObject
     private void AddObjectToLists()
     {
         if (this is IUpdatable updatable)
-            SceneLoader.GetCurrentScene().AddUpdatableObject(updatable);
+            SceneLoader.CurrentScene?.AddUpdatableObject(updatable);
         
         if (this is IDrawable drawable)
-            SceneLoader.GetCurrentScene().AddDrawableObject(drawable);
+            SceneLoader.CurrentScene?.AddDrawableObject(drawable);
     }
 
     protected void Destroy()
     {
         if (this is IUpdatable updatable)
-            SceneLoader.GetCurrentScene().DestroyUpdatableObject(updatable);
+            SceneLoader.CurrentScene?.DestroyUpdatableObject(updatable);
         
         if (this is IDrawable drawable)
-            SceneLoader.GetCurrentScene().DestroyDrawableObject(drawable);
+            SceneLoader.CurrentScene?.DestroyDrawableObject(drawable);
     }
 
     public Drawable GetMesh()

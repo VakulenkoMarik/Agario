@@ -1,52 +1,55 @@
 // ReSharper disable InconsistentNaming
 
-using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Interfaces;
 
 namespace Agario.Scripts.Engine.Scene;
 
 public static class SceneLoader
 {
-    private static Scene currentScene = null!;
+    public static Scene? CurrentScene { get; private set; }
+
+    private static GameLoop gameLoop = null!;
     private static readonly List<Scene> scenes = new();
 
-    public static void Init(string sceneName, ISceneRules rules)
+    public static void Init(GameLoop loop)
+    {
+        gameLoop = loop;
+        loop.AddEndLoopAction(OnExitGame);
+    }
+
+    public static void AddOnExitGameAction(Action action)
+        => gameLoop.AddEndLoopAction(action);
+
+    private static void OnExitGame()
+        => CurrentScene?.Deactivate();
+
+    public static void InitFirstScene(string sceneName, ISceneRules rules)
     {
         Scene scene = AddScene(sceneName, rules);
-        currentScene = scene;
-        
-        scene.LoadDataToGameLoop();
+        CurrentScene = scene;
     }
 
-    public static void StartCurrentScene()
-        => currentScene.SceneRules.Start();
-    
-    public static Scene GetCurrentScene()
-        => currentScene;
-    
-    public static void SetCurrentScene(string sceneName)
-    {
-        currentScene.InputKeys = Input.Keys;
-        
-        Scene? scene = GetScene(sceneName);
-
-        if (scene is not null)
-        {
-            currentScene = scene;
-            currentScene.LoadDataToGameLoop();
-            
-            return;
-        }
-
-        throw new ArgumentException("Scene not found");
-    }
-    
     private static void StartScene(Scene scene)
-        => scene.SetThisAsCurrentScene();
+    {
+        Scene? last = CurrentScene;
+
+        CurrentScene = scene;
+        scene.LoadDataToGameLoop();
+        
+        last?.Deactivate();
+
+        if (!scene.IsInited)
+        {
+            scene.SceneRules.Init();
+            scene.IsInited = true;
+        }
+        
+        scene.SceneRules.Start();
+    }
     
     public static Scene AddScene(string sceneName, ISceneRules rules)
     {
-        Scene newScene = new Scene(sceneName, rules);
+        Scene newScene = new Scene(sceneName, rules, gameLoop);
         scenes.Add(newScene);
         
         return newScene;

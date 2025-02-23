@@ -1,24 +1,20 @@
-using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils.Extensions;
 
 namespace Agario.Scripts.Engine.Scene;
 
-public class Scene(string name, ISceneRules rules)
+public class Scene(string name, ISceneRules rules, GameLoop loop)
 {
     public readonly string Name = name;
+    public bool IsInited = false;
     
     private readonly List<IUpdatable> updatableObjects = new();
     private readonly List<IDrawable> drawableObjects = new();
-    public Dictionary<string, EventKey> InputKeys = new();
 
     public ISceneRules SceneRules { get; private set; } = rules;
 
-    public void SetThisAsCurrentScene()
-    {
-        SceneLoader.SetCurrentScene(Name);
-        SceneRules.Start();
-    }
+    public void Update()
+        => SceneRules.Update();
     
     public void AddUpdatableObject(IUpdatable updatable)
         => updatableObjects.Add(updatable);
@@ -33,10 +29,13 @@ public class Scene(string name, ISceneRules rules)
         => drawableObjects.RemoveSwap(drawable);
     
     public void LoadDataToGameLoop()
-    {
-        GameLoop gl = GameLoop.GetInstance();
-        gl.SetData(updatableObjects, drawableObjects);
+        => loop.SetData(updatableObjects, drawableObjects);
 
-        Input.SetKeys(InputKeys);
+    public void Deactivate()
+    {
+        SceneRules.OnDelete();
+        
+        updatableObjects.Clear();
+        drawableObjects.Clear();
     }
 }
