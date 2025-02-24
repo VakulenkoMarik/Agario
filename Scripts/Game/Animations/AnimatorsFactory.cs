@@ -1,7 +1,9 @@
 // ReSharper disable InconsistentNaming
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
 
+using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Animations;
+using Agario.Scripts.Game.GameObjects;
 using SFML.Graphics;
 
 namespace Agario.Scripts.Game.Animations;
@@ -13,15 +15,14 @@ public enum AnimateObjectType
 
 public static class AnimatorsFactory
 {
-    private static readonly AnimationsList animationsList = new();
     private static readonly AnimatorsList animatorsList = new();
     
-    private static readonly Dictionary<AnimateObjectType, Func<Shape, Animator>> AnimatorCreators = new()
+    private static readonly Dictionary<AnimateObjectType, Func<GameObject, Animator>> AnimatorCreators = new()
     {
-        { AnimateObjectType.Player, CreatePlayerAnimator },
+        { AnimateObjectType.Player, CreateCharacterAnimator },
     };
     
-    public static Animator CreateAnimator(AnimateObjectType type, Shape targetShape)
+    public static Animator CreateAnimator(AnimateObjectType type, GameObject targetShape)
     {
         if (AnimatorCreators.TryGetValue(type, out var createAnimator))
         {
@@ -31,14 +32,35 @@ public static class AnimatorsFactory
         throw new ArgumentException($"No animator found for type {type}");
     }
 
-    private static Animator CreatePlayerAnimator(Shape target)
+    private static Animator CreateCharacterAnimator(GameObject gameObject)
     {
         Animator animator = animatorsList.GetPlayerAnimator();
         
-        animator.Init(target, new(animationsList.PlayerIdle, "idle", false));
-        animator.AddState(new(animationsList.PlayerWalk, "walk", false));
-        animator.AddState(new(animationsList.PlayerRun, "run", false));
-        animator.AddState(new(animationsList.PlayerHappy, "happy"));
+        if (gameObject is Player player)
+        {
+            Shape shape = gameObject.GetMesh() as Shape;
+            Dictionary<string, Animation> animations = player.Character.Animations;
+            
+            return player.Character.Name switch
+            {
+                "Boba" => CreatePlayerAnimator(animator, shape, animations["BobaIdle"], animations["BobaWalk"],
+                    animations["BobaRun"], animations["BobaHappy"]),
+                "Biba" => CreatePlayerAnimator(animator, shape, animations["BibaIdle"], animations["BibaWalk"],
+                    animations["BibaRun"], animations["BibaHappy"]),
+                _ => throw new Exception("Character is not registered")
+            };
+        }
+
+        throw new ArgumentException("Game object is not player");
+    }
+
+    private static Animator CreatePlayerAnimator(Animator animator, Shape target, Animation idle,
+        Animation walk, Animation run, Animation happy)
+    {
+        animator.Init(target, new(idle, "idle", false));
+        animator.AddState(new(walk, "walk", false));
+        animator.AddState(new(run, "run", false));
+        animator.AddState(new(happy, "happy"));
         
         animator.CreateDoubleTransition("idle", "happy");
         animator.CreateDoubleTransition("walk", "happy");

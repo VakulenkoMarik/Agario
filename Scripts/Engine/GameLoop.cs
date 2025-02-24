@@ -14,7 +14,7 @@ public class GameLoop
     private List<IUpdatable>? updatableObjects;
     
     private Color backgroundColor;
-    private readonly RenderWindow render;
+    public readonly RenderWindow RenderWindow;
 
     private bool isEndGameLoop;
     
@@ -23,7 +23,7 @@ public class GameLoop
         uint width = (uint)ProgramConfig.Data.WindowWidth;
         uint height = (uint)ProgramConfig.Data.WindowHeight;
         
-        render = new RenderWindow(new VideoMode(width, height), "Game window");
+        RenderWindow = new RenderWindow(new VideoMode(width, height), "Game window");
     }
 
     public void SetData(List<IUpdatable> updatables, List<IDrawable> drawables)
@@ -34,13 +34,13 @@ public class GameLoop
     
     private void Init()
     {
-        AddEndLoopAction(render.Close);
+        AddEndLoopAction(RenderWindow.Close);
         
         backgroundColor = Color.White;
     }
 
     public void AddEndLoopAction(Action action)
-        => render.Closed += (_, _) => action();
+        => RenderWindow.Closed += (_, _) => action();
 
     public void Stop()
         => isEndGameLoop = true;
@@ -59,7 +59,7 @@ public class GameLoop
     
     private void Input()
     {
-        render.DispatchEvents();
+        RenderWindow.DispatchEvents();
 
         InputSystem.Input.UpdateKeyStatuses();
     }
@@ -86,22 +86,29 @@ public class GameLoop
     
     private void Render()
     {
-        render.Clear(backgroundColor);
+        RenderWindow.Clear(backgroundColor);
 
         if (drawableObjects is not null)
         {
             foreach (IDrawable objectToDraw in drawableObjects)
             {
-                Drawable shapeToDraw = objectToDraw.GetMesh();
-                render.Draw(shapeToDraw);
+                Drawable? shapeToDraw = objectToDraw.GetMesh();
+
+                if (shapeToDraw is null)
+                {
+                    objectToDraw.Draw();
+                    continue;
+                }
+                
+                RenderWindow.Draw(shapeToDraw);
             }
         }
 
-        render.Display();
+        RenderWindow.Display();
     }
 
     private bool IsEndGameLoop()
     {
-        return !render.IsOpen || isEndGameLoop;
+        return !RenderWindow.IsOpen || isEndGameLoop;
     }
 }

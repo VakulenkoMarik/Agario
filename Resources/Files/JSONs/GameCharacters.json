@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "Bob",
+    "IconTexturePath": "BobIcon.jpg",
+    "AnimationsNames": ["BobIdle", "BobWalk", "BobRun", "BobHappy"],
+    "SoundsNames": ["JumpSound", "HitSound"]
+  },
+  {
+    "Name": "Biba",
+    "IconTexturePath": "BibaIcon.jpg",
+    "AnimationsNames": ["Walk", "Attack", "Death"],
+    "SoundsNames": ["AttackSound", "DeathSound"]
+  }
+]

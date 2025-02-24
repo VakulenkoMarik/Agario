@@ -6,19 +6,17 @@ public static class PathUtils
 {
     private const string programIniFilePath = "Resources\\Files\\ProgramConf.ini";
     private const string gameIniFilePath = "Resources\\Files\\GameConf.ini";
+    private const string animationsFolder = "Resources\\Textures\\Animations";
     
     public static string Get(string path)
-    {
-        return Path.Combine(AppContext.BaseDirectory, path);
-    }
+        => Path.Combine(AppContext.BaseDirectory, path);
+    
+    public static string GetAnimation(string path)
+        => Path.Combine(AppContext.BaseDirectory, animationsFolder, path);
 
     public static string GetProgramIniFile()
-    {
-        return Get(programIniFilePath);
-    }
+        => Get(programIniFilePath);
 
     public static string GetGameIniFile()
-    {
-        return Get(gameIniFilePath);
-    }
+        => Get(gameIniFilePath);
 }

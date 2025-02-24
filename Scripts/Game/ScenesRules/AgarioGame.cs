@@ -55,10 +55,12 @@ public class AgarioGame : ISceneRules
         float posX = ProgramConfig.Data.WindowWidth / 2f;
         float posY = ProgramConfig.Data.WindowHeight / 2f;
         
-        Player activePlayer = new(30f)
+        Player activePlayer = new()
         {
             Position = new Vector2f(posX, posY)
         };
+        
+        activePlayer.ShapeInit(30);
 
         Controller controller = new HumanController(activePlayer);
         
@@ -72,7 +74,8 @@ public class AgarioGame : ISceneRules
         
         for (int i = 0; i < GameConfig.Data.PlayersVolume - 1; i++)
         {
-            Player player = new(Randomizer.Next(10, 30));
+            Player player = new();
+            player.ShapeInit(Randomizer.Next(10, 30));
             
             int x = Randomizer.Next(0, maxXPos);
             int y = Randomizer.Next(0, maxYPos);

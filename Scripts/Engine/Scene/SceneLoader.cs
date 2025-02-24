@@ -1,6 +1,7 @@
 // ReSharper disable InconsistentNaming
 
 using Agario.Scripts.Engine.Interfaces;
+using SFML.Graphics;
 
 namespace Agario.Scripts.Engine.Scene;
 
@@ -22,6 +23,9 @@ public static class SceneLoader
 
     private static void OnExitGame()
         => CurrentScene?.Deactivate();
+
+    public static RenderWindow GetRenderWindow()
+        => gameLoop.RenderWindow;
 
     public static void InitFirstScene(string sceneName, ISceneRules rules)
     {

@@ -2,26 +2,56 @@ using SFML.Graphics;
 
 namespace Agario.Scripts.Engine.Animations;
 
-public class Animation(List<Texture> frames, float frameTime)
+public class AnimationData
+{
+    public bool HasExitTime { get; set; }
+    public float FrameTime { get; set; }
+    public List<string> TexturesPathsList { get; set; }
+}
+
+
+public class Animation
 {
     private float elapsedTime;
     private int currentFrame;
+    
+    public bool HasExitTime { get; set; }
+    public float FrameTime { get; private set; }
+    
+    private readonly List<Texture> frames = new();
+    public List<string> TexturesPathsList { get; private set; }
 
-    public bool HasExitTime;
+    public Animation(bool hasExitTime, float frameTime, List<string> texturesPaths)
+    {
+        HasExitTime = hasExitTime;
+        FrameTime = frameTime;
+        TexturesPathsList = texturesPaths;
+        
+        LoadTextures();
+    }
     
     public Texture GetCurrentFrame()
         => frames[currentFrame];
     
     public bool IsFinished()
+        => currentFrame == frames.Count - 1 || elapsedTime >= FrameTime;
+
+    public void LoadTextures()
     {
-        return currentFrame == frames.Count - 1 || elapsedTime >= frameTime;
+        frames.Clear();
+        
+        foreach (var path in TexturesPathsList)
+        {
+            if (File.Exists(path))
+                frames.Add(new Texture(path));
+        }
     }
 
     public void Update()
     {
         elapsedTime += Time.deltaTime;
-        
-        if (elapsedTime >= frameTime)
+
+        if (elapsedTime >= FrameTime)
         {
             elapsedTime = 0;
 

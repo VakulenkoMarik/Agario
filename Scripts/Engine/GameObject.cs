@@ -11,7 +11,7 @@ namespace Agario.Scripts.Engine;
 public class GameObject
 {
     public Vector2f Position;
-    protected Shape? ObjectShape { get; private set; }
+    protected Shape? ObjectShape { get; set; }
     public Animator? Animator { get; init; }
 
     protected GameObject(Shape? objectShape = null)
@@ -19,9 +19,7 @@ public class GameObject
         ValuesInit();
 
         if (objectShape is not null)
-        {
             ObjectShape = objectShape;
-        }
 
         AddObjectToLists();
     }
