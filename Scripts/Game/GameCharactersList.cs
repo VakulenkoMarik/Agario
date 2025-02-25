@@ -15,7 +15,7 @@ public class GameCharactersList : IGameUtility
 
     private void LoadCharacters()
     {
-        var loadedCharacters = JsonHandler.LoadData<List<GameCharacterData>>("GameCharacters.json");
+        var loadedCharacters = JsonHandler.LoadData<List<GameCharacterData>>(@"Resources/Files/JSONs/GameCharacters.json");
         
         if (loadedCharacters is not null)
         {
@@ -26,7 +26,7 @@ public class GameCharactersList : IGameUtility
                 var animations = ServiceLocator.Instance.Get<AnimationsList>().Animations;
                 character.FillCharacterAnimations(data.AnimationsNames, animations);
                 
-                var soundPaths = JsonHandler.LoadData<Dictionary<string, string>>("Sounds.json");
+                var soundPaths = JsonHandler.LoadData<Dictionary<string, string>>(@"Resources/Files/JSONs/Sounds.json");
                 
                 if (soundPaths is not null)
                     character.FillCharacterSounds(data.SoundsNames, soundPaths);

@@ -14,8 +14,8 @@ public class AnimationsList : IGameUtility
     
     private void Init()
     {
-        var animationData = JsonHandler.LoadData<Dictionary<string, AnimationData>>("Animations.json");
-
+        var animationData = JsonHandler.LoadData<Dictionary<string, AnimationData>>(@"Resources/Files/JSONs/Animations.json");
+        
         if (animationData is not null)
         {
             foreach (var (key, data) in animationData)

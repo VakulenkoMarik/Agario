@@ -1,23 +1,30 @@
 using Agario.Scripts.Engine.Animations;
+using Agario.Scripts.Engine.Utils;
 using SFML.Audio;
 using SFML.Graphics;
 
 namespace Agario.Scripts.Game;
 
 [Serializable]
-public struct GameCharacterData
+public class GameCharacterData
 {
-    public string Name;
-    public string IconTexturePath;
+    public string Name { get; set; }
+    public string IconTexturePath { get; set; }
     
-    public List<string> AnimationsNames;
-    public List<string> SoundsNames;
+    public List<string> AnimationsNames = new();
+    public List<string> SoundsNames = new();
 }
 
-public class GameCharacter(GameCharacterData data)
+public class GameCharacter
 {
-    public readonly string Name = data.Name;
-    public Texture IconTexture = new(data.IconTexturePath);
+    public GameCharacter(GameCharacterData data)
+    {
+        Name = data.Name;
+        IconTexture = new(PathUtils.Get(data.IconTexturePath));
+    }
+    
+    public readonly string Name;
+    public readonly Texture IconTexture;
     
     public readonly Dictionary<string, Animation> Animations = new();
     public readonly Dictionary<string, Sound> Sounds = new();

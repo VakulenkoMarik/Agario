@@ -38,7 +38,7 @@ public static class AnimatorsFactory
         
         if (gameObject is Player player)
         {
-            Shape shape = gameObject.GetMesh() as Shape;
+            Shape shape = (Shape)gameObject.GetMesh();
             Dictionary<string, Animation> animations = player.Character.Animations;
             
             return player.Character.Name switch

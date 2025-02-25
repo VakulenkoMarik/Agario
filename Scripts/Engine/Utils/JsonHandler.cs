@@ -7,7 +7,10 @@ public static class JsonHandler
     public static T? LoadData<T>(string filePath)
     {
         if (!File.Exists(PathUtils.Get(filePath)))
+        {
+            Console.WriteLine("ERROR!!!");
             return default;
+        }
 
         try
         {

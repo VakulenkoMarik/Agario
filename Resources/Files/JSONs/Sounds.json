@@ -1,0 +1,9 @@
+{
+  "Bite": "Audio/Bite.mp3",
+  "FirstKill": "Audio/FirstKill.mp3",
+  "Movement": "Audio/Movement.mp3",
+  "TheLastSurvivor": "Audio/TheLastSurvivor.mp3",
+  "Background": "Audio/Background.mp3",
+  "Running": "Audio/Angry.mp3",
+  "Happy": "Audio/Happy.mp3"
+}

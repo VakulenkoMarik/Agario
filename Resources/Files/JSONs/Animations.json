@@ -1,0 +1,36 @@
+{
+  "BobaIdle": {
+    "HasExitTime": false,
+    "FrameTime": 0.2,
+    "TexturesPathsList": [
+      "Boba/BobaIdle1.png",
+      "Boba/BobaIdle2.png",
+      "Boba/BobaIdle3.png",
+      "Boba/BobaIdle2.png"
+    ]
+  },
+  "BobaWalk": {
+    "HasExitTime": false,
+    "FrameTime": 0.2,
+    "TexturesPathsList": [
+      "Boba/BobaWalk1.png",
+      "Boba/BobaWalk2.png"
+    ]
+  },
+  "BobaRun": {
+    "HasExitTime": true,
+    "FrameTime": 0.2,
+    "TexturesPathsList": [
+      "Boba/BobaRun1.png",
+      "Boba/BobaRun2.png"
+    ]
+  },
+  "BobaHappy": {
+    "HasExitTime": true,
+    "FrameTime": 2,
+    "TexturesPathsList": [
+      "Boba/BobaHappy1.png",
+      "Boba/BobaHappy1.png"
+    ]
+  }
+}

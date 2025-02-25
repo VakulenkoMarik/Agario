@@ -6,7 +6,7 @@ public class AnimationData
 {
     public bool HasExitTime { get; set; }
     public float FrameTime { get; set; }
-    public List<string> TexturesPathsList { get; set; }
+    public List<string> TexturesPathsList { get; set; } = new();
 }
 
 

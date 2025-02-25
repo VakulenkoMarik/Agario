@@ -1,15 +1,15 @@
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
 using Agario.Scripts.Engine.Animations;
 using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Scene;
 using Agario.Scripts.Engine.UI;
 using Agario.Scripts.Engine.Utils;
-using Agario.Scripts.Engine.Utils.Extensions;
 using Agario.Scripts.Game.Audio;
 using Agario.Scripts.Game.Configurations;
 using SFML.Graphics;
 using TGUI;
-using Color = SFML.Graphics.Color;
 
 namespace Agario.Scripts.Game.ScenesRules;
 
@@ -32,8 +32,8 @@ public class MainMenu : ISceneRules
     public void Init()
     {
         ServiceLocator.Instance.Register(new AudioSystem());
-        ServiceLocator.Instance.Register(new GameCharactersList());
         ServiceLocator.Instance.Register(new AnimationsList());
+        ServiceLocator.Instance.Register(new GameCharactersList());
         
         GameConfig.SetData(new GameData());
     }
@@ -45,8 +45,6 @@ public class MainMenu : ISceneRules
         mainMenuCanvas = new Canvas();
         
         CurrentSkinInit();
-        
-        SceneLoader.CurrentScene?.AddDrawableObject(lobbyCharacter);
 
         UiInit();
     }
@@ -89,7 +87,7 @@ public class MainMenu : ISceneRules
     {
         int indesOfSkinToSelect = currentCharacterIndex + bill;
         
-        if (indesOfSkinToSelect > skins.Count || indesOfSkinToSelect < 0)
+        if (indesOfSkinToSelect > skins.Count - 1 || indesOfSkinToSelect < 0)
             return;
 
         currentCharacterIndex = indesOfSkinToSelect;
@@ -100,21 +98,20 @@ public class MainMenu : ISceneRules
     private void CurrentSkinInit()
     {
         CircleShape shape = new();
+        
         shape.Radius = currentCharacterRadius;
         shape.Origin = new SFML.System.Vector2f(shape.Radius, shape.Radius);
         shape.Position = new SFML.System.Vector2f(ProgramConfig.Data.WindowWidth / 2, 250);
         
         lobbyCharacter = new(shape);
+        
+        SceneLoader.CurrentScene?.AddDrawableObject(lobbyCharacter);
     }
 
     private void ChangeSelectedCharacter()
     {
-        //currentCharacter.Texture = skins[currentCharacterIndex].IconTexture;
-        Color color = new();
-        CircleShape shape = lobbyCharacter.GetMesh() as CircleShape;
-        shape.FillColor = color.GenerateColor(10, 200);
+        CircleShape shape = (CircleShape)lobbyCharacter.GetMesh();
         
-        Console.WriteLine(111);
-        Console.WriteLine(shape.FillColor);
+        shape.Texture = skins[currentCharacterIndex].IconTexture;
     }
 }
