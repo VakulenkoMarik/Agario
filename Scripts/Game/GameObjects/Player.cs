@@ -45,8 +45,6 @@ public class Player : GameObject, IUpdatable, IDrawable
     {
         defaultValues = new PlayerDefaultValues();
         currentSpeed = defaultValues.walkSpeed;
-        
-        shape = (CircleShape)ObjectShape;
     }
     
     public void Update()
@@ -63,6 +61,7 @@ public class Player : GameObject, IUpdatable, IDrawable
     public void ShapeInit(float radius, Color? color = null)
     {
         shape = new CircleShape(radius);
+        ObjectShape = shape;
         
         Color fillColor = color ?? shape.FillColor.GenerateColor(10, 255);
         shape.FillColor = fillColor;

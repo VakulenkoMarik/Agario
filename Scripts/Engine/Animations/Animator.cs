@@ -29,6 +29,7 @@ public class Animator : IUpdatable
     public void Update()
     {
         fsm?.Update();
+        
         if (sprite != null) 
             sprite.Texture = fsm?.GetCurrentTexture();
 

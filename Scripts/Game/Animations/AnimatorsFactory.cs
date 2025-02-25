@@ -5,7 +5,6 @@ using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Animations;
 using Agario.Scripts.Game.GameObjects;
 using SFML.Graphics;
-using SFML.Window;
 
 namespace Agario.Scripts.Game.Animations;
 
@@ -23,11 +22,11 @@ public static class AnimatorsFactory
         { AnimateObjectType.Player, CreateCharacterAnimator },
     };
     
-    public static Animator CreateAnimator(AnimateObjectType type, GameObject targetShape)
+    public static Animator CreateAnimator(AnimateObjectType type, GameObject target)
     {
         if (AnimatorCreators.TryGetValue(type, out var createAnimator))
         {
-            return createAnimator(targetShape);
+            return createAnimator(target);
         }
         
         throw new ArgumentException($"No animator found for type {type}");
@@ -39,7 +38,7 @@ public static class AnimatorsFactory
         
         if (gameObject is Player player)
         {
-            Shape shape = (Shape)gameObject.GetMesh();
+            CircleShape shape = (CircleShape)gameObject.GetMesh();
             Dictionary<string, Animation> animations = player.Character.Animations;
             
             return player.Character.Name switch
