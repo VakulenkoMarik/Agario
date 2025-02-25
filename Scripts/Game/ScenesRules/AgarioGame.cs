@@ -55,36 +55,51 @@ public class AgarioGame : ISceneRules
         float posX = ProgramConfig.Data.WindowWidth / 2f;
         float posY = ProgramConfig.Data.WindowHeight / 2f;
         
-        Player activePlayer = new()
-        {
-            Position = new Vector2f(posX, posY)
-        };
-        
-        activePlayer.ShapeInit(30);
+        GameCharactersList list = ServiceLocator.Instance.Get<GameCharactersList>();
+        GameCharacter? character = list.TryGetNewCharacter("Boba");
 
-        Controller controller = new HumanController(activePlayer);
+        if (character is not null)
+        {
+            Player activePlayer = new()
+            {
+                Position = new Vector2f(posX, posY)
+            };
         
-        controllersList.Add(controller);
+            activePlayer.ShapeInit(30);
+            activePlayer.SetCharacter(character);
+
+            Controller controller = new HumanController(activePlayer);
+        
+            controllersList.Add(controller);
+        }
     }
 
     private void AiPlayersInit()
     {
         int maxXPos = ProgramConfig.Data.WindowWidth;
         int maxYPos = ProgramConfig.Data.WindowHeight;
+
+        GameCharactersList list = ServiceLocator.Instance.Get<GameCharactersList>();
         
         for (int i = 0; i < GameConfig.Data.PlayersVolume - 1; i++)
         {
-            Player player = new();
-            player.ShapeInit(Randomizer.Next(10, 30));
+            GameCharacter? character = list.TryGetNewCharacter("Boba");
             
-            int x = Randomizer.Next(0, maxXPos);
-            int y = Randomizer.Next(0, maxYPos);
+            if (character is not null)
+            {
+                Player player = new();
+                player.ShapeInit(Randomizer.Next(10, 30));
+                player.SetCharacter(character);
             
-            player.Position = new Vector2f(x, y);
+                int x = Randomizer.Next(0, maxXPos);
+                int y = Randomizer.Next(0, maxYPos);
             
-            Controller controller = new BotController(player);
+                player.Position = new Vector2f(x, y);
             
-            controllersList.Add(controller);
+                Controller controller = new BotController(player);
+            
+                controllersList.Add(controller);
+            }
         }
     }
 

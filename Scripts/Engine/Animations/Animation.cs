@@ -1,3 +1,4 @@
+using Agario.Scripts.Engine.Utils;
 using SFML.Graphics;
 
 namespace Agario.Scripts.Engine.Animations;
@@ -42,8 +43,10 @@ public class Animation
         
         foreach (var path in TexturesPathsList)
         {
-            if (File.Exists(path))
-                frames.Add(new Texture(path));
+            string fullPath = PathUtils.Get(Path.Combine(@"Resources/Textures/Animations", path));
+            
+            if (File.Exists(fullPath))
+                frames.Add(new Texture(fullPath));
         }
     }
 

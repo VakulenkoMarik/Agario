@@ -5,6 +5,7 @@ using Agario.Scripts.Engine;
 using Agario.Scripts.Engine.Animations;
 using Agario.Scripts.Game.GameObjects;
 using SFML.Graphics;
+using SFML.Window;
 
 namespace Agario.Scripts.Game.Animations;
 

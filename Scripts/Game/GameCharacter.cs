@@ -11,23 +11,19 @@ public class GameCharacterData
     public string Name { get; set; }
     public string IconTexturePath { get; set; }
     
-    public List<string> AnimationsNames = new();
-    public List<string> SoundsNames = new();
+    public List<string> AnimationsNames { get; set; } = new();
+    public List<string> SoundsNames { get; set; } = new();
 }
 
-public class GameCharacter
+public class GameCharacter(GameCharacterData data)
 {
-    public GameCharacter(GameCharacterData data)
-    {
-        Name = data.Name;
-        IconTexture = new(PathUtils.Get(data.IconTexturePath));
-    }
+    public readonly string Name = data.Name;
+    public Texture IconTexture = new(PathUtils.Get(data.IconTexturePath));
     
-    public readonly string Name;
-    public readonly Texture IconTexture;
-    
-    public readonly Dictionary<string, Animation> Animations = new();
-    public readonly Dictionary<string, Sound> Sounds = new();
+    public Dictionary<string, Animation> Animations = new();
+    public Dictionary<string, Sound> Sounds = new();
+
+    public readonly GameCharacterData Data = data;
 
     public void FillCharacterAnimations(List<string> animatonsNames, Dictionary<string, Animation> allAnimations)
     {

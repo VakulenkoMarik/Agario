@@ -36,7 +36,7 @@ public class Player : GameObject, IUpdatable, IDrawable
         }
     }
     
-    private readonly CircleShape shape;
+    private CircleShape shape;
     private readonly AudioSystem audioSystem = ServiceLocator.Instance.Get<AudioSystem>();
     
     private PlayerDefaultValues defaultValues;
@@ -47,7 +47,6 @@ public class Player : GameObject, IUpdatable, IDrawable
         currentSpeed = defaultValues.walkSpeed;
         
         shape = (CircleShape)ObjectShape;
-        Animator = AnimatorsFactory.CreateAnimator(AnimateObjectType.Player, this);
     }
     
     public void Update()
@@ -55,12 +54,19 @@ public class Player : GameObject, IUpdatable, IDrawable
         UpdateMesh();
     }
 
+    public void SetCharacter(GameCharacter character)
+    {
+        Character = character;
+        Animator = AnimatorsFactory.CreateAnimator(AnimateObjectType.Player, this);
+    }
+
     public void ShapeInit(float radius, Color? color = null)
     {
+        shape = new CircleShape(radius);
+        
         Color fillColor = color ?? shape.FillColor.GenerateColor(10, 255);
-
-        shape.Radius = radius;
         shape.FillColor = fillColor;
+        
         shape.Origin = new Vector2f(shape.Radius, shape.Radius);
 
         Radius = shape.Radius;

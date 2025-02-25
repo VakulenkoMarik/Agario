@@ -12,7 +12,7 @@ public class GameObject
 {
     public Vector2f Position;
     protected Shape? ObjectShape { get; set; }
-    public Animator? Animator { get; init; }
+    public Animator? Animator { get; set; }
 
     protected GameObject(Shape? objectShape = null)
     {

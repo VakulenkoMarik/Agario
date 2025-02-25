@@ -13,6 +13,23 @@ public class GameCharactersList : IGameUtility
         LoadCharacters();
     }
 
+    public GameCharacter? TryGetNewCharacter(string name)
+    {
+        foreach (var character in Characters)
+        {
+            if (character.Name.Equals(name))
+            {
+                return new GameCharacter(character.Data)
+                {
+                    Animations = character.Animations,
+                    Sounds = character.Sounds,
+                };
+            }
+        }
+
+        return null;
+    }
+
     private void LoadCharacters()
     {
         var loadedCharacters = JsonHandler.LoadData<List<GameCharacterData>>(@"Resources/Files/JSONs/GameCharacters.json");
@@ -24,7 +41,7 @@ public class GameCharactersList : IGameUtility
                 GameCharacter character = new(data);
                 
                 var animations = ServiceLocator.Instance.Get<AnimationsList>().Animations;
-                character.FillCharacterAnimations(data.AnimationsNames, animations);
+                character.FillCharacterAnimations(data.AnimationsNames, animations); 
                 
                 var soundPaths = JsonHandler.LoadData<Dictionary<string, string>>(@"Resources/Files/JSONs/Sounds.json");
                 
@@ -33,6 +50,8 @@ public class GameCharactersList : IGameUtility
                 
                 Characters.Add(character);
             }
+            
+            
         }
     }
 }
