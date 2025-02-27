@@ -46,4 +46,12 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Scripts\SeaBattleGame\Animations\" />
+    <Folder Include="Scripts\SeaBattleGame\Audio\" />
+    <Folder Include="Scripts\SeaBattleGame\Controllers\" />
+    <Folder Include="Scripts\SeaBattleGame\GameObjects\" />
+    <Folder Include="Scripts\SeaBattleGame\SceneRules\" />
+  </ItemGroup>
+
 </Project>
