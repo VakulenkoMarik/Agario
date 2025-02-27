@@ -1,5 +1,7 @@
 // ReSharper disable InconsistentNaming
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
+using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Interfaces;
 using SFML.Graphics;
 
@@ -9,78 +11,73 @@ public static class SceneLoader
 {
     public static Scene? CurrentScene { get; private set; }
 
-    private static GameLoop gameLoop = null!;
-    private static readonly List<Scene> scenes = new();
+    private static GameLoop gameLoop => targetGame.gameLoop;
+    private static readonly Dictionary<string, Scene> scenes = new();
 
-    public static void Init(GameLoop loop)
+    public static RenderWindow Window { get; private set; }
+    private static Game targetGame;
+
+    public static void Init(Game game)
     {
-        gameLoop = loop;
-        loop.AddEndLoopAction(OnExitGame);
+        targetGame = game;
+        Window = targetGame.GameWindow;
     }
+
+    public static void AddOnExitSceneAction(Action action)
+        => gameLoop.AddEndSceneAction(action);
 
     public static void AddOnExitGameAction(Action action)
-        => gameLoop.AddEndLoopAction(action);
-
-    private static void OnExitGame()
-        => CurrentScene?.Deactivate();
-
-    public static RenderWindow GetRenderWindow()
-        => gameLoop.RenderWindow;
-
-    public static void InitFirstScene(string sceneName, ISceneRules rules)
-    {
-        Scene scene = AddScene(sceneName, rules);
-        CurrentScene = scene;
-    }
+        => Window.Closed += (_, _) => action();
 
     private static void StartScene(Scene scene)
     {
-        Scene? last = CurrentScene;
+        targetGame.NewGameLoop();
+        
+        LastSceneDeactivate();
 
         CurrentScene = scene;
-        scene.LoadDataToGameLoop();
+        CurrentSceneDataToGameLoop();
         
-        last?.Deactivate();
+        scene.Start();
+        gameLoop.Run();
+    }
 
-        if (!scene.IsInited)
+    private static void LastSceneDeactivate()
+    {
+        Scene? last = CurrentScene;
+        Input.Keys.Clear();
+        last?.Deactivate();
+    }
+
+    private static void CurrentSceneDataToGameLoop()
+    {
+        if (CurrentScene is not null)
         {
-            scene.SceneRules.Init();
-            scene.IsInited = true;
-        }
+            (List<IUpdatable> updatables, List<IDrawable> drawables) = CurrentScene.GetData();
         
-        scene.SceneRules.Start();
+            gameLoop.SetData(updatables, drawables);
+        }
     }
     
     public static Scene AddScene(string sceneName, ISceneRules rules)
     {
-        Scene newScene = new Scene(sceneName, rules, gameLoop);
-        scenes.Add(newScene);
+        Scene newScene = new Scene(rules);
+        scenes.Add(sceneName, newScene);
         
         return newScene;
     }
 
     public static Scene? GetScene(string name)
-    {
-        foreach (var scene in scenes)
-        {
-            if (scene.Name.Equals(name))
-            {
-                return scene;
-            }
-        }
-
-        return null;
-    }
+        => scenes.GetValueOrDefault(name);
 
     public static void LoadScene(string sceneName)
     {
-        foreach (var scene in scenes)
+        Scene? target = GetScene(sceneName);
+        
+        if (target is not null)
         {
-            if (scene.Name.Equals(sceneName))
-            {
-                StartScene(scene);
-                return;
-            }
+            StartScene(target);
+            return;
         }
 
         throw new ArgumentException("Scene not found");

@@ -12,6 +12,7 @@ public static class SoundExtensions
 
     public static void TurnOff(this Sound sound)
     {
+        sound.Stop();
         sound.Dispose();
         sound.SoundBuffer.Dispose();
     }

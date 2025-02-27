@@ -1,22 +1,36 @@
 // ReSharper disable InconsistentNaming
+#pragma warning disable CS8618, CS9264
 
 using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.Scene;
 using Agario.Scripts.Engine.Utils;
+using SFML.Graphics;
+using SFML.Window;
 
 namespace Agario.Scripts.Engine;
 
 public class Game
 {
-    private readonly GameLoop gameLoop;
+    public GameLoop gameLoop { get; private set; } = null!;
+    public RenderWindow GameWindow { get; private set; }
 
     public Game()
     {
         FilesInit();
         
-        gameLoop = new();
+        WindowInit();
         
         ObjectsInit();
+    }
+
+    private void WindowInit()
+    {
+        uint width = (uint)ProgramConfig.Data.WindowWidth;
+        uint height = (uint)ProgramConfig.Data.WindowHeight;
+        
+        GameWindow = new RenderWindow(new VideoMode(width, height), "Game window");
+        
+        GameWindow.Closed += (_, _) => GameWindow.Close();
     }
 
     private void FilesInit()
@@ -26,29 +40,10 @@ public class Game
 
     private void ObjectsInit()
     {
-        SceneLoader.Init(gameLoop);
-        
-        ServiceLocatorInit();
-    }
-    
-    private void ServiceLocatorInit()
-    {
+        SceneLoader.Init(this);
         ServiceLocator.Instance.Register(new PauseActivator());
     }
-
-    public void Start()
-    {
-        try
-        {
-            string? currentSceneName = SceneLoader.CurrentScene?.Name;
-            SceneLoader.LoadScene(currentSceneName);
-        
-            gameLoop.Run();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("You cannot start the game: " + e);
-            throw;
-        }
-    }
+    
+    public void NewGameLoop()
+        => gameLoop = new(GameWindow);
 }

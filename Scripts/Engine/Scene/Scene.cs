@@ -3,15 +3,28 @@ using Agario.Scripts.Engine.Utils.Extensions;
 
 namespace Agario.Scripts.Engine.Scene;
 
-public class Scene(string name, ISceneRules rules, GameLoop loop)
+public class Scene(ISceneRules rules)
 {
-    public readonly string Name = name;
-    public bool IsInited = false;
+    public bool IsInited;
     
     private readonly List<IUpdatable> updatableObjects = new();
     private readonly List<IDrawable> drawableObjects = new();
 
-    public ISceneRules SceneRules { get; private set; } = rules;
+    private ISceneRules SceneRules { get; set; } = rules;
+
+    public (List<IUpdatable>, List<IDrawable>) GetData()
+        => (updatableObjects, drawableObjects);
+
+    public void Start()
+    {
+        if (!IsInited)
+        {
+            SceneRules.Init();
+            IsInited = true;
+        }
+        
+        SceneRules.Start(); // Тут проблема
+    }
 
     public void Update()
         => SceneRules.Update();
@@ -27,13 +40,10 @@ public class Scene(string name, ISceneRules rules, GameLoop loop)
     
     public void DestroyDrawableObject(IDrawable drawable)
         => drawableObjects.RemoveSwap(drawable);
-    
-    public void LoadDataToGameLoop()
-        => loop.SetData(updatableObjects, drawableObjects);
 
     public void Deactivate()
     {
-        SceneRules.OnDelete();
+        SceneRules.OnEnd();
         
         updatableObjects.Clear();
         drawableObjects.Clear();

@@ -23,7 +23,7 @@ public class MainMenu : ISceneRules
     private Canvas mainMenuCanvas;
 
     private LobbyCharacter lobbyCharacter;
-    public class LobbyCharacter(CircleShape shape) : IDrawable
+    private class LobbyCharacter(CircleShape shape) : IDrawable
     {
         public Drawable GetMesh()
             => shape;
@@ -55,7 +55,7 @@ public class MainMenu : ISceneRules
         
         Vector2f pos = new Vector2f(ProgramConfig.Data.WindowWidth / 2, ProgramConfig.Data.WindowHeight - 150);
         Vector2f size = new Vector2f(200, 100);
-        Button playButton = UiFactory.CreateButton(pos, size, StartGame, "PLAY");
+        Button playButton = UiFactory.CreateButton(pos, size, StartGame, "PLAY"); // Тут проблема
         
         Vector2f pos2 = new Vector2f(ProgramConfig.Data.WindowWidth - 100, ProgramConfig.Data.WindowHeight / 2);
         Vector2f size2 = new Vector2f(100, 200);
@@ -113,5 +113,13 @@ public class MainMenu : ISceneRules
         CircleShape shape = (CircleShape)lobbyCharacter.GetMesh();
         
         shape.Texture = skins[currentCharacterIndex].IconTexture;
+    }
+
+    void ISceneRules.OnEnd()
+    {
+        mainMenuCanvas.Desrtoy();
+        skins = null;
+        mainMenuCanvas = null;
+        lobbyCharacter = null;
     }
 }

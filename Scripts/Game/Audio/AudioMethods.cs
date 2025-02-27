@@ -16,7 +16,7 @@ public readonly struct AudioMethods(AudioPlayer audioPlayer)
     
     public void Happy()
         => audioPlayer.Play("Happy");
-    
+
     public void Background()
         => audioPlayer.Play("Background", false);
     

@@ -11,7 +11,7 @@ public class Canvas : IDrawable
 
     public Canvas()
     {
-        RenderWindow window = SceneLoader.GetRenderWindow();
+        RenderWindow window = SceneLoader.Window;
         gui = new (window);
         
         SceneLoader.CurrentScene?.AddDrawableObject(this);

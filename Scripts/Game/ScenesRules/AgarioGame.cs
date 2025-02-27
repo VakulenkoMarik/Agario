@@ -24,6 +24,12 @@ public class AgarioGame : ISceneRules
     private static List<GameObject> destructionList;
 
     private PauseActivator pauseActivator => ServiceLocator.Instance.Get<PauseActivator>();
+    private AudioSystem system => ServiceLocator.Instance.Get<AudioSystem>();
+
+    public void Init()
+    {
+        system.SetVolume("Background", 20);
+    }
 
     public void Start()
     {
@@ -41,13 +47,10 @@ public class AgarioGame : ISceneRules
         destructionList = new();
         
         // Input
-        PauseActivator activator = ServiceLocator.Instance.Get<PauseActivator>();
-        Input.RegisterControllerKey(GameConfig.Data.PauseKey, activator.PauseToggle, "pause", false);
+        Input.RegisterControllerKey(GameConfig.Data.PauseKey, pauseActivator.PauseToggle, "pause", false);
         
         // Audio system
-        AudioSystem system = ServiceLocator.Instance.Get<AudioSystem>();
         system.Play(AudioType.Background);
-        system.SetVolume("Background", 20);
     }
     
     private void ActivePlayerInit()
@@ -220,6 +223,13 @@ public class AgarioGame : ISceneRules
     public static void AddToDeathList(GameObject victim)
     {
         destructionList.Add(victim);
+    }
+    
+    void ISceneRules.OnEnd()
+    {
+        foodList = null;
+        controllersList = null;
+        destructionList = null;
     }
 
     public static int ActivePlayersCount
