@@ -9,7 +9,10 @@ using Agario.Scripts.Engine.Utils;
 using Agario.Scripts.Game.Audio;
 using Agario.Scripts.Game.Configurations;
 using SFML.Graphics;
+using SFML.System;
 using TGUI;
+using Time = Agario.Scripts.Engine.Time;
+using Vector2f = TGUI.Vector2f;
 
 namespace Agario.Scripts.Game.ScenesRules;
 
@@ -55,7 +58,7 @@ public class MainMenu : ISceneRules
         
         Vector2f pos = new Vector2f(ProgramConfig.Data.WindowWidth / 2, ProgramConfig.Data.WindowHeight - 150);
         Vector2f size = new Vector2f(200, 100);
-        Button playButton = UiFactory.CreateButton(pos, size, StartGame, "PLAY"); // Тут проблема
+        Button playButton = UiFactory.CreateButton(pos, size, StartGame, "PLAY");
         
         Vector2f pos2 = new Vector2f(ProgramConfig.Data.WindowWidth - 100, ProgramConfig.Data.WindowHeight / 2);
         Vector2f size2 = new Vector2f(100, 200);

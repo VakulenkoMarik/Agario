@@ -227,6 +227,10 @@ public class AgarioGame : ISceneRules
     
     void ISceneRules.OnEnd()
     {
+        foodList.Clear();
+        controllersList.Clear();
+        destructionList.Clear();
+        
         foodList = null;
         controllersList = null;
         destructionList = null;

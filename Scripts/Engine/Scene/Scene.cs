@@ -7,8 +7,8 @@ public class Scene(ISceneRules rules)
 {
     public bool IsInited;
     
-    private readonly List<IUpdatable> updatableObjects = new();
-    private readonly List<IDrawable> drawableObjects = new();
+    private List<IUpdatable> updatableObjects = new();
+    private List<IDrawable> drawableObjects = new();
 
     private ISceneRules SceneRules { get; set; } = rules;
 
@@ -23,7 +23,7 @@ public class Scene(ISceneRules rules)
             IsInited = true;
         }
         
-        SceneRules.Start(); // Тут проблема
+        SceneRules.Start();
     }
 
     public void Update()

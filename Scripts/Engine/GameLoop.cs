@@ -34,6 +34,14 @@ public class GameLoop(RenderWindow window)
     public void Stop()
     {
         onEndGameLoop?.Invoke();
+        onEndGameLoop = null;
+        
+        drawableObjects?.Clear();
+        updatableObjects?.Clear();
+
+        drawableObjects = null;
+        updatableObjects = null;
+        
         isEndGameLoop = true;
     }
     

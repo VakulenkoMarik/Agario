@@ -11,7 +11,7 @@ namespace Agario.Scripts.Engine;
 
 public class Game
 {
-    public GameLoop gameLoop { get; private set; } = null!;
+    public GameLoop? gameLoop { get; private set; }
     public RenderWindow GameWindow { get; private set; }
 
     public Game()
@@ -43,7 +43,10 @@ public class Game
         SceneLoader.Init(this);
         ServiceLocator.Instance.Register(new PauseActivator());
     }
-    
+
     public void NewGameLoop()
-        => gameLoop = new(GameWindow);
+    {
+        gameLoop?.Stop();
+        gameLoop = new(GameWindow);
+    }
 }
