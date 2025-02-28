@@ -5,7 +5,7 @@ namespace Agario.Scripts.Engine.UI;
 
 public static class UiFactory
 {
-    public static Button CreateButton(Vector2f position, Vector2f scale, Action onPresed, string? text = null)
+    public static Button CreateButton(Vector2f position, Vector2f scale, Action onPressed, string? text = null)
     {
         Button button = new();
         
@@ -14,7 +14,7 @@ public static class UiFactory
         position = new Vector2f(position.X - scale.X / 2, position.Y - scale.Y / 2);
         button.SetPosition(position);
         
-        button.Connect("Clicked", onPresed);
+        button.Connect("Clicked", onPressed);
 
         SceneLoader.AddOnExitSceneAction(button.Dispose);
 

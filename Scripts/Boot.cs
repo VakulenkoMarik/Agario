@@ -1,5 +1,5 @@
 using Agario.Scripts.Engine.Scene;
-using Agario.Scripts.Game.ScenesRules;
+using Agario.Scripts.SeaBattleGame.Rules;
 
 namespace Agario.Scripts;
 
@@ -10,9 +10,8 @@ public class Boot
         Engine.Game game = new Engine.Game();
         
         SceneLoader.Init(game);
-        SceneLoader.AddScene("MainMenu", new MainMenu());
-        SceneLoader.AddScene("Game", new AgarioGame());
+        SceneLoader.AddScene("Game", new SeaBattle());
         
-        SceneLoader.LoadScene("MainMenu");
+        SceneLoader.LoadScene("Game");
     }
 }
