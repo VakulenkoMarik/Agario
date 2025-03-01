@@ -1,6 +1,6 @@
 namespace Agario.Scripts.SeaBattleGame.Configurations;
 
-public class GameConfig
+public static class GameConfig
 {
     public static GameData Data { get; private set; } = null!;
 

@@ -49,7 +49,6 @@
   <ItemGroup>
     <Folder Include="Scripts\SeaBattleGame\Animations\" />
     <Folder Include="Scripts\SeaBattleGame\Audio\" />
-    <Folder Include="Scripts\SeaBattleGame\GameObjects\" />
   </ItemGroup>
 
 </Project>

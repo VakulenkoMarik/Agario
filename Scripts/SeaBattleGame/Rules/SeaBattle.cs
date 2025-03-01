@@ -1,9 +1,11 @@
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
+using Agario.Scripts.Engine.Data;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.UI;
 using Agario.Scripts.SeaBattleGame.Configurations;
 using Agario.Scripts.SeaBattleGame.Controllers;
+using TGUI;
 
 namespace Agario.Scripts.SeaBattleGame.Rules;
 
@@ -17,7 +19,6 @@ public enum Gamemode
 public class SeaBattle : ISceneRules
 {
     private Canvas canvas;
-    private readonly GameData data = GameConfig.Data;
 
     private Controller controller1;
     private Controller controller2;
@@ -27,7 +28,7 @@ public class SeaBattle : ISceneRules
     
     public void Init()
     {
-        GameConfig.Data.Load();
+        GameConfig.SetData(new GameData());
     }
     
     public void Start()
@@ -49,7 +50,7 @@ public class SeaBattle : ISceneRules
     
     private void SetPlayers()
     {
-        switch (data.Gamemode)
+        switch (GameConfig.Data.Gamemode)
         {
             case Gamemode.EvE:
                 (controller1, controller2) = (new AiController(), new AiController());
@@ -67,8 +68,8 @@ public class SeaBattle : ISceneRules
 
     private void GenerateMaps()
     {
-        controller1.TargetPlayer.GenerateMap(canvas, data.OnePlayerShipsCount);
-        controller2.TargetPlayer.GenerateMap(canvas, data.OnePlayerShipsCount);
+        controller1.GenerateGridMap(canvas, new Vector2f(50, 50));
+        controller2.GenerateGridMap(canvas, new Vector2f(ProgramConfig.Data.WindowWidth / 2 + 50, 50));
     }
 
     public void Update()
