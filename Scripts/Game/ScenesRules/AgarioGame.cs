@@ -59,7 +59,7 @@ public class AgarioGame : ISceneRules
         float posY = ProgramConfig.Data.WindowHeight / 2f;
         
         GameCharactersList list = ServiceLocator.Instance.Get<GameCharactersList>();
-        GameCharacter? character = list.TryGetNewCharacter("Boba");
+        GameCharacter? character = list.TryGetCharacter("Boba");
 
         if (character is not null)
         {
@@ -86,7 +86,7 @@ public class AgarioGame : ISceneRules
         
         for (int i = 0; i < GameConfig.Data.PlayersVolume - 1; i++)
         {
-            GameCharacter? character = list.TryGetNewCharacter("Boba");
+            GameCharacter? character = list.TryGetCharacter("Boba");
             
             if (character is not null)
             {
@@ -116,7 +116,7 @@ public class AgarioGame : ISceneRules
         
             CollisionsHandling();
             
-            if (ActivePlayersCount == 1)
+            if (ActivePlayersCount <= 1)
                 OnEndGame();
         }
     }
@@ -227,6 +227,11 @@ public class AgarioGame : ISceneRules
     
     void ISceneRules.OnEnd()
     {
+        foreach (var controller in controllersList)
+        {
+            controller.ChangePlayer(null);
+        }
+        
         foodList.Clear();
         controllersList.Clear();
         destructionList.Clear();

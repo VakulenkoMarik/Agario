@@ -13,17 +13,13 @@ public class GameCharactersList : IGameUtility
         LoadCharacters();
     }
 
-    public GameCharacter? TryGetNewCharacter(string name)
+    public GameCharacter? TryGetCharacter(string name)
     {
         foreach (var character in Characters)
         {
             if (character.Name.Equals(name))
             {
-                return new GameCharacter(character.Data)
-                {
-                    Animations = character.Animations,
-                    Sounds = character.Sounds,
-                };
+                return character;
             }
         }
 

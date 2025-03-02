@@ -21,10 +21,8 @@ public class Controller : GameObject, IUpdatable
         this.player = player;
     }
 
-    public void ChangePlayer(Player newPlayer)
-    {
-        player = newPlayer;
-    }
+    public void ChangePlayer(Player? newPlayer)
+        => player = newPlayer;
     
     public void Update()
     {
@@ -37,7 +35,5 @@ public class Controller : GameObject, IUpdatable
     }
 
     protected virtual Vector2f GetDirection()
-    {
-        return direction;
-    }
+        => direction;
 }
