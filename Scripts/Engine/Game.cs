@@ -11,7 +11,6 @@ namespace Agario.Scripts.Engine;
 
 public class Game
 {
-    public GameLoop? gameLoop { get; private set; }
     public RenderWindow GameWindow { get; private set; }
 
     public Game()
@@ -31,6 +30,7 @@ public class Game
         GameWindow = new RenderWindow(new VideoMode(width, height), "Game window");
         
         GameWindow.Closed += (_, _) => GameWindow.Close();
+        SceneLoader.Init(GameWindow);
     }
 
     private void FilesInit()
@@ -40,13 +40,7 @@ public class Game
 
     private void ObjectsInit()
     {
-        SceneLoader.Init(this);
+        SceneLoader.Init(GameWindow);
         ServiceLocator.Instance.Register(new PauseActivator());
-    }
-
-    public void NewGameLoop()
-    {
-        gameLoop?.Stop();
-        gameLoop = new(GameWindow);
     }
 }

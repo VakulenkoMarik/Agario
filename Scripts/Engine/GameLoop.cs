@@ -12,8 +12,7 @@ public class GameLoop(RenderWindow window)
     private List<IUpdatable>? updatableObjects;
     
     private Color backgroundColor;
-
-    private Action? onEndGameLoop;
+    
     private bool isEndGameLoop;
 
     public void SetData(List<IUpdatable> updatables, List<IDrawable> drawables)
@@ -21,9 +20,6 @@ public class GameLoop(RenderWindow window)
         drawableObjects = drawables;
         updatableObjects = updatables;
     }
-
-    public void AddEndSceneAction(Action action)
-        => onEndGameLoop += action;
     
     private void Init()
     {
@@ -33,9 +29,6 @@ public class GameLoop(RenderWindow window)
 
     public void Stop()
     {
-        onEndGameLoop?.Invoke();
-        onEndGameLoop = null;
-        
         drawableObjects?.Clear();
         updatableObjects?.Clear();
 
@@ -68,7 +61,7 @@ public class GameLoop(RenderWindow window)
     {
         Time.Update();
         
-        SceneLoader.CurrentScene?.Update();
+        SceneLoader.CurrentScene.Update();
 
         if (updatableObjects is not null)
         {
@@ -108,7 +101,5 @@ public class GameLoop(RenderWindow window)
     }
 
     private bool IsEndGameLoop()
-    {
-        return !window.IsOpen || isEndGameLoop;
-    }
+        => !window.IsOpen || isEndGameLoop;
 }

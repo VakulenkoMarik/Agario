@@ -17,7 +17,7 @@ public class Animator : IUpdatable
 
     public void Init(Shape targetSprite, State firsAnim)
     {
-        SceneLoader.CurrentScene?.AddUpdatableObject(this);
+        SceneLoader.CurrentScene.AddUpdatableObject(this);
         
         AddState(firsAnim);
         

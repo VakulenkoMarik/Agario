@@ -14,8 +14,9 @@ public static class UiFactory
         position = new Vector2f(position.X - scale.X / 2, position.Y - scale.Y / 2);
         button.SetPosition(position);
         
-        button.Connect("Clicked", onPresed);
+        var id = button.Connect("Clicked", onPresed);
 
+        SceneLoader.AddOnExitSceneAction(()=>button.Disconnect("Clicked", id));
         SceneLoader.AddOnExitSceneAction(button.Dispose);
 
         if (!string.IsNullOrEmpty(text))

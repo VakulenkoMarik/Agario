@@ -108,7 +108,7 @@ public class MainMenu : ISceneRules
         
         lobbyCharacter = new(shape);
         
-        SceneLoader.CurrentScene?.AddDrawableObject(lobbyCharacter);
+        SceneLoader.CurrentScene.AddDrawableObject(lobbyCharacter);
     }
 
     private void ChangeSelectedCharacter()

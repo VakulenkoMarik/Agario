@@ -1,33 +1,47 @@
+using Agario.Scripts.Engine.InputSystem;
 using Agario.Scripts.Engine.Interfaces;
 using Agario.Scripts.Engine.Utils.Extensions;
+using SFML.Graphics;
 
 namespace Agario.Scripts.Engine.Scene;
 
-public class Scene(ISceneRules rules)
+public class Scene(ISceneRules rules, RenderWindow window)
 {
     public bool IsInited;
     
-    private List<IUpdatable> updatableObjects = new();
-    private List<IDrawable> drawableObjects = new();
+    private readonly List<IUpdatable> updatableObjects = new();
+    private readonly List<IDrawable> drawableObjects = new();
 
-    private ISceneRules SceneRules { get; set; } = rules;
-
-    public (List<IUpdatable>, List<IDrawable>) GetData()
-        => (updatableObjects, drawableObjects);
+    private GameLoop gameLoop;
+    
+    private Action? onEndGameLoop;
 
     public void Start()
     {
+        gameLoop = new(window);
+        
         if (!IsInited)
         {
-            SceneRules.Init();
+            rules.Init();
             IsInited = true;
         }
         
-        SceneRules.Start();
+        rules.Start();
+        
+        gameLoop.SetData(updatableObjects, drawableObjects);
+        gameLoop.Run();
+        
+        Deactivate();
     }
 
+    public void Stop()
+        => gameLoop.Stop();
+
+    public void AddOnExitSceneAction(Action action)
+        => onEndGameLoop += action;
+    
     public void Update()
-        => SceneRules.Update();
+        => rules.Update();
     
     public void AddUpdatableObject(IUpdatable updatable)
         => updatableObjects.Add(updatable);
@@ -41,11 +55,17 @@ public class Scene(ISceneRules rules)
     public void DestroyDrawableObject(IDrawable drawable)
         => drawableObjects.RemoveSwap(drawable);
 
-    public void Deactivate()
+    private void Deactivate()
     {
-        SceneRules.OnEnd();
+        Input.Keys.Clear();
+        rules.OnEnd();
+        
+        onEndGameLoop?.Invoke();
+        onEndGameLoop = null;
         
         updatableObjects.Clear();
         drawableObjects.Clear();
+
+        gameLoop = null;
     }
 }

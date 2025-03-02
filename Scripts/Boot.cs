@@ -9,10 +9,9 @@ public class Boot
     {
         Engine.Game game = new Engine.Game();
         
-        SceneLoader.Init(game);
         SceneLoader.AddScene("MainMenu", new MainMenu());
         SceneLoader.AddScene("Game", new AgarioGame());
         
-        SceneLoader.LoadScene("MainMenu");
+        SceneLoader.Start("MainMenu");
     }
 }

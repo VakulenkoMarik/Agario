@@ -14,7 +14,7 @@ public class Canvas : IDrawable
         RenderWindow window = SceneLoader.Window;
         gui = new (window);
         
-        SceneLoader.CurrentScene?.AddDrawableObject(this);
+        SceneLoader.CurrentScene.AddDrawableObject(this);
     }
 
     public void AddWidget(Widget widget, string name)
